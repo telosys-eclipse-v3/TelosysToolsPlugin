@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Telosys" default="gen_and_zip">
+	
+	<!-- Init Telosys version from common properties file -->
+	<property file="build_doc.properties" />
+	
+	<property name="title"     value="Telosys generator v ${version} - Context objects" />
+	
+	<property name="dist_dir"      value="dist" />
+	<property name="doc_dir"       value="${dist_dir}/doc" />
+	<property name="doc_zip_file"  value="${dist_dir}/telosys-tools-${telosys_version}_doc.zip" />
+	
+	<!-- ============================================================================== -->
+	<!-- Init                                                                           -->
+	<!-- ============================================================================== -->
+	<target name="init">
+		<echo message="ANT version  : ${ant.version}" />
+		<echo message="JAVA version : ${ant.java.version}" />
+		<echo message="Title   = ${title}" />
+		<echo message="Doc dir = ${doc_dir}" />
+		<delete dir="${doc_dir}" /> 
+		<mkdir  dir="${doc_dir}" />
+	</target>
+	
+	<!-- ============================================================================== -->
+	<!-- Generate JavaDoc                                                               -->
+	<!-- ============================================================================== -->
+    <target name="gen-javadoc" depends="init" >
+		
+        <javadoc 
+			doctitle="${title}"
+			windowtitle="${title}"
+			
+			sourcepath="src" 
+			packagenames="doc.*" 
+			destdir="${doc_dir}" 
+			
+			access="protected" 
+			
+			use="false" 
+			notree="true" 
+			nonavbar="true" 
+			noindex="true" 
+			splitindex="false" 
+			author="false" 
+			version="true" 
+			nodeprecatedlist="false" 
+			nodeprecated="false" 
+			/>
+			
+    </target>
+
+	<!-- ============================================================================== -->
+	<!-- Zip JavaDoc                                                                    -->
+	<!-- ============================================================================== -->
+	<target name="gen_and_zip" depends="gen-javadoc">
+		<echo message="ZIP FILE = ${doc_zip_file} " />
+		<delete file="${doc_zip_file}" />
+		<zip destfile="${doc_zip_file}"  >	
+			<zipfileset dir="${doc_dir}"   prefix="javadoc" />	
+		</zip>
+	</target>
+	
+</project>

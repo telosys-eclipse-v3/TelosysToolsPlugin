@@ -1,0 +1,61 @@
+<project default="save">
+	
+	<property file="build_svg.properties"/>
+		
+	<tstamp>
+	    <format property="DSTAMP" pattern="yyyy-MM-dd" />
+	</tstamp>
+
+	<property name="dest_dir"  value="../(backup)/${DSTAMP}" />
+	
+	<property name="zip_file"  value="${dest_dir}/TelosysToolsPlugin-${DSTAMP}-${TSTAMP}.zip" />
+
+	<!-- ============================================================================== -->
+	<target name="save" >
+		<echo message="Project name : ${project.name}  " />
+		
+		<echo message="DSTAMP : ${DSTAMP}  TSTAMP : ${TSTAMP}  " />
+		
+		<echo message="Create dir : ${dest_dir} " />
+		<mkdir dir="${dest_dir}"/>
+		
+		<echo message="Zip file : ${zip_file}  " />
+		<!--
+		<delete file="${zip_file}" />
+		-->
+		<zip destfile="${zip_file}"  >	
+			<zipfileset dir="./src"         prefix="src"      excludes="**/*.class"   />		
+			<zipfileset dir="./icons"       prefix="icons"      />		
+			<zipfileset dir="./META-INF"    prefix="META-INF"   />		
+			<zipfileset dir="./doc"         prefix="doc"         />
+			<zipfileset dir="." >
+				<filename name="*.xml"/>  <!-- build*.xml, pom.xml -->
+			</zipfileset>
+			
+			<zipfileset dir="." >
+				<filename name="*.properties"/>  
+			</zipfileset>	
+
+			<zipfileset dir="." >
+				<filename name="about.ini"/>  
+			</zipfileset>	
+			<zipfileset dir="." >
+				<filename name="*.jpg"/>  
+			</zipfileset>	
+			
+		</zip>
+	</target>
+
+	<target name="save-ftp" depends="save">
+		<echo message="FTP : copy zip file : ${zip_file}  " />
+		<ftp server="ftpperso.free.fr"
+			userid="${ftp.userid}"
+			password="${ftp.password}">
+			<!--
+			<fileset file="../(backup)/2015-07-20/TelosysToolsPlugin-2015-07-20-0157.zip"/>
+			-->
+			<fileset file="${zip_file}"/>
+		</ftp>
+	</target>
+
+</project>

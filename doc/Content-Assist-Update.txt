@@ -1,0 +1,17 @@
+
+How to update the content assist for the Velocity Editor
+-------------------------------------------------------- 
+
+How to add a new "directive" :
+
+ 1 - Add the description in the file "ContentAssistMessages.properties"
+     e.g. directive.checkid.doc=xxxx
+ 
+ 2 - Define the key in the file "ContentAssistConfiguration.java"
+     e.g. String DIRECTIVE_CHECKID_DOC = "directive.checkid.doc";
+     
+ 3 - Declare the new key-word in the file "VelocityKeyWords.java"
+     e.g. keyWords.add(new VelocityKeyWord("#checkId", "#checkId()", docHTML(....) ) );
+     
+ N.B. The HTML Help must be updated by hand ( see project TelosysToolsPluginHelp )
+ 

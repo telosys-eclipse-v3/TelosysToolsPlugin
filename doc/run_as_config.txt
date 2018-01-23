@@ -1,0 +1,11 @@
+
+To avoid "Out of memory" when running the plugin set the "PermGen" size to 128m
+VM args ( PermGen => -XX:MaxPermSize=128m ) :
+
+Run As ... / Run Configurations / Eclipse Application / Tab "Arguments" - "VM arguments" :
+
+With Eclipse 3.6 Helios : 
+-Dosgi.requiredJavaVersion=1.5 -Xms40m -Xmx768m -XX:MaxPermSize=128m
+
+With Eclipse 4.3 Kepler : 
+-Dosgi.requiredJavaVersion=1.6 -Xms40m -Xmx512m -XX:MaxPermSize=128m

@@ -1,0 +1,49 @@
+<project default="copy-jars">
+
+	<property name="maven_repo" value="D:\MAVEN\.m2\repository"/>
+	<property name="VERSION"    value="3.0.0" />
+	
+	<!-- set "-SNAPSHOT" to copy the current SNAPSHOT or "" to copy the current RELEASE -->
+	<property name="SNAPSHOT"   value="" />
+	<!--
+	<property name="SNAPSHOT"   value="-SNAPSHOT" />
+	-->
+
+	<property name="lib_dir"    value="./lib" />
+	<property environment="env"/>
+
+	<!-- ============================================================================== -->
+
+	<target name="copy-jars" >
+		
+		<!-- MAVEN_HOME is not defined (Maven is not installed on OS)
+		<echo message="MAVEN_HOME =  ${MAVEN_HOME}" />
+		<echo message="env.MAVEN_HOME =  ${env.MAVEN_HOME}" />
+		-->
+
+		<fail message="Environment variable &quot;USERNAME&quot; undefined" unless="env.USERNAME"/>
+		<echo message="Env &quot;USERNAME&quot; = ${env.USERNAME}" />
+		
+		<echo message="Maven repository    : ${maven_repo}" />
+		<echo message="Libraries directory : ${lib_dir}" />
+		
+		<echo message="Delete existing JAR files " />
+		<delete verbose="true">
+			<fileset dir="${lib_dir}" includes="telosys-tools-*.jar"/>
+		</delete>
+
+		<echo message="Copy new JAR files " />
+		<echo message="  from ${maven_repo} ( version ${VERSION} )" />
+		<echo message="  to   ${lib_dir}" />
+
+		<copy file="${maven_repo}/org/telosys/telosys-tools-all/${VERSION}${SNAPSHOT}/telosys-tools-all-${VERSION}${SNAPSHOT}.jar" 
+			  tofile="${lib_dir}/telosys-tools-all-${VERSION}.jar" 
+			  overwrite="true" verbose="true" />
+
+		<echo message=" " />
+		<echo message="-----" />
+		<echo message="Don't forget to refresh the &quot;${lib_dir}&quot; folder in the Eclipse workspace (F5)" />
+		<echo message="-----" />
+	</target>
+
+</project>

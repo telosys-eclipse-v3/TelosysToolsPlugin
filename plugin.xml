@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.6"?>
+<plugin>
+
+   <!-- MAIN TOOLBAR ACTION  -->
+   <!-- see 
+        http://www.eclipse.org/articles/article.php?file=Article-action-contribution/index.html 
+        Example 7: Adding an action set
+	-->
+	<extension point="org.eclipse.ui.actionSets" >
+		<actionSet
+			id="org.eclipse.ui.articles.action.contribution.set"
+			label="Telosys"
+			visible="true">
+			<action
+				id="org.eclipse.ui.articles.action.contribution.set.action1" 
+				label="Telosys configuration" 
+				icon="icons/telosys_folder.png"
+				tooltip="Telosys configuration"
+				toolbarPath="Normal/additions"
+				class="org.telosys.tools.eclipse.plugin.toolbar.ActionOpenProperties"> 
+			</action> 
+			<!--
+			<action
+				id="org.eclipse.ui.articles.action.contribution.set.action2" 
+				label="Set Action 2" 
+				icon="icons/key1.gif"
+				tooltip="Tooltip for Set Action 2"
+				toolbarPath="Normal/additions"
+				style="pulldown"
+				class="org.eclipse.ui.articles.action.contribution.SetAction2Delegate">
+			</action> 
+			-->
+		</actionSet>    
+	</extension>
+
+   <!-- WIZARDS ver 3.0.0  -->
+   <extension point="org.eclipse.ui.newWizards" >
+      <category
+         id="TelosysToolsWizard"
+         name="Telosys Tools">
+      </category>
+      <wizard
+         category="TelosysToolsWizard"
+         class="org.telosys.tools.eclipse.plugin.wizards.dslmodel.NewDslModelWizard"
+         id   ="org.telosys.tools.eclipse.plugin.wizards.dslmodel.NewDslModelWizard"
+         icon ="./icons/model_16pix.png"
+         name="New DSL model" >
+         <selection
+            class="org.eclipse.core.resources.IResource">
+         </selection>
+      </wizard>
+   </extension>
+   
+   <extension  point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension  targetID="org.eclipse.jdt.ui.JavaPerspective">
+         <newWizardShortcut  id="org.telosys.tools.eclipse.plugin.wizards.dslmodel.NewDslModelWizard" />
+      </perspectiveExtension>
+   </extension>
+   <extension  point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension  targetID="org.eclipse.ui.resourcePerspective">
+         <newWizardShortcut  id="org.telosys.tools.eclipse.plugin.wizards.dslmodel.NewDslModelWizard" />
+      </perspectiveExtension>
+   </extension>
+
+   <!-- WIZARDS ( all wizards extensions removed in ver 2.1.0 ) -->
+   <!--
+   <extension point="org.eclipse.ui.newWizards">
+   
+      <category name="Telosys Tools" id="TelosysWizard" />
+            
+      <wizard
+            category="TelosysWizard"
+            class="org.telosys.tools.eclipse.plugin.wizards.vobean.NewVOWizard"
+            icon="icons/sample.gif"
+            id="org.telosys.tools.eclipse.plugin.wizards.vobean.NewVOWizard"
+            name="Java Bean"/>
+      <wizard
+            category="TelosysWizard"
+            class="org.telosys.tools.eclipse.plugin.wizards.volist.NewVOListWizard"
+            icon="icons/sample.gif"
+            id="org.telosys.tools.eclipse.plugin.wizards.volist.NewVOListWizard"
+            name="Telosys V.O. List"/>
+            
+      <wizard
+            category="TelosysWizard"
+            class="org.telosys.tools.eclipse.plugin.wizards.xmlmapper.NewXmlMapperWizard"
+            icon="icons/sample.gif"
+            id="org.telosys.tools.eclipse.plugin.wizards.xmlmapper.NewXmlMapperWizard"
+            name="Telosys V.O. XML mapper"/>
+      <wizard
+            category="TelosysWizard"
+            class="org.telosys.tools.eclipse.plugin.wizards.screendata.NewScreenDataWizard"
+            icon="icons/sample.gif"
+            id="org.telosys.tools.eclipse.plugin.wizards.screendata.NewScreenDataWizard"
+            name="Telosys Screen Data"/>
+      <wizard
+            category="TelosysWizard"
+            class="org.telosys.tools.eclipse.plugin.wizards.screenmanager.NewScreenManagerWizard"
+            icon="icons/sample.gif"
+            id="org.telosys.tools.eclipse.plugin.wizards.screenmanager.NewScreenManagerWizard"
+            name="Telosys Screen Manager"/>
+      <wizard
+            category="TelosysWizard"
+            class="org.telosys.tools.eclipse.plugin.wizards.screenprocedures.NewScreenProceduresWizard"
+            icon="icons/sample.gif"
+            id="org.telosys.tools.eclipse.plugin.wizards.screenprocedures.NewScreenProceduresWizard"
+            name="Telosys Screen Procedures"/>
+      <wizard
+            category="TelosysWizard"
+            class="org.telosys.tools.eclipse.plugin.wizards.screentriggers.NewScreenTriggersWizard"
+            icon="icons/sample.gif"
+            id="org.telosys.tools.eclipse.plugin.wizards.screentriggers.NewScreenTriggersWizard"
+            name="Telosys Screen Triggers"/>
+      <wizard
+            category="TelosysWizard"
+            class="org.telosys.tools.eclipse.plugin.wizards.service.NewServiceWizard"
+            icon="icons/sample.gif"
+            id="org.telosys.tools.eclipse.plugin.wizards.service.NewServiceWizard"
+            name="Telosys Service"/>
+
+      <wizard
+            category="TelosysWizard"
+            class="org.telosys.tools.eclipse.plugin.wizards.dataset.NewDataSetWizard"
+            icon="icons/sample.gif"
+            id="org.telosys.tools.eclipse.plugin.wizards.dataset.NewDataSetWizard"
+            name="Telosys Dataset"/>
+		
+   </extension>
+  -->
+  
+  <!-- PROPERTY PAGES -->
+   <extension
+         id="org.telosys.tools.eclipse.plugin.properties.PropertiesPage"
+         name="Telosys Tools properties"
+         point="org.eclipse.ui.propertyPages">
+      <page
+            class="org.telosys.tools.eclipse.plugin.config.view.PropertiesPage"
+            name="Telosys Tools"
+            icon="icons/telosys_folder.png"
+            id="org.telosys.tools.eclipse.plugin.config.view.PropertiesPage"
+            adaptable="true"
+            objectClass="org.eclipse.core.resources.IProject"
+            />
+   </extension>
+<!--
+      <page
+            adaptable="true"
+            objectClass="org.eclipse.core.resources.IProject"
+            />
+		<enabledWhen>
+            <instanceof value="org.eclipse.core.resources.IProject"/>
+            <instanceof value="org.eclipse.core.resources.IFolder"/>
+         </enabledWhen>            
+		<enabledWhen>
+            <instanceof value="org.eclipse.core.resources.IProject"/>
+         </enabledWhen>            
+-->
+
+  <!-- EDITORS -->
+  <!-- Removed to fix file icon bug 
+         id="org.telosys.tools.eclipse.plugin.editors.dbrep.RepositoryEditor"
+         name="Repository"
+  -->
+  <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            id=   "org.telosys.tools.eclipse.plugin.editors.dbrep.RepositoryEditor"
+            class="org.telosys.tools.eclipse.plugin.editors.dbrep.RepositoryEditor"
+            icon="icons/dbrep4_16.png"
+            default="true"
+            name="Telosys Tools database model editor"
+            extensions="dbmodel,dbrep"/>
+      <editor
+            id=   "org.telosys.tools.eclipse.plugin.editors.dsl.model.ModelEditor"
+            class="org.telosys.tools.eclipse.plugin.editors.dsl.model.ModelEditor"
+            icon="icons/model_16pix.png"
+            default="true"
+            name="Telosys Tools model editor"
+            extensions="model"/>
+      <editor
+            id="org.telosys.tools.eclipse.plugin.editors.dbconfig.DbConfigEditor"
+            class="org.telosys.tools.eclipse.plugin.editors.dbconfig.DbConfigEditor"
+            icon="icons/dbcfg16.png"
+            default="true"
+            name="Telosys Tools Dbconfig editor"
+            extensions="dbcfg"/>
+      <editor
+            name="Telosys Velocity Template Editor"
+            extensions="vm"
+      		icon="icons/velocity_file.png"
+      		   id="org.telosys.tools.eclipse.plugin.editors.velocity.VelocityEditor"
+      		class="org.telosys.tools.eclipse.plugin.editors.velocity.VelocityEditor"
+      		default="true"
+            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor" 
+            />
+      <editor
+            name="Telosys DSL Entity Editor"
+            extensions="entity"
+            icon="icons/entity_16pix.png"
+            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
+            class="org.telosys.tools.eclipse.plugin.editors.dsl.entityeditor.EntityEditor"
+               id="org.telosys.tools.eclipse.plugin.editors.dsl.entityEditor.EntityEditor" 
+            />
+      
+   </extension>
+   
+	<!-- MARKERS -->
+	<!-- <persistent value="true"/> : Keep file markers when closing Eclipse -->
+	<!--
+	<extension point="org.eclipse.core.resources.markers" id="com.ibm.mymarkers.mymarker" name="My Marker">
+		<super type="org.eclipse.core.resources.marker"/>
+		<persistent value="true"/>
+		<attribute  name="description"/>
+	</extension>
+	-->
+	
+	<!-- DECORATORS -->
+				<!-- lightweight="true" -->
+	<!--
+	<extension point="org.eclipse.ui.decorators">  
+		<decorator   
+				id="org.telosys.tools.eclipse.plugin.wkschanges.deco.filedecorator"   
+				label="File Decorator"   
+				state="true"   
+				class="org.telosys.tools.eclipse.plugin.wkschanges.deco.FileDecorator"  
+				objectClass="org.eclipse.core.resources.IResource"
+				
+				adaptable="true"   
+				
+				>   
+		</decorator>
+	</extension>
+	-->
+   
+   <extension point="org.eclipse.ui.decorators">
+	  <decorator id="org.telosys.tools.eclipse.plugin.decorator.folderdecorator" 
+			label="Decorator for Telosys Tools folder" 
+			state="true" 
+			class="org.telosys.tools.eclipse.plugin.decorator.FolderDecorator"  
+			objectClass="org.eclipse.core.resources.IFolder" 
+			adaptable="true">
+			<description>
+				Decorator for folder used by Telosys Tools generator plug-in
+			</description>
+		</decorator>
+   </extension>
+   
+</plugin>

@@ -11,7 +11,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui.forms,
  org.eclipse.ui.ide,
  org.eclipse.ui.editors,
- org.eclipse.jface.text
+ org.eclipse.jface.text,
+ org.eclipse.ui.console
 Bundle-Activator: org.telosys.tools.eclipse.plugin.TelosysTools
 Bundle-ClassPath: .,
  lib/telosys-tools-all-3.0.0.jar

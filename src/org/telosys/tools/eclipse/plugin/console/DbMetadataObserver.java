@@ -22,7 +22,7 @@ public class DbMetadataObserver implements TaskObserver2<Integer, String> {
 		
 	}
 	
-	public String repeat(char c, int n) {
+	private String repeat(char c, int n) {
 		char[] chars = new char[n];
 		for ( int i=0 ; i < n ; i++) {
 			chars[i] = c ;

@@ -53,6 +53,8 @@ import org.telosys.tools.eclipse.plugin.commons.PluginImages;
 import org.telosys.tools.eclipse.plugin.commons.Util;
 import org.telosys.tools.eclipse.plugin.commons.mapping.MapperTextBean;
 import org.telosys.tools.eclipse.plugin.config.ProjectConfigManager;
+import org.telosys.tools.eclipse.plugin.console.DbMetadataConsole;
+import org.telosys.tools.eclipse.plugin.console.DbModelConsole;
 import org.telosys.tools.repository.changelog.ChangeLog;
 
 /**
@@ -258,7 +260,7 @@ import org.telosys.tools.repository.changelog.ChangeLog;
     	{
             public void widgetSelected(SelectionEvent arg0)
             {
-                actionGenerateRepository();
+                actionCreateNewDbModel();
             }
             public void widgetDefaultSelected(SelectionEvent arg0)
             {
@@ -276,7 +278,7 @@ import org.telosys.tools.repository.changelog.ChangeLog;
     	{
             public void widgetSelected(SelectionEvent arg0)
             {
-                actionUpdateRepository();
+                actionUpdateDbModel();
             }
             public void widgetDefaultSelected(SelectionEvent arg0)
             {
@@ -1226,7 +1228,7 @@ import org.telosys.tools.repository.changelog.ChangeLog;
     
     private void actionGetMetaData(int whatElse) {
     	Shell shell = Util.cursorWait();
-		
+    	
     	DatabaseConfiguration databaseConfiguration = getCurrentDatabaseConfig(true) ;
 		TelosysProject telosysProject = getTelosysProject();
 		MetaDataOptionsImpl options = new MetaDataOptionsImpl();
@@ -1259,6 +1261,9 @@ import org.telosys.tools.repository.changelog.ChangeLog;
 			break;
 		}
 		
+    	//DbModelConsole.reset();
+    	DbMetadataConsole.reset();
+    	
 		try {
 			String result = telosysProject.getMetaData(databaseConfiguration, options);
 			_tMetaData.setText(result);
@@ -1389,47 +1394,41 @@ import org.telosys.tools.repository.changelog.ChangeLog;
     /**
      * Generates the repository file 
      */
-    private void actionGenerateRepository() 
-    {
+    private void actionCreateNewDbModel() {
         // MsgBox.debug("Generate Repository");
         boolean repositoryCreated = false ;
         String sRepositoryFile = null ;
         
         IProject project = _editor.getProject();
         if ( project == null ) {
-        	MsgBox.error("actionGenerateRepository() : Cannot get project ");
+        	MsgBox.error("actionCreateNewDbModel() : Cannot get project ");
         	return ;
         }
 
-        //TelosysToolsLogger logger = _editor.getTextWidgetLogger();	
-		
         DatabaseConfiguration db = getCurrentDatabaseConfig(true) ;
         if ( null == db ) return ;
 		String sDatabaseName = db.getDatabaseName();		
 		sRepositoryFile = getRepositoryFileName( db.getDatabaseName() ) ;
 		
-		//IFile repositoryFile = project.getFile(sRepositoryFile);
-
-		String sMsg = "This operation will replace the current version of the repository if it exists." 
-				+ "\n\n" + "Repository file : \n" + sRepositoryFile 
-				+ "\n\n" + "Database name : \n" + sDatabaseName 
+		String sMsg = "This operation will replace the current version of the database model if it exists." 
+				+ "\n\n" + "Database model file : \n" + sRepositoryFile 
+				+ "\n\n" + "From database name : \n" + sDatabaseName 
 				+ "\n\n" + "Launch the generation ?";
 		if ( MsgBox.confirm(" Confirm generation", sMsg) )	{
 			Shell shell = Util.cursorWait();
 			
 			try {
-				//repositoryCreated = generateRepository(db, repositoryFile, logger ) ; // v 3.0.0
-				repositoryCreated = generateRepository(db) ; // v 3.0.0
+				repositoryCreated = createNewDbModel(db) ; // v 3.0.0
 			} 
 			catch (Exception e) { // Catch ALL exceptions 
 		    	logException(e);					
-				MsgBox.error("Cannot generate repository", e) ;
+				MsgBox.error("Cannot create database model", e) ;
 			} 
 
 			if ( repositoryCreated ) {
 	        	syncRepoFolder();
 				Util.cursorArrow(shell);
-				MsgBox.info("Repository generated.\n\nSee file " + sRepositoryFile );
+				MsgBox.info("Database model created.\n\nSee file " + sRepositoryFile );
 	        }
 			else {
 				Util.cursorArrow(shell);
@@ -1437,15 +1436,20 @@ import org.telosys.tools.repository.changelog.ChangeLog;
 		}
     }
     
-//    private boolean generateRepository( DatabaseConfiguration db, 
-//    		IFile repositoryFile, TelosysToolsLogger logger ) 
-    private boolean generateRepository( DatabaseConfiguration db ) 
-    {
+    /**
+     * Creates a new "Database Model" 
+     * @param db
+     * @return true if model has been created, false if an error occurred
+     */
+    private boolean createNewDbModel( DatabaseConfiguration db ) {
+    	
+    	DbModelConsole.reset(); // clear and reveal console
+
 		try {
 			TelosysProject telosysProject = getTelosysProject();
 			telosysProject.createNewDbModel(db) ;
 		} catch (TelosysToolsException e) {
-			MsgBox.error("Cannot generate db-model", e);
+			MsgBox.error("Cannot create database model", e);
 			return false ;
 		}
 			
@@ -1453,11 +1457,16 @@ import org.telosys.tools.repository.changelog.ChangeLog;
     }
 
     /**
-     * Updates the repository and returns the number of entities changed
+     * Updates the current "Database Model" and returns the number of entities changed
+     * @param db
+     * @return
+     * @throws TelosysToolsException
      */
-//    private int updateRepository(DatabaseConfiguration db, TelosysToolsLogger logger ) throws TelosysToolsException {
-    private int updateRepository(DatabaseConfiguration db ) throws TelosysToolsException {
-		TelosysProject telosysProject = getTelosysProject();
+    private int updateDbModel(DatabaseConfiguration db ) throws TelosysToolsException {
+    	
+    	DbModelConsole.reset(); // clear and reveal console
+
+    	TelosysProject telosysProject = getTelosysProject();
 		ChangeLog changeLog = telosysProject.updateDbModel(db) ;
 		return changeLog.getNumberOfEntities() ;
     }
@@ -1465,7 +1474,7 @@ import org.telosys.tools.repository.changelog.ChangeLog;
     /**
      * Updates the repository file 
      */
-    private void actionUpdateRepository() {
+    private void actionUpdateDbModel() {
     	int nbChanges = 0 ;
         boolean repositoryUpdated = false ;
         
@@ -1483,15 +1492,15 @@ import org.telosys.tools.repository.changelog.ChangeLog;
 		//--- Check repository existence
 		IFile iFile = project.getFile(sRepositoryFile);
 		if ( ! iFile.exists() ) {
-        	MsgBox.info("The repository file doesn't exist => cannot update."
-        			+ "\n\nRepository file : \n" + sRepositoryFile );
+        	MsgBox.info("The database model file doesn't exist => cannot update."
+        			+ "\n\n Database model file : \n" + sRepositoryFile );
         	return ;
 		}
         
 		if ( db != null ) {
-			String sMsg = "This operation will update the current repository if it exists." 
-				+ "\n\n" + "Repository file : \n" + sRepositoryFile 
-				+ "\n\n" + "Database name : \n" + sDatabaseName 
+			String sMsg = "This operation will update the current database model if it exists." 
+				+ "\n\n" + "Database model file : \n" + sRepositoryFile 
+				+ "\n\n" + "From database name : \n" + sDatabaseName 
 				+ "\n\n" + "Launch update ?";
 			if ( MsgBox.confirm(" Confirm ", sMsg) ) {
 				Shell shell = Util.cursorWait();
@@ -1499,7 +1508,7 @@ import org.telosys.tools.repository.changelog.ChangeLog;
     	        try {
     	        	//TelosysToolsLogger logger = _editor.getTextWidgetLogger();
     	        	//nbChanges = updateRepository(db, logger ) ; // v 3.0.0
-    	        	nbChanges = updateRepository(db) ; // v 3.0.0
+    	        	nbChanges = updateDbModel(db) ; // v 3.0.0
 	        		repositoryUpdated = true ;
 				}
     	        catch ( Throwable e ) { // Catch ALL exceptions 
@@ -1517,9 +1526,9 @@ import org.telosys.tools.repository.changelog.ChangeLog;
 	            		msgChanges = nbChanges + " change(s).\n\n"
 	            		  			+ "See the update log file for details.";
 	            	}
-	                MsgBox.info("Repository updated.\n"
+	                MsgBox.info("Database model updated.\n"
 	                		+ "\n" 
-	                		+ "Repository file : \n" 
+	                		+ "Database model file : \n" 
 	                		+ sRepositoryFile + "\n"
 	                		+ "\n"
 	                		+ msgChanges );

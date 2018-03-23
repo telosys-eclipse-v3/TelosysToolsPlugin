@@ -14,10 +14,13 @@ import org.telosys.tools.commons.TelosysToolsException;
 import org.telosys.tools.commons.TelosysToolsLogger;
 import org.telosys.tools.commons.dbcfg.DatabasesConfigurations;
 import org.telosys.tools.commons.dbcfg.DbConfigManager;
+import org.telosys.tools.db.observer.DatabaseObserverProvider;
 import org.telosys.tools.eclipse.plugin.commons.EclipseWksUtil;
 import org.telosys.tools.eclipse.plugin.commons.MsgBox;
 import org.telosys.tools.eclipse.plugin.commons.PluginLogger;
 import org.telosys.tools.eclipse.plugin.commons.TextWidgetLogger;
+import org.telosys.tools.eclipse.plugin.console.DbMetadataObserver;
+import org.telosys.tools.eclipse.plugin.console.DbModelObserver;
 
 /**
  * Main entry point for the editor <br>
@@ -28,9 +31,7 @@ import org.telosys.tools.eclipse.plugin.commons.TextWidgetLogger;
  */
 public class DbConfigEditor extends FormEditor 
 {
-	/** The dirty flag : see isDirty() */
-    private boolean           _dirty = false;
-//	private String            _fileName = "???" ;
+    private boolean           _dirty = false; // The dirty flag : see isDirty()
 	private IFile             _file = null ;
 	private DatabasesConfigurations   databasesConfigurations = new DatabasesConfigurations(); // Void configuration
 		
@@ -42,27 +43,25 @@ public class DbConfigEditor extends FormEditor
 	protected void addPages() {
 		PluginLogger.log(this, "addPages()..." );
 		DbConfigEditorPage1 page1 = new DbConfigEditorPage1(this, "DbConfigEditorPage1", " Database ");
-		DbConfigEditorPage2 page2 = new DbConfigEditorPage2(this, "DbConfigEditorPage2", " Log viewer");
+		//DbConfigEditorPage2 page2 = new DbConfigEditorPage2(this, "DbConfigEditorPage2", " Log viewer");
 		try {
 			addPage(page1);
-			addPage(page2);
+			//addPage(page2);
 		} catch ( Exception e ) {
 			MsgBox.error("addPage(page) Exception ", e);
 		}
 	}
 
-	public boolean isDirty()
-	{
+	@Override
+	public boolean isDirty() {
 		return _dirty;
 	}
 
-	public void setDirty()
-	{
+	public void setDirty() {
 		setDirty(true);
 	}
 	
-	private void setDirty(boolean flag)
-	{
+	private void setDirty(boolean flag) {
 		_dirty = flag ;
 		editorDirtyStateChanged(); // Notify the editor 
 	}
@@ -70,6 +69,7 @@ public class DbConfigEditor extends FormEditor
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.part.EditorPart#doSave(org.eclipse.core.runtime.IProgressMonitor)
 	 */
+	@Override
 	public void doSave(IProgressMonitor monitor) {
 		PluginLogger.log(this, "doSave()..." );
 
@@ -83,8 +83,6 @@ public class DbConfigEditor extends FormEditor
 		} catch (TelosysToolsException e) {
 			MsgBox.error("Cannot save file.", e);
 		}
-//		IEditorInput input = getEditorInput();
-//		IPersistableElement e = input.getPersistable();
 		
 		//--- Refresh the file in the Eclipse workspace
 		try {
@@ -99,6 +97,7 @@ public class DbConfigEditor extends FormEditor
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.part.EditorPart#doSaveAs()
 	 */
+	@Override
 	public void doSaveAs() {
 		PluginLogger.log(this, "doSaveAs()..." );
 		// Never called because isSaveAsAllowed() returns false
@@ -107,6 +106,7 @@ public class DbConfigEditor extends FormEditor
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.part.EditorPart#isSaveAsAllowed()
 	 */
+	@Override
 	public boolean isSaveAsAllowed() {
 		//PluginLogger.log(this, "isSaveAsAllowed()..." );
 		return false ; // "Save as..." not allowed for this file
@@ -115,21 +115,23 @@ public class DbConfigEditor extends FormEditor
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.IEditorPart#init(org.eclipse.ui.IEditorSite, org.eclipse.ui.IEditorInput)
 	 */
+	@Override
 	public void init(IEditorSite site, IEditorInput input)
 			throws PartInitException {
 		super.init(site, input);
 
 		// MsgBox.debug("DbConfig editor : init ");
+		
+		// Set the observers for console reporting
+		DatabaseObserverProvider.setModelObserverClass(DbModelObserver.class);
+		DatabaseObserverProvider.setMetadataObserverClass(DbMetadataObserver.class);
 
 		PluginLogger.log(this, "--- INIT ---" );
 		PluginLogger.log(this, "init(..,..) : site id = '" + site.getId() + "'" );
 		PluginLogger.log(this, "init(..,..) : input name = '" + input.getName() + "'" );
 		setPartName(input.getName());
 		
-//		_fileName = input.getName() ;
-
-		if ( input instanceof IFileEditorInput )
-		{
+		if ( input instanceof IFileEditorInput ) {
 			IFileEditorInput fileInput = (IFileEditorInput) input;
 			_file = fileInput.getFile();
 
@@ -144,29 +146,21 @@ public class DbConfigEditor extends FormEditor
 				MsgBox.error("Cannot load databases configurations.", e );
 			}		
 		}
-		else // never happen 
-		{
+		else {
+			// never happen 
 			MsgBox.error("The editor input '" + input.getName() + "' is not a File ! ");
 		}
 	}
 	
-	public TelosysToolsLogger getLogger ()
-	{		
+	public TelosysToolsLogger getLogger () {		
 		return _logger ;
 	}
 
-//	public String getFileName ()
-//	{
-//		return _fileName ;
-//	}
-	
-	public IFile getFile ()
-	{
+	public IFile getFile() {
 		return _file ;
 	}
 	
-	public IProject getProject ()
-	{		
+	public IProject getProject() {		
 		return _file.getProject() ;
 	}
 	
@@ -174,8 +168,7 @@ public class DbConfigEditor extends FormEditor
 		return this.databasesConfigurations ;
 	}
 	
-	public TextWidgetLogger getTextWidgetLogger()
-	{
+	public TextWidgetLogger getTextWidgetLogger() {
 		return _logger ;
 	}
 

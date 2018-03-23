@@ -5,13 +5,10 @@ import org.telosys.tools.eclipse.plugin.commons.PluginLogger;
 
 public class DbModelObserver implements TaskObserver2<Integer, String> {
 
-	//private final MessageConsoleStream out ;
 	private final TelosysConsole console  ;
 	
 	public DbModelObserver() {
 		super();
-		//out = ConsoleUtil.getConsoleStream("Telosys");
-		// console = new TelosysConsole("Telosys Database") ;
 		console = DbModelConsole.getConsole();
 		PluginLogger.log("DbModelObserver created");
 	}
@@ -25,7 +22,7 @@ public class DbModelObserver implements TaskObserver2<Integer, String> {
 		
 	}
 	
-	public String repeat(char c, int n) {
+	private String repeat(char c, int n) {
 		char[] chars = new char[n];
 		for ( int i=0 ; i < n ; i++) {
 			chars[i] = c ;

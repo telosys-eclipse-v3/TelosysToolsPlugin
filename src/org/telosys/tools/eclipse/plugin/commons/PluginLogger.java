@@ -1,16 +1,14 @@
 package org.telosys.tools.eclipse.plugin.commons;
 
-
 /**
  * Basic utility class for plugin logging (only for DEBUG) 
+ * Not supposed to be active when the plugin is released
  * 
  * @author Laurent GUERIN
  *
  */
-public class PluginLogger
-{
-//	private final static TelosysToolsLogger logger = new ConsoleLogger();
-
+public class PluginLogger {
+	
 	private static void print(String logLevel, String msg) {
 		System.out.println("[" + logLevel + "] " + msg );
 	}

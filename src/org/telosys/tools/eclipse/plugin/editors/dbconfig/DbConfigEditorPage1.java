@@ -1506,8 +1506,6 @@ import org.telosys.tools.repository.changelog.ChangeLog;
 				Shell shell = Util.cursorWait();
 				
     	        try {
-    	        	//TelosysToolsLogger logger = _editor.getTextWidgetLogger();
-    	        	//nbChanges = updateRepository(db, logger ) ; // v 3.0.0
     	        	nbChanges = updateDbModel(db) ; // v 3.0.0
 	        		repositoryUpdated = true ;
 				}

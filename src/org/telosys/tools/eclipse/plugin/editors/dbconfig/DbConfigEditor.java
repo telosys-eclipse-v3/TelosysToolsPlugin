@@ -5,6 +5,8 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
@@ -49,6 +51,17 @@ public class DbConfigEditor extends FormEditor
 			//addPage(page2);
 		} catch ( Exception e ) {
 			MsgBox.error("addPage(page) Exception ", e);
+		}
+		
+		// Only ONE PAGE => remove the single tab at the bottom of the editor
+		// see : https://www.modumind.com/2008/01/04/using-formeditor-when-you-only-have-a-single-page/
+		// int n = getPageCount(); // one page
+		Composite container = getContainer();
+		if ( container instanceof CTabFolder ) {
+			((CTabFolder) container).setTabHeight(0);
+		}
+		else {
+			MsgBox.error("addPages() : the container is not an instance of CTabFolder !");
 		}
 	}
 

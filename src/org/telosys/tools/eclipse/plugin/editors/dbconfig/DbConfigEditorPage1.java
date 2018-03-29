@@ -93,8 +93,8 @@ import org.telosys.tools.repository.changelog.ChangeLog;
     private Text _tUrl            = null ;
     private Text _tUser           = null ;
     private Text _tPassword       = null ;
-    private Text _tIsolationLevel = null ;
-    private Text _tPoolSize       = null ;
+//    private Text _tIsolationLevel = null ;
+//    private Text _tPoolSize       = null ;
     private Text _tTypeName       = null ;
     private Text _tDialect        = null ;
 
@@ -326,43 +326,147 @@ import org.telosys.tools.repository.changelog.ChangeLog;
 		Composite tabContent = new Composite(tabFolder, SWT.NONE);
 		tabContent.setBackground( getBackgroundColor() );
 		
-	    // Color color = DAOColor.color(tabContent.getDisplay());
-		createConfigurationFields(tabContent) ;
-
-		//--- Button "Test connection"
-		Button button = new Button(tabContent, SWT.NONE);
-		button.setText("Test connection");
-		button.setBounds(460, 20, 120, 25);
-
-    	button.addSelectionListener( new SelectionListener() 
-    	{
-            public void widgetSelected(SelectionEvent arg0)
-            {
-            	actionTestConnection();
-            }
-            public void widgetDefaultSelected(SelectionEvent arg0)
-            {
-            }
-        });
-    	
-		//--- Button "Show Libraries"
-		Button buttonLibraries = new Button(tabContent, SWT.NONE);
-		buttonLibraries.setText("Show libraries");
-		buttonLibraries.setBounds(460, 50, 120, 25);
-
-		buttonLibraries.addSelectionListener( new SelectionListener() 
-    	{
-            public void widgetSelected(SelectionEvent arg0)
-            {
-            	showLibraries();
-            }
-            public void widgetDefaultSelected(SelectionEvent arg0)
-            {
-            }
-        });
-    	
+//	    // Color color = DAOColor.color(tabContent.getDisplay());
+//		createConfigurationFields(tabContent) ;
+//
+//		//--- Button "Test connection"
+//		Button button = new Button(tabContent, SWT.NONE);
+//		button.setText("Test connection");
+//		button.setBounds(460, 20, 120, 25);
+//
+//    	button.addSelectionListener( new SelectionListener() 
+//    	{
+//            public void widgetSelected(SelectionEvent arg0)
+//            {
+//            	actionTestConnection();
+//            }
+//            public void widgetDefaultSelected(SelectionEvent arg0)
+//            {
+//            }
+//        });
+//    	
+//		//--- Button "Show Libraries"
+//		Button buttonLibraries = new Button(tabContent, SWT.NONE);
+//		buttonLibraries.setText("Show libraries");
+//		buttonLibraries.setBounds(460, 50, 120, 25);
+//
+//		buttonLibraries.addSelectionListener( new SelectionListener() 
+//    	{
+//            public void widgetSelected(SelectionEvent arg0)
+//            {
+//            	showLibraries();
+//            }
+//            public void widgetDefaultSelected(SelectionEvent arg0)
+//            {
+//            }
+//        });
+//    	
+//		tabItem.setControl(tabContent);
+		
+		
+		GridLayout gridLayout = new GridLayout ();
+		gridLayout.numColumns = 3;
+		gridLayout.marginHeight = 12;
+		tabContent.setLayout(gridLayout);
+		
+		createTabFolder1Panel1(tabContent);
+		
+		createTabFolder1Panel2(tabContent);
+		
 		tabItem.setControl(tabContent);
 	}
+	
+	//----------------------------------------------------------------------------------------------
+	/**
+	 * Creates the 1rst panel : set of fields ( label + input text )
+	 * @param container
+	 */
+	private void createTabFolder1Panel1(Composite container) {
+		GridData gdPanel = new GridData();
+		gdPanel.verticalAlignment = SWT.BEGINNING ;
+		gdPanel.widthHint = 400 ;
+		
+		Composite panel = new Composite(container, SWT.NONE );
+		GridLayout gridLayout = new GridLayout();
+		gridLayout.numColumns = 2;
+		gridLayout.marginHeight = 12;
+		panel.setLayout(gridLayout);
+		panel.setLayoutData(gdPanel);
+
+		{
+			GridData gd = new GridData();
+			gd.widthHint = 260;
+			gd.verticalAlignment = SWT.BEGINNING ;
+
+		    _tId       = createTextWithLabel(panel, "Id",       gd, false ) ;  
+		    _tName     = createTextWithLabel(panel, "Name",     gd, true ) ;  
+		    _tDriver   = createTextWithLabel(panel, "Driver",   gd, true ) ;  
+		    _tUrl      = createTextWithLabel(panel, "URL",      gd, true ) ;  
+		    _tUser     = createTextWithLabel(panel, "User",     gd, true ) ;  
+		    _tPassword = createTextWithLabel(panel, "Password", gd, true ) ;  
+		    _tTypeName = createTextWithLabel(panel, "Type ",    gd, true ) ;  
+		    _tDialect  = createTextWithLabel(panel, "Dialect",  gd, true ) ;  
+			
+		    bindViewToModel(_tId,             "setDatabaseId",     int.class );
+		    bindViewToModel(_tName,           "setDatabaseName",   String.class);
+		    bindViewToModel(_tDriver,         "setDriverClass",    String.class);
+		    bindViewToModel(_tUrl,            "setJdbcUrl",        String.class);
+		    bindViewToModel(_tUser,           "setUser",           String.class);
+		    bindViewToModel(_tPassword,       "setPassword",       String.class);
+		    bindViewToModel(_tTypeName,       "setTypeName",       String.class); // ver 2.1.0
+		    bindViewToModel(_tDialect,        "setDialect",        String.class); // ver 2.1.0
+		    
+		    _tName.setData( TEXT_DATA_UPDATE_COMBO, "true" ) ; // Flag for update combo item 
+		}
+	}
+	/**
+	 * Creates the 2nd panel (right) : set of buttons 
+	 * @param container
+	 */
+	private void createTabFolder1Panel2(Composite container) {
+		GridData gdPanel = new GridData();
+		gdPanel.verticalAlignment = SWT.BEGINNING ;
+		//gdPanel.widthHint = 200 ;
+
+		Composite panel = new Composite(container, SWT.NONE );
+		GridLayout gl = new GridLayout();
+		gl.numColumns = 1;
+		gl.marginHeight = 12;
+		gl.marginLeft = 20 ;
+		panel.setLayout(gl);
+		panel.setLayoutData(gdPanel);
+
+		GridData gd = new GridData();
+		gd.widthHint = 120;
+		gd.verticalAlignment = SWT.BEGINNING ;
+		
+		{
+			Button button = new Button(panel, SWT.NONE);
+			button.setText("Test connection");
+			button.setLayoutData(gd);
+	    	button.addSelectionListener( new SelectionListener() {
+	            public void widgetSelected(SelectionEvent arg0) {
+	            	actionTestConnection();
+	            }
+	            public void widgetDefaultSelected(SelectionEvent arg0) {
+	            }
+	        });
+		}
+    	
+		{
+	    	Button button = new Button(panel, SWT.NONE);
+			button.setText("Show libraries");
+			button.setLayoutData(gd);		
+	    	button.addSelectionListener( new SelectionListener() {
+	            public void widgetSelected(SelectionEvent arg0) {
+	            	showLibraries();
+	            }
+	            public void widgetDefaultSelected(SelectionEvent arg0) {
+	            }
+	        });
+		}
+	}
+	
 	//----------------------------------------------------------------------------------------------
 	private void createConfigurationFields(Composite container) 
 	{
@@ -391,13 +495,13 @@ import org.telosys.tools.repository.changelog.ChangeLog;
 	    _tDialect  = createTextWithLabel(container, x, y, "Dialect", true, labelWidth, textWidth ) ;  
 	    y = y + yGap ;
 
-	    createSingleLabel(container, x, y, "Configuration below is useful only for the framework : ", labelWidth+textWidth );
-	    y = y + yGap ;
-	    
-	    _tIsolationLevel = createTextWithLabel(container, x, y, "Isolation level", true, labelWidth, textWidth ) ;  
-	    y = y + yGap ;
-	    _tPoolSize  = createTextWithLabel(container, x, y, "Pool size", true, labelWidth, textWidth ) ;  
-	    y = y + yGap ;
+//	    createSingleLabel(container, x, y, "Configuration below is useful only for the framework : ", labelWidth+textWidth );
+//	    y = y + yGap ;
+//	    
+//	    _tIsolationLevel = createTextWithLabel(container, x, y, "Isolation level", true, labelWidth, textWidth ) ;  
+//	    y = y + yGap ;
+//	    _tPoolSize  = createTextWithLabel(container, x, y, "Pool size", true, labelWidth, textWidth ) ;  
+//	    y = y + yGap ;
 
 	    bindViewToModel(_tId,             "setDatabaseId",     int.class );
 	    bindViewToModel(_tName,           "setDatabaseName",   String.class);
@@ -408,8 +512,8 @@ import org.telosys.tools.repository.changelog.ChangeLog;
 	    bindViewToModel(_tTypeName,       "setTypeName",       String.class); // ver 2.1.0
 	    bindViewToModel(_tDialect,        "setDialect",        String.class); // ver 2.1.0
 	    
-	    bindViewToModel(_tIsolationLevel, "setIsolationLevel", String.class);
-	    bindViewToModel(_tPoolSize,       "setPoolSize",       int.class );
+//	    bindViewToModel(_tIsolationLevel, "setIsolationLevel", String.class);
+//	    bindViewToModel(_tPoolSize,       "setPoolSize",       int.class );
 	    _tName.setData( TEXT_DATA_UPDATE_COMBO, "true" ) ; // Flag for update combo item 
 	}
 	
@@ -793,8 +897,8 @@ import org.telosys.tools.repository.changelog.ChangeLog;
 		_tName.setText("");
 		_tDriver.setText("");
 		_tUrl.setText("");
-		_tIsolationLevel.setText("");
-		_tPoolSize.setText("");
+//		_tIsolationLevel.setText("");
+//		_tPoolSize.setText("");
 		_tUser.setText("");
 		_tPassword.setText("");
 		_tTypeName.setText(""); // ver 2.1.0
@@ -851,8 +955,8 @@ import org.telosys.tools.repository.changelog.ChangeLog;
 			    _tTypeName.setText ( nn( db.getTypeName() )); // ver 2.1.0
 			    _tDialect.setText  ( nn( db.getDialect() )); // ver 2.1.0
 
-			    _tIsolationLevel.setText( nn( db.getIsolationLevel() ) );
-				_tPoolSize.setText ( "" + db.getPoolSize() );
+//			    _tIsolationLevel.setText( nn( db.getIsolationLevel() ) );
+//				_tPoolSize.setText ( "" + db.getPoolSize() );
 			    
 			    //--- Meta-Data
 			    _tMetaDataCatalog.setText( nn( db.getMetadataCatalog() ) ) ;

@@ -384,7 +384,8 @@ import org.telosys.tools.repository.changelog.ChangeLog;
 	private void createTabFolder1Panel1(Composite container) {
 		GridData gdPanel = new GridData();
 		gdPanel.verticalAlignment = SWT.BEGINNING ;
-		gdPanel.widthHint = 400 ;
+		//gdPanel.widthHint = 400 ;
+		gdPanel.widthHint = 540 ;
 		
 		Composite panel = new Composite(container, SWT.NONE );
 		GridLayout gridLayout = new GridLayout();
@@ -395,8 +396,8 @@ import org.telosys.tools.repository.changelog.ChangeLog;
 
 		{
 			GridData gd = new GridData();
-			gd.widthHint = 260;
 			gd.verticalAlignment = SWT.BEGINNING ;
+			gd.widthHint = 540;
 
 		    _tId       = createTextWithLabel(panel, "Id",       gd, false ) ;  
 		    _tName     = createTextWithLabel(panel, "Name",     gd, true ) ;  
@@ -437,7 +438,7 @@ import org.telosys.tools.repository.changelog.ChangeLog;
 		panel.setLayoutData(gdPanel);
 
 		GridData gd = new GridData();
-		gd.widthHint = 120;
+		gd.widthHint = 140; // "widthHint" specifies the preferred width in pixels = buttons width
 		gd.verticalAlignment = SWT.BEGINNING ;
 		
 		{
@@ -467,56 +468,56 @@ import org.telosys.tools.repository.changelog.ChangeLog;
 		}
 	}
 	
-	//----------------------------------------------------------------------------------------------
-	private void createConfigurationFields(Composite container) 
-	{
-		int x = 5 ; 
-		int y = 20 ; 
-		int yGap = 30 ; 
-		int labelWidth = 100 ;
-		int textWidth  = 320 ;
-		
-	    _tId       = createTextWithLabel(container, x, y, "Id", false, labelWidth, textWidth ) ;  
-	    y = y + yGap ;
-	    _tName     = createTextWithLabel(container, x, y, "Name", true, labelWidth, textWidth ) ;  
-	    y = y + yGap ;
-	    _tDriver   = createTextWithLabel(container, x, y, "Driver", true, labelWidth, textWidth ) ;  
-	    y = y + yGap ;
-	    _tUrl      = createTextWithLabel(container, x, y, "URL", true, labelWidth, textWidth ) ;  
-	    y = y + yGap ;
-	    
-	    _tUser     = createTextWithLabel(container, x, y, "User", true, labelWidth, textWidth ) ;  
-	    y = y + yGap ;
-	    _tPassword = createTextWithLabel(container, x, y, "Password", true, labelWidth, textWidth ) ;  
-	    y = y + yGap ;
-
-	    _tTypeName = createTextWithLabel(container, x, y, "Type ", true, labelWidth, textWidth ) ;  
-	    y = y + yGap ;
-	    _tDialect  = createTextWithLabel(container, x, y, "Dialect", true, labelWidth, textWidth ) ;  
-	    y = y + yGap ;
-
-//	    createSingleLabel(container, x, y, "Configuration below is useful only for the framework : ", labelWidth+textWidth );
+//	//----------------------------------------------------------------------------------------------
+//	private void createConfigurationFields(Composite container) 
+//	{
+//		int x = 5 ; 
+//		int y = 20 ; 
+//		int yGap = 30 ; 
+//		int labelWidth = 100 ;
+//		int textWidth  = 320 ;
+//		
+//	    _tId       = createTextWithLabel(container, x, y, "Id", false, labelWidth, textWidth ) ;  
+//	    y = y + yGap ;
+//	    _tName     = createTextWithLabel(container, x, y, "Name", true, labelWidth, textWidth ) ;  
+//	    y = y + yGap ;
+//	    _tDriver   = createTextWithLabel(container, x, y, "Driver", true, labelWidth, textWidth ) ;  
+//	    y = y + yGap ;
+//	    _tUrl      = createTextWithLabel(container, x, y, "URL", true, labelWidth, textWidth ) ;  
 //	    y = y + yGap ;
 //	    
-//	    _tIsolationLevel = createTextWithLabel(container, x, y, "Isolation level", true, labelWidth, textWidth ) ;  
+//	    _tUser     = createTextWithLabel(container, x, y, "User", true, labelWidth, textWidth ) ;  
 //	    y = y + yGap ;
-//	    _tPoolSize  = createTextWithLabel(container, x, y, "Pool size", true, labelWidth, textWidth ) ;  
+//	    _tPassword = createTextWithLabel(container, x, y, "Password", true, labelWidth, textWidth ) ;  
 //	    y = y + yGap ;
-
-	    bindViewToModel(_tId,             "setDatabaseId",     int.class );
-	    bindViewToModel(_tName,           "setDatabaseName",   String.class);
-	    bindViewToModel(_tDriver,         "setDriverClass",    String.class);
-	    bindViewToModel(_tUrl,            "setJdbcUrl",        String.class);
-	    bindViewToModel(_tUser,           "setUser",           String.class);
-	    bindViewToModel(_tPassword,       "setPassword",       String.class);
-	    bindViewToModel(_tTypeName,       "setTypeName",       String.class); // ver 2.1.0
-	    bindViewToModel(_tDialect,        "setDialect",        String.class); // ver 2.1.0
-	    
-//	    bindViewToModel(_tIsolationLevel, "setIsolationLevel", String.class);
-//	    bindViewToModel(_tPoolSize,       "setPoolSize",       int.class );
-	    _tName.setData( TEXT_DATA_UPDATE_COMBO, "true" ) ; // Flag for update combo item 
-	}
-	
+//
+//	    _tTypeName = createTextWithLabel(container, x, y, "Type ", true, labelWidth, textWidth ) ;  
+//	    y = y + yGap ;
+//	    _tDialect  = createTextWithLabel(container, x, y, "Dialect", true, labelWidth, textWidth ) ;  
+//	    y = y + yGap ;
+//
+////	    createSingleLabel(container, x, y, "Configuration below is useful only for the framework : ", labelWidth+textWidth );
+////	    y = y + yGap ;
+////	    
+////	    _tIsolationLevel = createTextWithLabel(container, x, y, "Isolation level", true, labelWidth, textWidth ) ;  
+////	    y = y + yGap ;
+////	    _tPoolSize  = createTextWithLabel(container, x, y, "Pool size", true, labelWidth, textWidth ) ;  
+////	    y = y + yGap ;
+//
+//	    bindViewToModel(_tId,             "setDatabaseId",     int.class );
+//	    bindViewToModel(_tName,           "setDatabaseName",   String.class);
+//	    bindViewToModel(_tDriver,         "setDriverClass",    String.class);
+//	    bindViewToModel(_tUrl,            "setJdbcUrl",        String.class);
+//	    bindViewToModel(_tUser,           "setUser",           String.class);
+//	    bindViewToModel(_tPassword,       "setPassword",       String.class);
+//	    bindViewToModel(_tTypeName,       "setTypeName",       String.class); // ver 2.1.0
+//	    bindViewToModel(_tDialect,        "setDialect",        String.class); // ver 2.1.0
+//	    
+////	    bindViewToModel(_tIsolationLevel, "setIsolationLevel", String.class);
+////	    bindViewToModel(_tPoolSize,       "setPoolSize",       int.class );
+//	    _tName.setData( TEXT_DATA_UPDATE_COMBO, "true" ) ; // Flag for update combo item 
+//	}
+//	
 	//----------------------------------------------------------------------------------------------
 	private void createTabFolder2(TabFolder tabFolder) 
 	{
@@ -527,60 +528,149 @@ import org.telosys.tools.repository.changelog.ChangeLog;
 		Composite tabContent = new Composite(tabFolder, SWT.NONE);
 		tabContent.setBackground( getBackgroundColor() );
 		
-		createInformationFields(tabContent) ;
-		
-		//--- Button "Get infos"
-		Button button = new Button(tabContent, SWT.NONE);
-		button.setText("Get database info");
-		button.setBounds(460, 20, 120, 25);
+//		//-----------------------------------------------
+//		createInformationFields(tabContent) ;
+//		
+//		//--- Button "Get infos"
+//		Button button = new Button(tabContent, SWT.NONE);
+//		button.setText("Get database info");
+//		button.setBounds(460, 20, 120, 25);
+//
+//    	button.addSelectionListener( new SelectionListener() 
+//    	{
+//            public void widgetSelected(SelectionEvent arg0)
+//            {
+//            	actionGetInformations();
+//            }
+//            public void widgetDefaultSelected(SelectionEvent arg0)
+//            {
+//            }
+//        });
+//		tabItem.setControl(tabContent);
+//		//-----------------------------------------------
 
-    	button.addSelectionListener( new SelectionListener() 
-    	{
-            public void widgetSelected(SelectionEvent arg0)
-            {
-            	actionGetInformations();
-            }
-            public void widgetDefaultSelected(SelectionEvent arg0)
-            {
-            }
-        });
+		// Grid layout with 3 columns
+    	GridLayout gridLayout = new GridLayout ();
+		gridLayout.numColumns = 3;
+		gridLayout.marginHeight = 12;
+		tabContent.setLayout(gridLayout);
 		
+		createTabFolder2Panel1(tabContent);		
+		createTabFolder2Panel2(tabContent);
+
 		tabItem.setControl(tabContent);
 	}
 	//----------------------------------------------------------------------------------------------
-	private void createInformationFields(Composite container) 
-	{
-		int x = 5 ; 
-		int y = 20 ; 
-		int yGap = 30 ; 
-		int labelWidth = 120 ;
-		int textWidth  = 320 ;
+	/**
+	 * Creates the 1rst panel : set of fields ( label + input text )
+	 * @param container
+	 */
+	private void createTabFolder2Panel1(Composite container) {
+		GridData gdPanel = new GridData();
+		gdPanel.verticalAlignment = SWT.BEGINNING ;
+		//gdPanel.widthHint = 400 ;
+		gdPanel.widthHint = 540 ; // "widthHint" specifies the preferred width in pixels 
 		
-	    _InfoProdName  = createTextWithLabel(container, x, y, "Product name", true, labelWidth, textWidth ) ;  
-	    y = y + yGap ;
-	    _InfoProdVer   = createTextWithLabel(container, x, y, "Product version", true, labelWidth, textWidth ) ;  
-	    y = y + yGap ;
-	    _InfoDriverName  = createTextWithLabel(container, x, y, "Driver name", true, labelWidth, textWidth ) ;  
-	    y = y + yGap ;
-	    _InfoDriverVer   = createTextWithLabel(container, x, y, "Driver version", true, labelWidth, textWidth ) ;  
-	    y = y + yGap ;
-	    _InfoURL       = createTextWithLabel(container, x, y, "JDBC URL", true, labelWidth, textWidth ) ;  
-	    y = y + yGap ;
-	    _InfoUser      = createTextWithLabel(container, x, y, "User name", true, labelWidth, textWidth ) ;  
-	    y = y + yGap ;
-	    _InfoIsolation = createTextWithLabel(container, x, y, "Def. isolation level", true, labelWidth, textWidth ) ;  
-	    y = y + yGap ;
-	    _InfoMaxConn = createTextWithLabel(container, x, y, "Max connections", true, labelWidth, textWidth ) ;  
-	    y = y + yGap ;
-	    _InfoCatalogTerm = createTextWithLabel(container, x, y, "Catalog term", true, labelWidth, textWidth ) ;  
-	    y = y + yGap ;
-	    _InfoCatalogSepar = createTextWithLabel(container, x, y, "Catalog separator", true, labelWidth, textWidth ) ;  
-	    y = y + yGap ;
-	    _InfoSchemaTerm = createTextWithLabel(container, x, y, "Schema term", true, labelWidth, textWidth ) ; 
-	    y = y + yGap ;
-	    _InfoSearchEscape = createTextWithLabel(container, x, y, "Search escape", true, labelWidth, textWidth ) ; 
-	}
+		Composite panel = new Composite(container, SWT.NONE );
+		GridLayout gridLayout = new GridLayout();
+		gridLayout.numColumns = 2;
+		gridLayout.marginHeight = 12;
+		panel.setLayout(gridLayout);
+		panel.setLayoutData(gdPanel);
 
+		{
+			GridData gd = new GridData();
+//			//gd.widthHint = 320; // "widthHint" specifies the preferred width in pixels 
+//			gd.widthHint = 400; // "widthHint" specifies the preferred width in pixels 
+			gd.widthHint = 540; // "widthHint" specifies the preferred width in pixels 
+			gd.verticalAlignment = SWT.BEGINNING ;
+
+		    _InfoProdName     = createTextWithLabel(panel, "Product name", gd, true) ;  
+		    _InfoProdVer      = createTextWithLabel(panel, "Product version", gd, true) ;  
+		    _InfoDriverName   = createTextWithLabel(panel, "Driver name", gd, true) ;  
+		    _InfoDriverVer    = createTextWithLabel(panel, "Driver version", gd, true) ;  
+		    _InfoURL          = createTextWithLabel(panel, "JDBC URL", gd, true) ;  
+		    _InfoUser         = createTextWithLabel(panel, "User name", gd, true) ;  
+		    _InfoIsolation    = createTextWithLabel(panel, "Def. isolation level", gd, true) ;  
+		    _InfoMaxConn      = createTextWithLabel(panel, "Max connections", gd, true) ;  
+		    _InfoCatalogTerm  = createTextWithLabel(panel, "Catalog term", gd, true) ;  
+		    _InfoCatalogSepar = createTextWithLabel(panel, "Catalog separator", gd, true) ;  
+		    _InfoSchemaTerm   = createTextWithLabel(panel, "Schema term", gd, true) ; 
+		    _InfoSearchEscape = createTextWithLabel(panel, "Search escape", gd, true) ; 
+		    
+		    // No binding for the fields (not stored in the configuration)
+		    
+		    _tName.setData( TEXT_DATA_UPDATE_COMBO, "true" ) ; // Flag for update combo item 
+		}
+	}
+	/**
+	 * Creates the 2nd panel (right) : set of buttons 
+	 * @param container
+	 */
+	private void createTabFolder2Panel2(Composite container) {
+		GridData gdPanel = new GridData();
+		gdPanel.verticalAlignment = SWT.BEGINNING ;
+		//gdPanel.widthHint = 200 ;
+
+		Composite panel = new Composite(container, SWT.NONE );
+		GridLayout gl = new GridLayout();
+		gl.numColumns = 1;
+		gl.marginHeight = 12;
+		gl.marginLeft = 20 ;
+		panel.setLayout(gl);
+		panel.setLayoutData(gdPanel);
+
+		GridData gd = new GridData();
+		gd.widthHint = 150; // "widthHint" specifies the preferred width in pixels = buttons width
+		gd.verticalAlignment = SWT.BEGINNING ;
+		
+		{
+			Button button = new Button(panel, SWT.NONE);
+			button.setText("Get database info");
+			button.setLayoutData(gd);
+	    	button.addSelectionListener( new SelectionListener() {
+	            public void widgetSelected(SelectionEvent arg0) {
+	            	actionGetInformations();
+	            }
+	            public void widgetDefaultSelected(SelectionEvent arg0) {
+	            }
+	        });
+		}
+	}
+//	//----------------------------------------------------------------------------------------------
+//	private void createInformationFields(Composite container) 
+//	{
+//		int x = 5 ; 
+//		int y = 20 ; 
+//		int yGap = 30 ; 
+//		int labelWidth = 120 ;
+//		int textWidth  = 320 ;
+//		
+//	    _InfoProdName  = createTextWithLabel(container, x, y, "Product name", true, labelWidth, textWidth ) ;  
+//	    y = y + yGap ;
+//	    _InfoProdVer   = createTextWithLabel(container, x, y, "Product version", true, labelWidth, textWidth ) ;  
+//	    y = y + yGap ;
+//	    _InfoDriverName  = createTextWithLabel(container, x, y, "Driver name", true, labelWidth, textWidth ) ;  
+//	    y = y + yGap ;
+//	    _InfoDriverVer   = createTextWithLabel(container, x, y, "Driver version", true, labelWidth, textWidth ) ;  
+//	    y = y + yGap ;
+//	    _InfoURL       = createTextWithLabel(container, x, y, "JDBC URL", true, labelWidth, textWidth ) ;  
+//	    y = y + yGap ;
+//	    _InfoUser      = createTextWithLabel(container, x, y, "User name", true, labelWidth, textWidth ) ;  
+//	    y = y + yGap ;
+//	    _InfoIsolation = createTextWithLabel(container, x, y, "Def. isolation level", true, labelWidth, textWidth ) ;  
+//	    y = y + yGap ;
+//	    _InfoMaxConn = createTextWithLabel(container, x, y, "Max connections", true, labelWidth, textWidth ) ;  
+//	    y = y + yGap ;
+//	    _InfoCatalogTerm = createTextWithLabel(container, x, y, "Catalog term", true, labelWidth, textWidth ) ;  
+//	    y = y + yGap ;
+//	    _InfoCatalogSepar = createTextWithLabel(container, x, y, "Catalog separator", true, labelWidth, textWidth ) ;  
+//	    y = y + yGap ;
+//	    _InfoSchemaTerm = createTextWithLabel(container, x, y, "Schema term", true, labelWidth, textWidth ) ; 
+//	    y = y + yGap ;
+//	    _InfoSearchEscape = createTextWithLabel(container, x, y, "Search escape", true, labelWidth, textWidth ) ; 
+//	}
+//
 	//----------------------------------------------------------------------------------------------
 	/**
 	 * Tab "Meta-data"
@@ -809,32 +899,32 @@ import org.telosys.tools.repository.changelog.ChangeLog;
 	}
 	
 	//----------------------------------------------------------------------------------------------
-	private Text createTextWithLabel(Composite container, int x, int y, String sLabel, boolean b, int labelWidth, int textWidth ) 
-	{
-		Label label = new Label(container, SWT.NONE);
-		label.setText( sLabel + " : ");
-		label.setBounds(x, y, labelWidth, TEXT_HEIGHT);
-		//label.setLocation(x, y);
-		 
-		Text text = new Text(container, SWT.BORDER);
-		text.setBounds(x + labelWidth + 10 , y, 320, TEXT_HEIGHT);
-		//text.setLocation(x + 80, y);
-		text.setEnabled(b);
-		 
-		return text ;
-	}
-	private void createSingleLabel(Composite container, int x, int y, String labelText, int labelWidth ) 
-	{
-		Label label ;
-		
-		label = new Label(container, SWT.NONE);
-		label.setText( labelText );
-		label.setBounds(x, y, labelWidth, TEXT_HEIGHT);
-		 
+//	private Text createTextWithLabel(Composite container, int x, int y, String sLabel, boolean b, int labelWidth, int textWidth ) 
+//	{
+//		Label label = new Label(container, SWT.NONE);
+//		label.setText( sLabel + " : ");
+//		label.setBounds(x, y, labelWidth, TEXT_HEIGHT);
+//		//label.setLocation(x, y);
+//		 
+//		Text text = new Text(container, SWT.BORDER);
+//		text.setBounds(x + labelWidth + 10 , y, 320, TEXT_HEIGHT);
+//		//text.setLocation(x + 80, y);
+//		text.setEnabled(b);
+//		 
+//		return text ;
+//	}
+//	private void createSingleLabel(Composite container, int x, int y, String labelText, int labelWidth ) 
+//	{
+//		Label label ;
+//		
 //		label = new Label(container, SWT.NONE);
-//		label.setText( label2 );
-//		label.setBounds(x + labelWidth1 + 10 , y, 320, TEXT_HEIGHT);
-	}
+//		label.setText( labelText );
+//		label.setBounds(x, y, labelWidth, TEXT_HEIGHT);
+//		 
+////		label = new Label(container, SWT.NONE);
+////		label.setText( label2 );
+////		label.setBounds(x + labelWidth1 + 10 , y, 320, TEXT_HEIGHT);
+//	}
 	//----------------------------------------------------------------------------------------------
 	private Text createTextWithLabel(Composite container, String sLabel, GridData gridData, boolean b ) 
 	{
@@ -1149,17 +1239,6 @@ import org.telosys.tools.repository.changelog.ChangeLog;
     		MsgBox.error("No databases configuration file (file probably not loaded) " );
         }
         return null ;
-    }
-    
-    private void msgBoxErrorWithClassPath(String msg, Exception e, String[] classPath) 
-    {
-		StringBuffer sb = new StringBuffer();
-		sb.append(msg + "\n" ) ;
-		sb.append("Project Class Path : \n" ) ;
-		for ( String s : classPath ) {
-			sb.append(" . " + s + "\n") ;
-		}
-		MsgBox.error(sb.toString(), e );
     }
     
     /**

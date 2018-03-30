@@ -18,6 +18,7 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
@@ -203,87 +204,89 @@ import org.telosys.tools.repository.changelog.ChangeLog;
 		
 		body.setLayout( bodyLayout );
 		
-		//--------------------------------------------------------------
-		//--- Group "Database" ( composite )
-		Group group1 = new Group(body, SWT.NONE);
-		group1.setText("Database");
-		//group1.setSize(GROUP_WIDTH, 60);
-		//tab.setBackground(DAOColor.color(disp));
-		//group1.setLocation(GROUP_X, 20);
-        group1.setBackground( getBackgroundColor() );
-
-		//--- Combo Box "Database table"
-		_ComboDatabases = new Combo(group1, SWT.BORDER | SWT.READ_ONLY);
-		_ComboDatabases.setBounds(TEXT_X, 25, 260, TEXT_HEIGHT);
-		_ComboDatabases.setVisibleItemCount(12);
-		setDatabasesComboAction(_ComboDatabases);
-
-		//--------------------------------------------------------------
-		Button button ;
-		//--------------------------------------------------------------
-		button = new Button(group1, SWT.NONE);
-		button.setText("New");
-		button.setBounds(280, 25, 70, 25); // (x,y, width, height)
-		button.setImage( PluginImages.getImage(PluginImages.NEW_DATABASE ) );
-		button.setToolTipText("New database configuration");
-
-    	button.addSelectionListener( new SelectionListener() {
-            public void widgetSelected(SelectionEvent arg0) {
-            	actionNewDatabase() ;
-            }
-            public void widgetDefaultSelected(SelectionEvent arg0) {
-            }
-        });
-		//--------------------------------------------------------------
-		button = new Button(group1, SWT.NONE);
-		button.setText("Delete");
-		button.setBounds(360, 25, 70, 25); // (x,y, width, height)
-		button.setImage( PluginImages.getImage(PluginImages.DELETE_DATABASE ) );
-		button.setToolTipText("Delete database configuration");
-
-    	button.addSelectionListener( new SelectionListener() {
-            public void widgetSelected(SelectionEvent arg0) {
-            	actionDeleteDatabase() ;
-            }
-            public void widgetDefaultSelected(SelectionEvent arg0) {
-            }
-        });
+//		//--------------------------------------------------------------
+//		//--- Group "Database" ( composite )
+//		Group group1 = new Group(body, SWT.NONE);
+//		group1.setText("Database");
+//		//group1.setSize(GROUP_WIDTH, 60);
+//		//tab.setBackground(DAOColor.color(disp));
+//		//group1.setLocation(GROUP_X, 20);
+//        group1.setBackground( getBackgroundColor() );
+//
+//		//--- Combo Box "Database table"
+//		_ComboDatabases = new Combo(group1, SWT.BORDER | SWT.READ_ONLY);
+//		_ComboDatabases.setBounds(TEXT_X, 25, 260, TEXT_HEIGHT);
+//		_ComboDatabases.setVisibleItemCount(12);
+//		setDatabasesComboAction(_ComboDatabases);
+//
+//		//--------------------------------------------------------------
+//		Button button ;
+//		//--------------------------------------------------------------
+//		button = new Button(group1, SWT.NONE);
+//		button.setText("New");
+//		button.setBounds(280, 25, 70, 25); // (x,y, width, height)
+//		button.setImage( PluginImages.getImage(PluginImages.NEW_DATABASE ) );
+//		button.setToolTipText("New database configuration");
+//
+//    	button.addSelectionListener( new SelectionListener() {
+//            public void widgetSelected(SelectionEvent arg0) {
+//            	actionNewDatabase() ;
+//            }
+//            public void widgetDefaultSelected(SelectionEvent arg0) {
+//            }
+//        });
+//		//--------------------------------------------------------------
+//		button = new Button(group1, SWT.NONE);
+//		button.setText("Delete");
+//		button.setBounds(360, 25, 70, 25); // (x,y, width, height)
+//		button.setImage( PluginImages.getImage(PluginImages.DELETE_DATABASE ) );
+//		button.setToolTipText("Delete database configuration");
+//
+//    	button.addSelectionListener( new SelectionListener() {
+//            public void widgetSelected(SelectionEvent arg0) {
+//            	actionDeleteDatabase() ;
+//            }
+//            public void widgetDefaultSelected(SelectionEvent arg0) {
+//            }
+//        });
+//		
+//		//--------------------------------------------------------------
+//		button = new Button(group1, SWT.NONE);
+//		button.setText("Generate repository");
+//		button.setBounds(450, 25, 140, 25); // (x,y, width, height)
+//		button.setImage( PluginImages.getImage(PluginImages.GENERATE_REPO ) );
+//		button.setToolTipText("Generate a new repository");
+//
+//    	button.addSelectionListener( new SelectionListener() 
+//    	{
+//            public void widgetSelected(SelectionEvent arg0)
+//            {
+//                actionCreateNewDbModel();
+//            }
+//            public void widgetDefaultSelected(SelectionEvent arg0)
+//            {
+//            }
+//        });
+//		
+//		//--------------------------------------------------------------
+//		button = new Button(group1, SWT.NONE);
+//		button.setText("Update repository");
+//		button.setBounds(600, 25, 140, 25); // (x,y, width, height)
+//		button.setImage( PluginImages.getImage(PluginImages.UPDATE_REPO ) );
+//		button.setToolTipText("Update existing repository");
+//
+//    	button.addSelectionListener( new SelectionListener() 
+//    	{
+//            public void widgetSelected(SelectionEvent arg0)
+//            {
+//                actionUpdateDbModel();
+//            }
+//            public void widgetDefaultSelected(SelectionEvent arg0)
+//            {
+//            }
+//        });
 		
-		//--------------------------------------------------------------
-		button = new Button(group1, SWT.NONE);
-		button.setText("Generate repository");
-		button.setBounds(450, 25, 140, 25); // (x,y, width, height)
-		button.setImage( PluginImages.getImage(PluginImages.GENERATE_REPO ) );
-		button.setToolTipText("Generate a new repository");
-
-    	button.addSelectionListener( new SelectionListener() 
-    	{
-            public void widgetSelected(SelectionEvent arg0)
-            {
-                actionCreateNewDbModel();
-            }
-            public void widgetDefaultSelected(SelectionEvent arg0)
-            {
-            }
-        });
-		
-		//--------------------------------------------------------------
-		button = new Button(group1, SWT.NONE);
-		button.setText("Update repository");
-		button.setBounds(600, 25, 140, 25); // (x,y, width, height)
-		button.setImage( PluginImages.getImage(PluginImages.UPDATE_REPO ) );
-		button.setToolTipText("Update existing repository");
-
-    	button.addSelectionListener( new SelectionListener() 
-    	{
-            public void widgetSelected(SelectionEvent arg0)
-            {
-                actionUpdateDbModel();
-            }
-            public void widgetDefaultSelected(SelectionEvent arg0)
-            {
-            }
-        });
+		createFormHeader(body);
 		
 		//--------------------------------------------------------------
 		//--- Tab Folder 
@@ -317,6 +320,87 @@ import org.telosys.tools.repository.changelog.ChangeLog;
 	}
 	
 	//----------------------------------------------------------------------------------------------
+	private void createFormHeader(Composite body) {
+		//--- Group "Database" ( composite )
+		Group group1 = new Group(body, SWT.NONE);
+		group1.setText("Database");
+        group1.setBackground( getBackgroundColor() );
+        
+        group1.setLayout(new RowLayout()); // ROW LAYOUT ( Added )
+
+		//--------------------------------------------------------------
+		Label filler ;
+		Button button ;
+		//--------------------------------------------------------------
+		//--- Combo Box "Database"
+		_ComboDatabases = new Combo(group1, SWT.BORDER | SWT.READ_ONLY);
+		//_ComboDatabases.setBounds(TEXT_X, 25, 260, TEXT_HEIGHT);
+		_ComboDatabases.setVisibleItemCount(12);
+		_ComboDatabases.setLayoutData( new RowData(240, SWT.DEFAULT) ); // Width 200
+		setDatabasesComboAction(_ComboDatabases);
+		//--------------------------------------------------------------
+		filler = new Label(group1, SWT.NULL);
+		filler.setText("");
+		filler.setLayoutData( new RowData(10, SWT.DEFAULT) );
+		//--------------------------------------------------------------
+		button = new Button(group1, SWT.NONE);
+		button.setText("New   ");
+		button.setLayoutData( new RowData(SWT.DEFAULT, SWT.DEFAULT) ); 
+		button.setImage( PluginImages.getImage(PluginImages.NEW_DATABASE ) );
+		button.setToolTipText("New database configuration");
+    	button.addSelectionListener( new SelectionListener() {
+            public void widgetSelected(SelectionEvent arg0) {
+            	actionNewDatabase() ;
+            }
+            public void widgetDefaultSelected(SelectionEvent arg0) {
+            }
+        });
+		//--------------------------------------------------------------
+		button = new Button(group1, SWT.NONE);
+		button.setText("Delete");
+		button.setLayoutData( new RowData(SWT.DEFAULT, SWT.DEFAULT) ); 
+		button.setImage( PluginImages.getImage(PluginImages.DELETE_DATABASE ) );
+		button.setToolTipText("Delete database configuration");
+    	button.addSelectionListener( new SelectionListener() {
+            public void widgetSelected(SelectionEvent arg0) {
+            	actionDeleteDatabase() ;
+            }
+            public void widgetDefaultSelected(SelectionEvent arg0) {
+            }
+        });
+		//--------------------------------------------------------------
+		filler = new Label(group1, SWT.NULL);
+		filler.setText("");
+		filler.setLayoutData( new RowData(20, SWT.DEFAULT) );
+		//--------------------------------------------------------------
+		button = new Button(group1, SWT.NONE);
+		button.setText("Create model");
+		button.setLayoutData( new RowData(SWT.DEFAULT, SWT.DEFAULT) ); 
+		button.setImage( PluginImages.getImage(PluginImages.GENERATE_REPO ) );
+		button.setToolTipText("Create a new database model");
+    	button.addSelectionListener( new SelectionListener() {
+            public void widgetSelected(SelectionEvent arg0) {
+                actionCreateNewDbModel();
+            }
+            public void widgetDefaultSelected(SelectionEvent arg0) {
+            }
+        });
+		//--------------------------------------------------------------
+		button = new Button(group1, SWT.NONE);
+		button.setText("Update model");
+		button.setLayoutData( new RowData(SWT.DEFAULT, SWT.DEFAULT) ); 
+		button.setImage( PluginImages.getImage(PluginImages.UPDATE_REPO ) );
+		button.setToolTipText("Update existing database model");
+    	button.addSelectionListener( new SelectionListener() {
+            public void widgetSelected(SelectionEvent arg0) {
+                actionUpdateDbModel();
+            }
+            public void widgetDefaultSelected(SelectionEvent arg0) {
+            }
+        });
+	}
+
+	//----------------------------------------------------------------------------------------------
 	private void createTabFolder1(TabFolder tabFolder) {
 		log(this, "createTabFolder1() ..." );
 
@@ -326,51 +410,12 @@ import org.telosys.tools.repository.changelog.ChangeLog;
 		Composite tabContent = new Composite(tabFolder, SWT.NONE);
 		tabContent.setBackground( getBackgroundColor() );
 		
-//	    // Color color = DAOColor.color(tabContent.getDisplay());
-//		createConfigurationFields(tabContent) ;
-//
-//		//--- Button "Test connection"
-//		Button button = new Button(tabContent, SWT.NONE);
-//		button.setText("Test connection");
-//		button.setBounds(460, 20, 120, 25);
-//
-//    	button.addSelectionListener( new SelectionListener() 
-//    	{
-//            public void widgetSelected(SelectionEvent arg0)
-//            {
-//            	actionTestConnection();
-//            }
-//            public void widgetDefaultSelected(SelectionEvent arg0)
-//            {
-//            }
-//        });
-//    	
-//		//--- Button "Show Libraries"
-//		Button buttonLibraries = new Button(tabContent, SWT.NONE);
-//		buttonLibraries.setText("Show libraries");
-//		buttonLibraries.setBounds(460, 50, 120, 25);
-//
-//		buttonLibraries.addSelectionListener( new SelectionListener() 
-//    	{
-//            public void widgetSelected(SelectionEvent arg0)
-//            {
-//            	showLibraries();
-//            }
-//            public void widgetDefaultSelected(SelectionEvent arg0)
-//            {
-//            }
-//        });
-//    	
-//		tabItem.setControl(tabContent);
-		
-		
 		GridLayout gridLayout = new GridLayout ();
 		gridLayout.numColumns = 3;
 		gridLayout.marginHeight = 12;
 		tabContent.setLayout(gridLayout);
 		
 		createTabFolder1Panel1(tabContent);
-		
 		createTabFolder1Panel2(tabContent);
 		
 		tabItem.setControl(tabContent);
@@ -468,56 +513,6 @@ import org.telosys.tools.repository.changelog.ChangeLog;
 		}
 	}
 	
-//	//----------------------------------------------------------------------------------------------
-//	private void createConfigurationFields(Composite container) 
-//	{
-//		int x = 5 ; 
-//		int y = 20 ; 
-//		int yGap = 30 ; 
-//		int labelWidth = 100 ;
-//		int textWidth  = 320 ;
-//		
-//	    _tId       = createTextWithLabel(container, x, y, "Id", false, labelWidth, textWidth ) ;  
-//	    y = y + yGap ;
-//	    _tName     = createTextWithLabel(container, x, y, "Name", true, labelWidth, textWidth ) ;  
-//	    y = y + yGap ;
-//	    _tDriver   = createTextWithLabel(container, x, y, "Driver", true, labelWidth, textWidth ) ;  
-//	    y = y + yGap ;
-//	    _tUrl      = createTextWithLabel(container, x, y, "URL", true, labelWidth, textWidth ) ;  
-//	    y = y + yGap ;
-//	    
-//	    _tUser     = createTextWithLabel(container, x, y, "User", true, labelWidth, textWidth ) ;  
-//	    y = y + yGap ;
-//	    _tPassword = createTextWithLabel(container, x, y, "Password", true, labelWidth, textWidth ) ;  
-//	    y = y + yGap ;
-//
-//	    _tTypeName = createTextWithLabel(container, x, y, "Type ", true, labelWidth, textWidth ) ;  
-//	    y = y + yGap ;
-//	    _tDialect  = createTextWithLabel(container, x, y, "Dialect", true, labelWidth, textWidth ) ;  
-//	    y = y + yGap ;
-//
-////	    createSingleLabel(container, x, y, "Configuration below is useful only for the framework : ", labelWidth+textWidth );
-////	    y = y + yGap ;
-////	    
-////	    _tIsolationLevel = createTextWithLabel(container, x, y, "Isolation level", true, labelWidth, textWidth ) ;  
-////	    y = y + yGap ;
-////	    _tPoolSize  = createTextWithLabel(container, x, y, "Pool size", true, labelWidth, textWidth ) ;  
-////	    y = y + yGap ;
-//
-//	    bindViewToModel(_tId,             "setDatabaseId",     int.class );
-//	    bindViewToModel(_tName,           "setDatabaseName",   String.class);
-//	    bindViewToModel(_tDriver,         "setDriverClass",    String.class);
-//	    bindViewToModel(_tUrl,            "setJdbcUrl",        String.class);
-//	    bindViewToModel(_tUser,           "setUser",           String.class);
-//	    bindViewToModel(_tPassword,       "setPassword",       String.class);
-//	    bindViewToModel(_tTypeName,       "setTypeName",       String.class); // ver 2.1.0
-//	    bindViewToModel(_tDialect,        "setDialect",        String.class); // ver 2.1.0
-//	    
-////	    bindViewToModel(_tIsolationLevel, "setIsolationLevel", String.class);
-////	    bindViewToModel(_tPoolSize,       "setPoolSize",       int.class );
-//	    _tName.setData( TEXT_DATA_UPDATE_COMBO, "true" ) ; // Flag for update combo item 
-//	}
-//	
 	//----------------------------------------------------------------------------------------------
 	private void createTabFolder2(TabFolder tabFolder) 
 	{
@@ -528,27 +523,6 @@ import org.telosys.tools.repository.changelog.ChangeLog;
 		Composite tabContent = new Composite(tabFolder, SWT.NONE);
 		tabContent.setBackground( getBackgroundColor() );
 		
-//		//-----------------------------------------------
-//		createInformationFields(tabContent) ;
-//		
-//		//--- Button "Get infos"
-//		Button button = new Button(tabContent, SWT.NONE);
-//		button.setText("Get database info");
-//		button.setBounds(460, 20, 120, 25);
-//
-//    	button.addSelectionListener( new SelectionListener() 
-//    	{
-//            public void widgetSelected(SelectionEvent arg0)
-//            {
-//            	actionGetInformations();
-//            }
-//            public void widgetDefaultSelected(SelectionEvent arg0)
-//            {
-//            }
-//        });
-//		tabItem.setControl(tabContent);
-//		//-----------------------------------------------
-
 		// Grid layout with 3 columns
     	GridLayout gridLayout = new GridLayout ();
 		gridLayout.numColumns = 3;
@@ -637,47 +611,13 @@ import org.telosys.tools.repository.changelog.ChangeLog;
 	        });
 		}
 	}
-//	//----------------------------------------------------------------------------------------------
-//	private void createInformationFields(Composite container) 
-//	{
-//		int x = 5 ; 
-//		int y = 20 ; 
-//		int yGap = 30 ; 
-//		int labelWidth = 120 ;
-//		int textWidth  = 320 ;
-//		
-//	    _InfoProdName  = createTextWithLabel(container, x, y, "Product name", true, labelWidth, textWidth ) ;  
-//	    y = y + yGap ;
-//	    _InfoProdVer   = createTextWithLabel(container, x, y, "Product version", true, labelWidth, textWidth ) ;  
-//	    y = y + yGap ;
-//	    _InfoDriverName  = createTextWithLabel(container, x, y, "Driver name", true, labelWidth, textWidth ) ;  
-//	    y = y + yGap ;
-//	    _InfoDriverVer   = createTextWithLabel(container, x, y, "Driver version", true, labelWidth, textWidth ) ;  
-//	    y = y + yGap ;
-//	    _InfoURL       = createTextWithLabel(container, x, y, "JDBC URL", true, labelWidth, textWidth ) ;  
-//	    y = y + yGap ;
-//	    _InfoUser      = createTextWithLabel(container, x, y, "User name", true, labelWidth, textWidth ) ;  
-//	    y = y + yGap ;
-//	    _InfoIsolation = createTextWithLabel(container, x, y, "Def. isolation level", true, labelWidth, textWidth ) ;  
-//	    y = y + yGap ;
-//	    _InfoMaxConn = createTextWithLabel(container, x, y, "Max connections", true, labelWidth, textWidth ) ;  
-//	    y = y + yGap ;
-//	    _InfoCatalogTerm = createTextWithLabel(container, x, y, "Catalog term", true, labelWidth, textWidth ) ;  
-//	    y = y + yGap ;
-//	    _InfoCatalogSepar = createTextWithLabel(container, x, y, "Catalog separator", true, labelWidth, textWidth ) ;  
-//	    y = y + yGap ;
-//	    _InfoSchemaTerm = createTextWithLabel(container, x, y, "Schema term", true, labelWidth, textWidth ) ; 
-//	    y = y + yGap ;
-//	    _InfoSearchEscape = createTextWithLabel(container, x, y, "Search escape", true, labelWidth, textWidth ) ; 
-//	}
-//
+
 	//----------------------------------------------------------------------------------------------
 	/**
 	 * Tab "Meta-data"
 	 * @param tabFolder
 	 */
-	private void createTabFolder3(TabFolder tabFolder) 
-	{
+	private void createTabFolder3(TabFolder tabFolder) {
 		log(this, "createTabFolder3() ..." );
 		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
 		tabItem.setText("  Meta-data  ");
@@ -700,8 +640,7 @@ import org.telosys.tools.repository.changelog.ChangeLog;
 	 * Creates the set of label + input field
 	 * @param container
 	 */
-	private void createTabFolder3Panel1(Composite container) 
-	{
+	private void createTabFolder3Panel1(Composite container) {
 		GridData gdPanel = new GridData();
 		gdPanel.verticalAlignment = SWT.BEGINNING ;
 		gdPanel.widthHint = 400 ;
@@ -743,8 +682,7 @@ import org.telosys.tools.repository.changelog.ChangeLog;
 	 * Creates the 1rst set of buttons 
 	 * @param container
 	 */
-	private void createTabFolder3Panel2(Composite container) 
-	{
+	private void createTabFolder3Panel2(Composite container) {
 		GridData gdPanel = new GridData();
 		gdPanel.verticalAlignment = SWT.BEGINNING ;
 		//gdPanel.widthHint = 200 ;
@@ -898,33 +836,6 @@ import org.telosys.tools.repository.changelog.ChangeLog;
 		_tMetaData.setLayoutData(gd);
 	}
 	
-	//----------------------------------------------------------------------------------------------
-//	private Text createTextWithLabel(Composite container, int x, int y, String sLabel, boolean b, int labelWidth, int textWidth ) 
-//	{
-//		Label label = new Label(container, SWT.NONE);
-//		label.setText( sLabel + " : ");
-//		label.setBounds(x, y, labelWidth, TEXT_HEIGHT);
-//		//label.setLocation(x, y);
-//		 
-//		Text text = new Text(container, SWT.BORDER);
-//		text.setBounds(x + labelWidth + 10 , y, 320, TEXT_HEIGHT);
-//		//text.setLocation(x + 80, y);
-//		text.setEnabled(b);
-//		 
-//		return text ;
-//	}
-//	private void createSingleLabel(Composite container, int x, int y, String labelText, int labelWidth ) 
-//	{
-//		Label label ;
-//		
-//		label = new Label(container, SWT.NONE);
-//		label.setText( labelText );
-//		label.setBounds(x, y, labelWidth, TEXT_HEIGHT);
-//		 
-////		label = new Label(container, SWT.NONE);
-////		label.setText( label2 );
-////		label.setBounds(x + labelWidth1 + 10 , y, 320, TEXT_HEIGHT);
-//	}
 	//----------------------------------------------------------------------------------------------
 	private Text createTextWithLabel(Composite container, String sLabel, GridData gridData, boolean b ) 
 	{

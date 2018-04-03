@@ -71,10 +71,6 @@ import org.telosys.tools.repository.changelog.ChangeLog;
 
     private final static int GROUP_X = 12 ;
 	
-	private final static int TEXT_X = 10 ;
-
-	private final static int TEXT_HEIGHT = 22 ;
-
 	private final static int GET_NOTHING      = 0 ;
 	private final static int GET_COLUMNS      = 1 ;
 	private final static int GET_PRIMARY_KEYS = 2 ;
@@ -204,88 +200,6 @@ import org.telosys.tools.repository.changelog.ChangeLog;
 		
 		body.setLayout( bodyLayout );
 		
-//		//--------------------------------------------------------------
-//		//--- Group "Database" ( composite )
-//		Group group1 = new Group(body, SWT.NONE);
-//		group1.setText("Database");
-//		//group1.setSize(GROUP_WIDTH, 60);
-//		//tab.setBackground(DAOColor.color(disp));
-//		//group1.setLocation(GROUP_X, 20);
-//        group1.setBackground( getBackgroundColor() );
-//
-//		//--- Combo Box "Database table"
-//		_ComboDatabases = new Combo(group1, SWT.BORDER | SWT.READ_ONLY);
-//		_ComboDatabases.setBounds(TEXT_X, 25, 260, TEXT_HEIGHT);
-//		_ComboDatabases.setVisibleItemCount(12);
-//		setDatabasesComboAction(_ComboDatabases);
-//
-//		//--------------------------------------------------------------
-//		Button button ;
-//		//--------------------------------------------------------------
-//		button = new Button(group1, SWT.NONE);
-//		button.setText("New");
-//		button.setBounds(280, 25, 70, 25); // (x,y, width, height)
-//		button.setImage( PluginImages.getImage(PluginImages.NEW_DATABASE ) );
-//		button.setToolTipText("New database configuration");
-//
-//    	button.addSelectionListener( new SelectionListener() {
-//            public void widgetSelected(SelectionEvent arg0) {
-//            	actionNewDatabase() ;
-//            }
-//            public void widgetDefaultSelected(SelectionEvent arg0) {
-//            }
-//        });
-//		//--------------------------------------------------------------
-//		button = new Button(group1, SWT.NONE);
-//		button.setText("Delete");
-//		button.setBounds(360, 25, 70, 25); // (x,y, width, height)
-//		button.setImage( PluginImages.getImage(PluginImages.DELETE_DATABASE ) );
-//		button.setToolTipText("Delete database configuration");
-//
-//    	button.addSelectionListener( new SelectionListener() {
-//            public void widgetSelected(SelectionEvent arg0) {
-//            	actionDeleteDatabase() ;
-//            }
-//            public void widgetDefaultSelected(SelectionEvent arg0) {
-//            }
-//        });
-//		
-//		//--------------------------------------------------------------
-//		button = new Button(group1, SWT.NONE);
-//		button.setText("Generate repository");
-//		button.setBounds(450, 25, 140, 25); // (x,y, width, height)
-//		button.setImage( PluginImages.getImage(PluginImages.GENERATE_REPO ) );
-//		button.setToolTipText("Generate a new repository");
-//
-//    	button.addSelectionListener( new SelectionListener() 
-//    	{
-//            public void widgetSelected(SelectionEvent arg0)
-//            {
-//                actionCreateNewDbModel();
-//            }
-//            public void widgetDefaultSelected(SelectionEvent arg0)
-//            {
-//            }
-//        });
-//		
-//		//--------------------------------------------------------------
-//		button = new Button(group1, SWT.NONE);
-//		button.setText("Update repository");
-//		button.setBounds(600, 25, 140, 25); // (x,y, width, height)
-//		button.setImage( PluginImages.getImage(PluginImages.UPDATE_REPO ) );
-//		button.setToolTipText("Update existing repository");
-//
-//    	button.addSelectionListener( new SelectionListener() 
-//    	{
-//            public void widgetSelected(SelectionEvent arg0)
-//            {
-//                actionUpdateDbModel();
-//            }
-//            public void widgetDefaultSelected(SelectionEvent arg0)
-//            {
-//            }
-//        });
-		
 		createFormHeader(body);
 		
 		//--------------------------------------------------------------
@@ -410,13 +324,14 @@ import org.telosys.tools.repository.changelog.ChangeLog;
 		Composite tabContent = new Composite(tabFolder, SWT.NONE);
 		tabContent.setBackground( getBackgroundColor() );
 		
+		// Grid layout with 3 columns
 		GridLayout gridLayout = new GridLayout ();
 		gridLayout.numColumns = 3;
 		gridLayout.marginHeight = 12;
 		tabContent.setLayout(gridLayout);
 		
-		createTabFolder1Panel1(tabContent);
-		createTabFolder1Panel2(tabContent);
+		createTabFolder1Panel1(tabContent); // 2 columns
+		createTabFolder1Panel2(tabContent); // 1 column
 		
 		tabItem.setControl(tabContent);
 	}
@@ -529,8 +444,8 @@ import org.telosys.tools.repository.changelog.ChangeLog;
 		gridLayout.marginHeight = 12;
 		tabContent.setLayout(gridLayout);
 		
-		createTabFolder2Panel1(tabContent);		
-		createTabFolder2Panel2(tabContent);
+		createTabFolder2Panel1(tabContent); // 2 columns
+		createTabFolder2Panel2(tabContent); // 1 column
 
 		tabItem.setControl(tabContent);
 	}
@@ -542,7 +457,6 @@ import org.telosys.tools.repository.changelog.ChangeLog;
 	private void createTabFolder2Panel1(Composite container) {
 		GridData gdPanel = new GridData();
 		gdPanel.verticalAlignment = SWT.BEGINNING ;
-		//gdPanel.widthHint = 400 ;
 		gdPanel.widthHint = 540 ; // "widthHint" specifies the preferred width in pixels 
 		
 		Composite panel = new Composite(container, SWT.NONE );
@@ -554,8 +468,6 @@ import org.telosys.tools.repository.changelog.ChangeLog;
 
 		{
 			GridData gd = new GridData();
-//			//gd.widthHint = 320; // "widthHint" specifies the preferred width in pixels 
-//			gd.widthHint = 400; // "widthHint" specifies the preferred width in pixels 
 			gd.widthHint = 540; // "widthHint" specifies the preferred width in pixels 
 			gd.verticalAlignment = SWT.BEGINNING ;
 
@@ -702,10 +614,8 @@ import org.telosys.tools.repository.changelog.ChangeLog;
 			Button button = new Button(panel, SWT.NONE);
 			button.setText("Get tables");
 			button.setLayoutData(gd);
-	    	button.addSelectionListener( new SelectionListener() 
-	    	{
-	            public void widgetSelected(SelectionEvent arg0)
-	            {
+	    	button.addSelectionListener( new SelectionListener() {
+	            public void widgetSelected(SelectionEvent arg0) {
 	            	actionGetMetaData(GET_NOTHING);
 	            }
 	            public void widgetDefaultSelected(SelectionEvent arg0)
@@ -718,14 +628,11 @@ import org.telosys.tools.repository.changelog.ChangeLog;
 	    	Button button = new Button(panel, SWT.NONE);
 			button.setText("Get columns");
 			button.setLayoutData(gd);		
-	    	button.addSelectionListener( new SelectionListener() 
-	    	{
-	            public void widgetSelected(SelectionEvent arg0)
-	            {
+	    	button.addSelectionListener( new SelectionListener() {
+	            public void widgetSelected(SelectionEvent arg0) {
 	            	actionGetMetaData(GET_COLUMNS);
 	            }
-	            public void widgetDefaultSelected(SelectionEvent arg0)
-	            {
+	            public void widgetDefaultSelected(SelectionEvent arg0) {
 	            }
 	        });
 		}
@@ -734,14 +641,11 @@ import org.telosys.tools.repository.changelog.ChangeLog;
 	    	Button button = new Button(panel, SWT.NONE);
 			button.setText("Get primary keys");
 			button.setLayoutData(gd);		
-	    	button.addSelectionListener( new SelectionListener() 
-	    	{
-	            public void widgetSelected(SelectionEvent arg0)
-	            {
+	    	button.addSelectionListener( new SelectionListener() {
+	            public void widgetSelected(SelectionEvent arg0) {
 	            	actionGetMetaData(GET_PRIMARY_KEYS);
 	            }
-	            public void widgetDefaultSelected(SelectionEvent arg0)
-	            {
+	            public void widgetDefaultSelected(SelectionEvent arg0) {
 	            }
 	        });
 		}
@@ -749,14 +653,11 @@ import org.telosys.tools.repository.changelog.ChangeLog;
 	    	Button button = new Button(panel, SWT.NONE);
 			button.setText("Get foreign keys");
 			button.setLayoutData(gd);		
-	    	button.addSelectionListener( new SelectionListener() 
-	    	{
-	            public void widgetSelected(SelectionEvent arg0)
-	            {
+	    	button.addSelectionListener( new SelectionListener() {
+	            public void widgetSelected(SelectionEvent arg0) {
 	            	actionGetMetaData(GET_FOREIGN_KEYS);
 	            }
-	            public void widgetDefaultSelected(SelectionEvent arg0)
-	            {
+	            public void widgetDefaultSelected(SelectionEvent arg0) {
 	            }
 	        });
 		}
@@ -787,14 +688,11 @@ import org.telosys.tools.repository.changelog.ChangeLog;
 			Button button = new Button(panel, SWT.NONE);
 			button.setText("Get catalogs");
 			button.setLayoutData(gd);
-	    	button.addSelectionListener( new SelectionListener() 
-	    	{
-	            public void widgetSelected(SelectionEvent arg0)
-	            {
+	    	button.addSelectionListener( new SelectionListener() {
+	            public void widgetSelected(SelectionEvent arg0) {
 	            	actionGetMetaData(GET_CATALOGS);
 	            }
-	            public void widgetDefaultSelected(SelectionEvent arg0)
-	            {
+	            public void widgetDefaultSelected(SelectionEvent arg0) {
 	            }
 	        });
 		}
@@ -803,14 +701,11 @@ import org.telosys.tools.repository.changelog.ChangeLog;
 	    	Button button = new Button(panel, SWT.NONE);
 			button.setText("Get schemas");
 			button.setLayoutData(gd);		
-	    	button.addSelectionListener( new SelectionListener() 
-	    	{
-	            public void widgetSelected(SelectionEvent arg0)
-	            {
+	    	button.addSelectionListener( new SelectionListener() {
+	            public void widgetSelected(SelectionEvent arg0) {
 	            	actionGetMetaData(GET_SCHEMAS);
 	            }
-	            public void widgetDefaultSelected(SelectionEvent arg0)
-	            {
+	            public void widgetDefaultSelected(SelectionEvent arg0) {
 	            }
 	        });
 		}

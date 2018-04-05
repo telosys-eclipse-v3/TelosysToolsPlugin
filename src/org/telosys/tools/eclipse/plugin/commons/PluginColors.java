@@ -3,6 +3,7 @@ package org.telosys.tools.eclipse.plugin.commons;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Device;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
 public class PluginColors {
@@ -30,5 +31,9 @@ public class PluginColors {
 
 	public static Color widgetBackground() {
 		return getSystemColor(SWT.COLOR_WIDGET_BACKGROUND );
+	}
+	
+	public static void setStandardBackground(Composite composite) {
+		composite.setBackground(widgetBackground());
 	}
 }

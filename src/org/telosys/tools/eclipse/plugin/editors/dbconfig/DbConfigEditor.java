@@ -13,22 +13,18 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.telosys.tools.commons.TelosysToolsException;
-import org.telosys.tools.commons.TelosysToolsLogger;
 import org.telosys.tools.commons.dbcfg.DatabasesConfigurations;
 import org.telosys.tools.commons.dbcfg.DbConfigManager;
 import org.telosys.tools.db.observer.DatabaseObserverProvider;
 import org.telosys.tools.eclipse.plugin.commons.EclipseWksUtil;
 import org.telosys.tools.eclipse.plugin.commons.MsgBox;
 import org.telosys.tools.eclipse.plugin.commons.PluginLogger;
-import org.telosys.tools.eclipse.plugin.commons.TextWidgetLogger;
 import org.telosys.tools.eclipse.plugin.console.DbMetadataObserver;
 import org.telosys.tools.eclipse.plugin.console.DbModelObserver;
 
 /**
  * Main entry point for the editor <br>
- * This editor contains x pages : <br>
- * . 1 : the table view with the mapping table<br>
- * . 2 : the log view <br>
+ * This editor contains only one page (since ver 3.0.0) <br>
  * 
  */
 public class DbConfigEditor extends FormEditor 
@@ -37,8 +33,6 @@ public class DbConfigEditor extends FormEditor
 	private IFile             _file = null ;
 	private DatabasesConfigurations   databasesConfigurations = new DatabasesConfigurations(); // Void configuration
 		
-	private TextWidgetLogger  _logger = new TextWidgetLogger() ;
-	
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.forms.editor.FormEditor#addPages()
 	 */
@@ -47,11 +41,13 @@ public class DbConfigEditor extends FormEditor
 		DbConfigEditorPage1 page1 = new DbConfigEditorPage1(this, "DbConfigEditorPage1", " Database ");
 		//DbConfigEditorPage2 page2 = new DbConfigEditorPage2(this, "DbConfigEditorPage2", " Log viewer");
 		try {
+			PluginLogger.log(this, "addPages() : addPage(page1)" );
 			addPage(page1);
 			//addPage(page2);
 		} catch ( Exception e ) {
 			MsgBox.error("addPage(page) Exception ", e);
 		}
+		PluginLogger.log(this, "addPages() : all pages added " );
 		
 		// Only ONE PAGE => remove the single tab at the bottom of the editor
 		// see : https://www.modumind.com/2008/01/04/using-formeditor-when-you-only-have-a-single-page/
@@ -63,6 +59,7 @@ public class DbConfigEditor extends FormEditor
 		else {
 			MsgBox.error("addPages() : the container is not an instance of CTabFolder !");
 		}
+		PluginLogger.log(this, "addPages() : end of method " );
 	}
 
 	@Override
@@ -121,7 +118,6 @@ public class DbConfigEditor extends FormEditor
 	 */
 	@Override
 	public boolean isSaveAsAllowed() {
-		//PluginLogger.log(this, "isSaveAsAllowed()..." );
 		return false ; // "Save as..." not allowed for this file
 	}
 
@@ -153,7 +149,7 @@ public class DbConfigEditor extends FormEditor
 				DbConfigManager dbDonfigManager = new DbConfigManager( EclipseWksUtil.toFile(_file) );
 				this.databasesConfigurations = dbDonfigManager.load() ;
 				PluginLogger.log(this, "init(..,..) : file loaded, " 
-						+ this.databasesConfigurations.getNumberOfDatabases() + " db configuartion(s)." );
+						+ this.databasesConfigurations.getNumberOfDatabases() + " db configuration(s)." );
 
 			} catch (TelosysToolsException e) {
 				MsgBox.error("Cannot load databases configurations.", e );
@@ -163,12 +159,13 @@ public class DbConfigEditor extends FormEditor
 			// never happen 
 			MsgBox.error("The editor input '" + input.getName() + "' is not a File ! ");
 		}
+		
+//		FormToolkit toolkit = this.getToolkit() ; // NPE : toolkit is null !
+//		FormColors formColors = toolkit.getColors();
+//		formColors.setBackground(PluginColors.red());
+
 	}
 	
-	public TelosysToolsLogger getLogger () {		
-		return _logger ;
-	}
-
 	public IFile getFile() {
 		return _file ;
 	}
@@ -181,10 +178,6 @@ public class DbConfigEditor extends FormEditor
 		return this.databasesConfigurations ;
 	}
 	
-	public TextWidgetLogger getTextWidgetLogger() {
-		return _logger ;
-	}
-
 //	public void addPageChangedListener(IPageChangedListener listener) {
 //		super.addPageChangedListener(listener);
 //	}

@@ -34,8 +34,10 @@ import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.forms.FormColors;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.telosys.tools.api.MetaDataOptionsImpl;
 import org.telosys.tools.api.TelosysProject;
@@ -50,6 +52,7 @@ import org.telosys.tools.commons.dbcfg.DbConnectionStatus;
 import org.telosys.tools.db.metadata.DbInfo;
 import org.telosys.tools.eclipse.plugin.commons.EclipseProjUtil;
 import org.telosys.tools.eclipse.plugin.commons.MsgBox;
+import org.telosys.tools.eclipse.plugin.commons.PluginColors;
 import org.telosys.tools.eclipse.plugin.commons.PluginImages;
 import org.telosys.tools.eclipse.plugin.commons.Util;
 import org.telosys.tools.eclipse.plugin.commons.mapping.MapperTextBean;
@@ -121,7 +124,27 @@ import org.telosys.tools.repository.changelog.ChangeLog;
 	
 	private boolean _bPopulateInProgress = false ;
 	
+//	private void setFormColor() {
+//		ScrolledForm form = this.getManagedForm().getForm();
+//		// Object <- Widget <- Control <- Scrollable <- Composite <- ScrolledComposite <- SharedScrolledComposite <- ScrolledForm
+//		// setBackground defined in "ScrolledForm" 
+//		form.setBackground( PluginColors.red() );
+//		//form.setBackgroundMode(SWT.INHERIT_DEFAULT);
+//	}
+	private void setBodyColor() {
+//		ScrolledForm form = this.getManagedForm().getForm();
+//		Composite body = form.getBody();
+//		// Object <- Widget <- Control <- Scrollable <- Composite 
+//		// setBackground defined in "Control" 
+//		body.setBackground( PluginColors.blue() );// for tests, just to see the body 
+		PluginColors.setStandardBackground(this.getManagedForm().getForm().getBody());
+	}
+	
+	//------------------------------------------------------------------------------
+	// Life cycle : STEP 1
+	//------------------------------------------------------------------------------
 	/**
+	 * Constructor
 	 * @param editor
 	 * @param id
 	 * @param title
@@ -132,7 +155,23 @@ import org.telosys.tools.repository.changelog.ChangeLog;
 		log(this, "constructor(.., '"+id+"', '"+ title +"')..." );
 		_editor = (DbConfigEditor) editor;
 	}
-
+	
+	//------------------------------------------------------------------------------
+	// Life cycle : STEP 2  : called during "addPage(pageXX)" 
+	//------------------------------------------------------------------------------
+	/* (non-Javadoc)
+	 * @see org.eclipse.ui.IEditorPart#init(org.eclipse.ui.IEditorSite, org.eclipse.ui.IEditorInput)
+	 */
+	public void init(IEditorSite site, IEditorInput input) {
+		super.init(site, input);
+		log(this, "init(..,..)..." );
+		log(this, "init(..,..) : site id = '" + site.getId() + "'" );
+		log(this, "init(..,..) : input name = '" + input.getName() + "'" );
+	}
+	
+	//------------------------------------------------------------------------------
+	// Life cycle : STEP 3  : Called after all "addPage(pageXX)"
+	//------------------------------------------------------------------------------
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.forms.editor.FormPage#createFormContent(org.eclipse.ui.forms.IManagedForm)
 	 */
@@ -140,30 +179,106 @@ import org.telosys.tools.repository.changelog.ChangeLog;
 		super.createFormContent(managedForm);
 		
 		log(this, "createFormContent(..)..." );
-		Control pageControl = getPartControl();
+		logInfo(managedForm);
+		
+//		Control pageControl = getPartControl();
 		
 //		Display display = pageControl.getDisplay();
 //		_backgroundColor = display.getSystemColor(SWT.COLOR_WIDGET_BACKGROUND);		
 //		pageControl.setBackground(_backgroundColor ) ;
 		
+
+		ScrolledForm form = managedForm.getForm();
+		// Page title 
+		// form.setText( _repEditor.getDatabaseTitle() );
+		
+//		form.setBackground( PluginColors.widgetBackground() );
+//		form.setBackgroundMode(SWT.INHERIT_DEFAULT);
+		
+		Composite body = form.getBody();
+		
+		Layout bodyLayout = new RowLayout(SWT.VERTICAL);
+		
+		body.setLayout( bodyLayout );
+		//pageControl.setBackground( PluginColors.widgetBackground() ) ;  // NEW FOR TESTS 
+		
+		// body.setBackgroundMode(SWT.INHERIT_FORCE);
+		
+		//body.setBackground( PluginColors.widgetBackground() );
+		//body.setBackground( PluginColors.blue() );// for tests, just to see the body 
+		
+		createFormHeader(body);
+		
+		//--------------------------------------------------------------
+		//--- Tab Folder 
+		Composite composite = null ;
+
+		composite = new Composite(body, SWT.NONE);
+		composite.setLayout(new FillLayout());
+		composite.setLocation(GROUP_X, 100);
+		composite.setSize(400, 200);
+//		composite.setBackground( getBackgroundColor() );
+		
+
+		TabFolder tabFolder = new TabFolder(composite, SWT.NONE);
+		
+		//tabFolder.setLocation(GROUP_X, 100);
+		//tabFolder.setSize(400, 200);
+//		tabFolder.setBackground( getBackgroundColor() ); // No effect : cannot change the TabFolder color 
+
+		createTabFolder1(tabFolder);
+		createTabFolder2(tabFolder);
+		createTabFolder3(tabFolder);
+
+		//--------------------------------------------------------------
+		
+		log(this, "Populate DATABASES combo ..." );
+
+		populateComboDatabases();
+		selectFirstDatabaseInCombo();
+
+		// NB : KEEP THIS INSTRUCTION AT THE END OF "createFormContent" 
+		// for compatibility with Eclipse Oxygen
+		setBodyColor(); 
+		
+		log(this, "Populate DATABASES combo : done." );
+	}
+	
+	private void logInfo(IManagedForm managedForm) {
+
+		Control pageControl = getPartControl(); 
 		if ( pageControl != null ) {
-			log(this, "createFormContent(..) : getPartControl() != null " );
+			log(this, "- getPartControl() != null " );
+			if ( pageControl instanceof Composite ) {
+				log(this, "- pageControl is a Composite  " );
+				// yes : Composite
+				log(this, "- pageControl class = " + pageControl.getClass() );
+				// class  : org.eclipse.ui.forms.widgets.ScrolledForm ( see API JavaDoc )
+				
+				Composite pageComposite = (Composite) pageControl ;
+				Layout layout = pageComposite.getLayout();			
+				log(this, "- pageControl layout class = " + layout.getClass() );
+				// layout : org.eclipse.swt.custom.ScrolledCompositeLayout
+			}
+			else {
+				log(this, "- pageControl() is NOT a Composite !!! " );
+			}
 		}
 		else {
-			log(this, "createFormContent(..) : getPartControl() is null !!! " );
+			log(this, "- getPartControl() is null !!! " );
 			return ;
 		}
 		
-		if ( pageControl instanceof Composite ) {
-			log(this, "- pageControl is a Composite  " );
-			log(this, "- pageControl class = " + pageControl.getClass() );
-			
-			Composite pageComposite = (Composite) pageControl ;
-			Layout layout = pageComposite.getLayout();			
-			log(this, "- pageControl layout class = " + layout.getClass() );
+		//--- Body
+		ScrolledForm form = managedForm.getForm();
+		Composite body = form.getBody();
+		log(this, "- body class = " + body.getClass() );
+		Layout layout = body.getLayout();			
+		if ( layout != null ) {
+			log(this, "- body layout class = " + layout.getClass() );
 		}
 		else {
-			log(this, "- pageControl() is NOT a Composite !!! " );
+			log(this, "- body layout class = NO LAYOUT ! ");
 		}
 
 		// What do we have here ?
@@ -180,65 +295,14 @@ import org.telosys.tools.repository.changelog.ChangeLog;
 		  form.getBody().setLayout(new GridLayout());
 		  toolkit.createButton(form.getBody(), "Checkbox", SWT.CHECK);
 		*/
-		
-		ScrolledForm form = managedForm.getForm();
-		// Page title 
-		// form.setText( _repEditor.getDatabaseTitle() );
-		
-		Composite body = form.getBody();
-		log(this, "- body class = " + body.getClass() );
-		
-		Layout layout = body.getLayout();			
-		if ( layout != null ) {
-			log(this, "- body layout class = " + layout.getClass() );
-		}
-		else {
-			log(this, "- body layout class = NO LAYOUT ! ");
-		}
-		
-		Layout bodyLayout = new RowLayout(SWT.VERTICAL);
-		
-		body.setLayout( bodyLayout );
-		
-		createFormHeader(body);
-		
-		//--------------------------------------------------------------
-		//--- Tab Folder 
-		Composite composite = null ;
-
-		composite = new Composite(body, SWT.NONE);
-		composite.setLayout(new FillLayout());
-		composite.setLocation(GROUP_X, 100);
-		composite.setSize(400, 200);
-		composite.setBackground( getBackgroundColor() );
-		
-
-		TabFolder tabFolder = new TabFolder(composite, SWT.NONE);
-		
-		//tabFolder.setLocation(GROUP_X, 100);
-		//tabFolder.setSize(400, 200);
-		tabFolder.setBackground( getBackgroundColor() ); // No effect : cannot change the TabFolder color 
-
-		createTabFolder1(tabFolder);
-		createTabFolder2(tabFolder);
-		createTabFolder3(tabFolder);
-
-		//--------------------------------------------------------------
-		
-		log(this, "Populate DATABASES combo ..." );
-
-		populateComboDatabases();
-		selectFirstDatabaseInCombo();
-
-		log(this, "Populate DATABASES combo : done." );
-	}
+	}	
 	
 	//----------------------------------------------------------------------------------------------
 	private void createFormHeader(Composite body) {
 		//--- Group "Database" ( composite )
 		Group group1 = new Group(body, SWT.NONE);
 		group1.setText("Database");
-        group1.setBackground( getBackgroundColor() );
+//        group1.setBackground( getBackgroundColor() );
         
         group1.setLayout(new RowLayout()); // ROW LAYOUT ( Added )
 
@@ -322,7 +386,7 @@ import org.telosys.tools.repository.changelog.ChangeLog;
 		tabItem.setText("  Configuration  ");
 
 		Composite tabContent = new Composite(tabFolder, SWT.NONE);
-		tabContent.setBackground( getBackgroundColor() );
+//		tabContent.setBackground( getBackgroundColor() );
 		
 		// Grid layout with 3 columns
 		GridLayout gridLayout = new GridLayout ();
@@ -401,31 +465,50 @@ import org.telosys.tools.repository.changelog.ChangeLog;
 		gd.widthHint = 140; // "widthHint" specifies the preferred width in pixels = buttons width
 		gd.verticalAlignment = SWT.BEGINNING ;
 		
-		{
-			Button button = new Button(panel, SWT.NONE);
-			button.setText("Test connection");
-			button.setLayoutData(gd);
-	    	button.addSelectionListener( new SelectionListener() {
-	            public void widgetSelected(SelectionEvent arg0) {
-	            	actionTestConnection();
-	            }
-	            public void widgetDefaultSelected(SelectionEvent arg0) {
-	            }
-	        });
-		}
+		Button button ;
+
+		button = new Button(panel, SWT.NONE);
+		button.setText("Test connection");
+		button.setLayoutData(gd);
+    	button.addSelectionListener( new SelectionListener() {
+            public void widgetSelected(SelectionEvent arg0) {
+            	actionTestConnection();
+            }
+            public void widgetDefaultSelected(SelectionEvent arg0) {
+            }
+        });
     	
-		{
-	    	Button button = new Button(panel, SWT.NONE);
-			button.setText("Show libraries");
-			button.setLayoutData(gd);		
-	    	button.addSelectionListener( new SelectionListener() {
-	            public void widgetSelected(SelectionEvent arg0) {
-	            	showLibraries();
-	            }
-	            public void widgetDefaultSelected(SelectionEvent arg0) {
-	            }
-	        });
-		}
+    	button = new Button(panel, SWT.NONE);
+		button.setText("Show libraries");
+		button.setLayoutData(gd);		
+    	button.addSelectionListener( new SelectionListener() {
+            public void widgetSelected(SelectionEvent arg0) {
+            	showLibraries();
+            }
+            public void widgetDefaultSelected(SelectionEvent arg0) {
+            }
+        });
+
+//    	button = new Button(panel, SWT.NONE);
+//		button.setText("Set form color");
+//		button.setLayoutData(gd);		
+//    	button.addSelectionListener( new SelectionListener() {
+//            public void widgetSelected(SelectionEvent arg0) {
+//            	setFormColor();
+//            }
+//            public void widgetDefaultSelected(SelectionEvent arg0) {
+//            }
+//        });
+//    	button = new Button(panel, SWT.NONE);
+//		button.setText("Set body color");
+//		button.setLayoutData(gd);		
+//    	button.addSelectionListener( new SelectionListener() {
+//            public void widgetSelected(SelectionEvent arg0) {
+//            	setBodyColor();
+//            }
+//            public void widgetDefaultSelected(SelectionEvent arg0) {
+//            }
+//        });
 	}
 	
 	//----------------------------------------------------------------------------------------------
@@ -436,7 +519,7 @@ import org.telosys.tools.repository.changelog.ChangeLog;
 		tabItem.setText("  Information  ");
 		
 		Composite tabContent = new Composite(tabFolder, SWT.NONE);
-		tabContent.setBackground( getBackgroundColor() );
+//		tabContent.setBackground( getBackgroundColor() );
 		
 		// Grid layout with 3 columns
     	GridLayout gridLayout = new GridLayout ();
@@ -535,7 +618,7 @@ import org.telosys.tools.repository.changelog.ChangeLog;
 		tabItem.setText("  Meta-data  ");
 		
 		Composite tabContent = new Composite(tabFolder, SWT.NONE);
-		tabContent.setBackground( getBackgroundColor() );
+//		tabContent.setBackground( getBackgroundColor() );
 		
 		GridLayout gridLayout = new GridLayout ();
 		gridLayout.numColumns = 3;
@@ -742,17 +825,6 @@ import org.telosys.tools.repository.changelog.ChangeLog;
 		text.setEnabled(b);
 		return text ;
 	}	
-	//----------------------------------------------------------------------------------------------
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.IEditorPart#init(org.eclipse.ui.IEditorSite, org.eclipse.ui.IEditorInput)
-	 */
-	public void init(IEditorSite site, IEditorInput input) {
-		super.init(site, input);
-		log(this, "init(..,..)..." );
-		log(this, "init(..,..) : site id = '" + site.getId() + "'" );
-		log(this, "init(..,..) : input name = '" + input.getName() + "'" );
-	}
-	
 	
     //------------------------------------------------------------------------------------------------------
     private void populateComboDatabases() 
@@ -1410,7 +1482,7 @@ import org.telosys.tools.repository.changelog.ChangeLog;
 				repositoryCreated = createNewDbModel(db) ; // v 3.0.0
 			} 
 			catch (Exception e) { // Catch ALL exceptions 
-		    	logException(e);					
+		    	//logException(e);					
 				MsgBox.error("Cannot create database model", e) ;
 			} 
 

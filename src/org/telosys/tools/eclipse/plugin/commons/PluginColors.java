@@ -33,7 +33,15 @@ public class PluginColors {
 		return getSystemColor(SWT.COLOR_WIDGET_BACKGROUND );
 	}
 	
+	/**
+	 * Set the standard background color to the given Composite
+	 * @param composite
+	 */
 	public static void setStandardBackground(Composite composite) {
 		composite.setBackground(widgetBackground());
+	}
+
+	public static void setBackgroundColor(Composite composite, Color color) {
+		composite.setBackground(color);
 	}
 }

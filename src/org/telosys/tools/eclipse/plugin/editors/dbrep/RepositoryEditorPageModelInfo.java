@@ -11,7 +11,6 @@ import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.telosys.tools.commons.DateUtil;
-import org.telosys.tools.eclipse.plugin.commons.PluginLogger;
 import org.telosys.tools.eclipse.plugin.commons.Util;
 import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
 import org.telosys.tools.repository.model.RepositoryModel;
@@ -22,7 +21,6 @@ import org.telosys.tools.repository.model.RepositoryModel;
  * Shows the project configuration 
  * 
  */
-///* package */ class RepositoryEditorPage4 extends RepositoryEditorPage 
 /* package */ class RepositoryEditorPageModelInfo extends AbstractModelEditorPage 
 {
 
@@ -35,7 +33,7 @@ import org.telosys.tools.repository.model.RepositoryModel;
 	 */
 	public RepositoryEditorPageModelInfo(FormEditor editor, String id, String title) {
 		super(editor, id, title);
-		PluginLogger.log(this, "constructor(.., '"+id+"', '"+ title +"')..." );		
+		log(this, "constructor(.., '"+id+"', '"+ title +"')..." );
 	}
 
 	//----------------------------------------------------------------------------------------------
@@ -45,8 +43,7 @@ import org.telosys.tools.repository.model.RepositoryModel;
 	@Override
 	public void init(IEditorSite site, IEditorInput input) {
 		super.init(site, input);
-		PluginLogger.log(this, "init(..,..) : site id = '" + site.getId() + "'" );
-		PluginLogger.log(this, "init(..,..) : input name = '" + input.getName() + "'" );
+		log(this, "init(..,..) : input name = '" + input.getName() + "'" );
 	}
 
 	//--------------------------------------------------------------------------------------------------
@@ -56,8 +53,7 @@ import org.telosys.tools.repository.model.RepositoryModel;
 	@Override
 	protected void createFormContent(IManagedForm managedForm) {
 		super.createFormContent(managedForm);
-		
-//		TelosysToolsCfg telosysToolsCfg = getProjectConfig(); // v 3.0.0
+		log(this, "createFormContent(IManagedForm) ..." );
 		
 		ScrolledForm form = managedForm.getForm();
 		
@@ -80,9 +76,6 @@ import org.telosys.tools.repository.model.RepositoryModel;
 		Label labelTitle = Util.setPageTitle(body, this.getTitle() ) ; // Title defined in the constructor
 		labelTitle.setLayoutData(gdTitle);
 		
-		
-		//TelosysToolsCfg telosysToolsCfg = config.getTelosysToolsCfg();
-		
 		addConfigRow(body, "", "" );
 			
 		RepositoryModel repositoryModel = getRepositoryModel();
@@ -101,6 +94,8 @@ import org.telosys.tools.repository.model.RepositoryModel;
 		addConfigRow(body, ". database ID :", ""+repositoryModel.getDatabaseId() );
 		addConfigRow(body, ". database name :", ""+repositoryModel.getDatabaseName() );
 		addConfigRow(body, ". database product name :", ""+repositoryModel.getDatabaseProductName() );
+		
+		setBodyBackgroundColor(); // KEEP IT AT THE END OF THE METHOD (for Eclipse 4.X compatibility )
 	}
 	
 	//----------------------------------------------------------------------------------------------
@@ -114,8 +109,7 @@ import org.telosys.tools.repository.model.RepositoryModel;
 		}
 	}
 	//----------------------------------------------------------------------------------------------
-	private void addConfigRow(Composite c, String s1, String s2)
-	{
+	private void addConfigRow(Composite c, String s1, String s2) {
 		Label label1 = new Label( c, SWT.LEFT );
 		label1.setText(s1) ;
 

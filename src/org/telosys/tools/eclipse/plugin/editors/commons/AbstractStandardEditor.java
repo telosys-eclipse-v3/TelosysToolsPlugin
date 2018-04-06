@@ -46,14 +46,19 @@ public abstract class AbstractStandardEditor extends FormEditor {
     }
     
 	//----------------------------------------------------------------------------------------
+	/**
+	 * Returns the TelosysToolsLogger
+	 * @return
+	 */
 	public TelosysToolsLogger getLogger () {
 		return _logger ;
 	}
-	protected void log(String msg) {
-		_logger.log(msg) ;
+
+	protected void log(String s) {
+		PluginLogger.log(s);
 	}
-	protected void log(Object object, String msg) {
-		_logger.log(object, msg) ;
+	protected void log(Object o, String s) {
+		PluginLogger.log(o,s);
 	}
 
 	//----------------------------------------------------------------------------------------
@@ -61,8 +66,8 @@ public abstract class AbstractStandardEditor extends FormEditor {
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException 
 	{
 		super.init(site, input);
-		PluginLogger.log(this, "init(..,..) : site id = '" + site.getId() + "'" );
-		PluginLogger.log(this, "init(..,..) : input name = '" + input.getName() + "'" );
+		log(this, "init(..,..) : site id = '" + site.getId() + "'" );
+		log(this, "init(..,..) : input name = '" + input.getName() + "'" );
 		setPartName(input.getName());
 		
 		if ( input instanceof IFileEditorInput ) {

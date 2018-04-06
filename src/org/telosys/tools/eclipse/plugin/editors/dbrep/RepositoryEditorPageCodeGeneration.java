@@ -13,10 +13,9 @@ import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPageF
 import org.telosys.tools.generic.model.Entity;
 
 /**
- * Editor Page 3 : "Bulk Generation"
+ * Editor Page : "Code Generation"
  * 
  */
-///* package */ class RepositoryEditorPage3 extends RepositoryEditorPage {
 /* package */ class RepositoryEditorPageCodeGeneration extends AbstractModelEditorPageForGeneration {
 
 	/**
@@ -27,60 +26,18 @@ import org.telosys.tools.generic.model.Entity;
 	 */
 	public RepositoryEditorPageCodeGeneration(FormEditor editor, String id, String title ) {
 		super(editor, id, title);
+		log(this, "constructor(.., '"+id+"', '"+ title +"')..." );		
 	}
 
-	//----------------------------------------------------------------------------------------------
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.IEditorPart#init(org.eclipse.ui.IEditorSite, org.eclipse.ui.IEditorInput)
-	 */
+	@Override
 	public void init(IEditorSite site, IEditorInput input) {
 		super.init(site, input);
+		log(this, "init(..,..) : input name = '" + input.getName() + "'" );
 	}
     
-	//----------------------------------------------------------------------------------------------	
-//	/**
-//	 * Populates the list of entities ( left side table )
-//	 */
-//	private void populateEntitiesTable()
-//	{
-//		log(this, "populateEntitiesTable()");
-//		
-//		RepositoryEditor repEditor = (RepositoryEditor) getEditor();
-//		RepositoryModel dbRep = repEditor.getDatabaseRepository();
-//		
-//		//Entity[] entities = dbRep.getEntities();
-////		EntityInDbModel[] entities = dbRep.getEntitiesArray(); // v 3.0.0
-//		EntityInDbModel[] entities = dbRep.getEntitiesArraySortedByTableName(); // v 3.0.0
-//		if ( entities != null )
-//		{
-////			for ( int i = 0 ; i < entities.length ; i++ ){
-////				Entity entity = entities[i];
-//			for ( EntityInDbModel entity : entities ) { // v 3.0.0
-//				//String sTableName = entity.getName() ;
-//				String tableName = entity.getDatabaseTable() ; // v 3.0.0
-//				if ( entity.getWarnings() != null && entity.getWarnings().size() > 0 ) {
-//					tableName = "(!) " + tableName;
-//				}
-//				//String sBeanClass = entity.getBeanJavaClass();
-//				String entityClassName = entity.getClassName(); // v 3.0.0
-//				
-//				if ( entityClassName == null ) entityClassName = "???" ;
-//				
-//                //--- Create the row content 
-//                String[] row = new String[] { tableName, entityClassName };
-//				
-//                //--- Create the TableItem and set the row content 
-//            	TableItem tableItem = new TableItem(_tableEntities, SWT.NONE );
-//                tableItem.setChecked(false);                
-//                tableItem.setText(row);                
-//                //tableItem.setData( sTableName );
-//                tableItem.setData( entityClassName ); // v 3.0.0
-//			}
-//		}
-//	}
-	
 	@Override
 	public void createEntitiesTableColumns(Table table) {
+		log(this, "createEntitiesTableColumns(Table)" );
 		TableColumn col = null ;
 		int iColumnIndex = 0 ;
 
@@ -97,8 +54,8 @@ import org.telosys.tools.generic.model.Entity;
 	
 	@Override
 	public void populateEntitiesTable(Table table, List<Entity> entities) {
-		if ( entities != null )
-		{
+		log(this, "populateEntitiesTable(Table,List)" );
+		if ( entities != null ) {
 			for ( Entity entity : entities ) { 
 				String tableName = entity.getDatabaseTable() ; // v 3.0.0
 				String entityClassName = entity.getClassName(); // v 3.0.0
@@ -108,13 +65,9 @@ import org.telosys.tools.generic.model.Entity;
 				
                 //--- Create the TableItem and set the row content 
             	TableItem tableItem = new TableItem(table, SWT.NONE );
-                //tableItem.setChecked(false);
                 tableItem.setChecked(true); // All entities checked by default
                 tableItem.setText(row);
-                
 	            tableItem.setImage( getEntityWarningImage(entity) ) ; // v 3.0.0
-
-                //tableItem.setData( sTableName );
                 tableItem.setData( entityClassName ); // v 3.0.0
 			}
 		}

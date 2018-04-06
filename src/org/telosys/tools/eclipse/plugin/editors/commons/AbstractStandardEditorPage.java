@@ -9,9 +9,7 @@ import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
-import org.telosys.tools.commons.TelosysToolsLogger;
 import org.telosys.tools.commons.cfg.TelosysToolsCfg;
-import org.telosys.tools.commons.logger.ConsoleLogger;
 import org.telosys.tools.eclipse.plugin.commons.MsgBox;
 import org.telosys.tools.eclipse.plugin.commons.PluginColors;
 import org.telosys.tools.eclipse.plugin.commons.PluginLogger;
@@ -20,7 +18,7 @@ public abstract class AbstractStandardEditorPage extends FormPage {
 
 	private final AbstractStandardEditor  _standardEditor ; // Ref on the Editor this page belongs to
 	
-	private final TelosysToolsLogger      _logger ;
+//	private final TelosysToolsLogger      _logger ;
 	
 	private final Color                   _backgroundColor = PluginColors.widgetBackground();
 
@@ -46,14 +44,14 @@ public abstract class AbstractStandardEditorPage extends FormPage {
 			MsgBox.error("FormEditor is not an instance of StandardEditor");
 		}
 		
-		//--- Init the logger
-		TelosysToolsLogger editorLogger = _standardEditor.getLogger();		
-		if ( editorLogger != null ) {
-			_logger = editorLogger;
-		}
-		else {
-			_logger = new ConsoleLogger();
-		}
+//		//--- Init the logger
+//		TelosysToolsLogger editorLogger = _standardEditor.getLogger();		
+//		if ( editorLogger != null ) {
+//			_logger = editorLogger;
+//		}
+//		else {
+//			_logger = new ConsoleLogger();
+//		}
 	}
 	
 	//----------------------------------------------------------------------------------------------
@@ -61,7 +59,7 @@ public abstract class AbstractStandardEditorPage extends FormPage {
 	protected void createFormContent(IManagedForm managedForm) 
 	{
 		super.createFormContent(managedForm);
-		log(this, "createFormContent(..)..." );
+		log(this, "createFormContent(..) [ Abstract class ] ..." );
 		Control pageControl = getPartControl();
 		
 		if ( pageControl == null ) {
@@ -69,7 +67,7 @@ public abstract class AbstractStandardEditorPage extends FormPage {
 			return;
 		}
 		
-		setPageBackgroundColor(pageControl) ;
+//		setPageBackgroundColor(pageControl) ;
 		
 //		if ( pageControl instanceof Composite ) {
 //			log(this, "- pageControl is a Composite, class = " + pageControl.getClass() );
@@ -84,17 +82,17 @@ public abstract class AbstractStandardEditorPage extends FormPage {
 	
 	//----------------------------------------------------------------------------------------------
 	public void log(String s) {
-		if ( _logger != null ) {_logger.log(s); };
+		PluginLogger.log(s);
 	}
 	
 	//----------------------------------------------------------------------------------------------
 	public void log(Object o, String s) {
-		if ( _logger != null ) { _logger.log(o,s); } ;
+		PluginLogger.log(o,s);
 	}
-	//----------------------------------------------------------------------------------------------
-	public TelosysToolsLogger getLogger() {
-		return _logger ;
-	}
+//	//----------------------------------------------------------------------------------------------
+//	public TelosysToolsLogger getLogger() {
+//		return _logger ;
+//	}
 
 	//----------------------------------------------------------------------------------------------
 	public void setDirty() {

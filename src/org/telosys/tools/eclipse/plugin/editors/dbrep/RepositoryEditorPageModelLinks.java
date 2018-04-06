@@ -19,7 +19,6 @@ import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.telosys.tools.commons.TelosysToolsException;
 import org.telosys.tools.eclipse.plugin.commons.MsgBox;
-import org.telosys.tools.eclipse.plugin.commons.PluginLogger;
 import org.telosys.tools.eclipse.plugin.commons.Util;
 import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
 import org.telosys.tools.repository.LinksManager;
@@ -31,7 +30,6 @@ import org.telosys.tools.repository.rules.RepositoryRulesProvider;
 /**
  * Page 2 of the editor : Links management  <br>
  */
-///* package */ class RepositoryEditorPage2 extends RepositoryEditorPage 
 /* package */ class RepositoryEditorPageModelLinks extends AbstractModelEditorPage 
 {
 
@@ -44,24 +42,35 @@ import org.telosys.tools.repository.rules.RepositoryRulesProvider;
 	private Button ckFilterOneToOne   ;
 	
 	private LinksList    linksView ;
-//	private LinksManager linksManager ; // removed in v 3.0.0
 	
 	private Label     linksCount ;
 	
 	/**
+	 * Constructor
 	 * @param editor
 	 * @param id
 	 * @param title
 	 */
 	public RepositoryEditorPageModelLinks(FormEditor editor, String id, String title) {
 		super(editor, id, title);
-//		linksManager = new LinksManager( getRepositoryModel() ); // v 3.0.0
+		log(this, "constructor(.., '"+id+"', '"+ title +"')..." );
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.ui.IEditorPart#init(org.eclipse.ui.IEditorSite, org.eclipse.ui.IEditorInput)
+	 */
+	@Override
+	public void init(IEditorSite site, IEditorInput input) {
+		super.init(site, input);
+		log(this, "init(..,..) : input name = '" + input.getName() + "'" );
 	}
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.forms.editor.FormPage#createFormContent(org.eclipse.ui.forms.IManagedForm)
 	 */
+	@Override
 	protected void createFormContent(IManagedForm managedForm) {
+		log(this, "createFormContent(IManagedForm) ..." );
 		super.createFormContent(managedForm);
 				
 		// What do we have here ?
@@ -87,7 +96,6 @@ import org.telosys.tools.repository.rules.RepositoryRulesProvider;
 			
 			//--- Set the Form Body Layout = Grid with only 1 column
 			GridLayout bodyLayout = new GridLayout(1, false); 
-			//GridData gd = new GridData(GridData.);
 			
 			// marginWidth specifies the number of pixels of horizontal margin 
 			// that will be placed along the left and right edges of the layout. The default value is 5.
@@ -101,7 +109,6 @@ import org.telosys.tools.repository.rules.RepositoryRulesProvider;
 			//---------------------------------------------------------------
 			// Line 1 - Column 1 : The page title
 			//---------------------------------------------------------------
-			//Util.setPageTitle(scrolledFormBody, "Links between entities"  ) ;
 			Util.setPageTitle(scrolledFormBody, this.getTitle() ) ; // Title defined in the constructor
 			
 			//---------------------------------------------------------------
@@ -117,7 +124,6 @@ import org.telosys.tools.repository.rules.RepositoryRulesProvider;
 			gd.heightHint = 400 ;
 			gd.widthHint  = 800;
 
-//			linksView = new LinksList(scrolledFormBody, gd, linksManager, this );
 			linksView = new LinksList(scrolledFormBody, gd, this ); // v 3.0.0
 	
 			//---------------------------------------------------------------
@@ -134,33 +140,20 @@ import org.telosys.tools.repository.rules.RepositoryRulesProvider;
 			//---------------------------------------------------------------
 			// Populate the links view
 			//---------------------------------------------------------------
-			//LinkedList<Link> links = linksManager.getAllLinks();
-//			LinkedList<LinkInDbModel> links = linksManager.getAllLinks(); // v 3.0.0
-//			List<LinkInDbModel> links = linksManager.getAllLinks(); // v 3.0.0
 			List<LinkInDbModel> links = getRepositoryModel().getAllLinks(); // v 3.0.0
 			linksView.populate( links );
 			
 			refreshCount();
 			
+			setBodyBackgroundColor(); // KEEP IT AT THE END OF THE METHOD (for Eclipse 4.X compatibility )
+
+			log(this, "createFormContent(IManagedForm) : END." );
 		}
 		catch ( Throwable tex ) {
 			MsgBox.error("Exception in createFormContent()", tex);
 		}
 	}
 
-//	private void createLinks(Composite scrolledFormBody)
-//	{
-//		LinkedList links = getAllLinks();
-//		//--- Set the composite height
-//		GridData gd = new GridData (GridData.FILL_HORIZONTAL);
-//		gd.heightHint = 400 ;
-//		gd.widthHint  = 800;
-//
-//		linksView = new LinksList(scrolledFormBody, gd, null );
-//		int n = linksView.populate( links );
-//		linksCount.setText( "" + n + "/" + links.size() );
-//	}
-	
 	private Button createCheckBox(Composite parent, String text, GridData gd ) {
 		Button b = new Button(parent, SWT.CHECK);
         b.setText(text);
@@ -170,7 +163,6 @@ import org.telosys.tools.repository.rules.RepositoryRulesProvider;
 	}
 	
 	protected void refreshCount() {
-//		linksCount.setText( "" + linksView.getSize() + "/" + linksManager.countAllLinks() );
 		linksCount.setText( "" + linksView.getSize() + "/" + getRepositoryModel().getNumberOfLinks() );
 	}
 	
@@ -187,8 +179,6 @@ import org.telosys.tools.repository.rules.RepositoryRulesProvider;
 		
 		log("applyFilterCriteria() : " + criteria );
 		
-		//LinkedList<Link> links = linksManager.getLinks(criteria);
-//		LinkedList<LinkInDbModel> links = linksManager.getLinks(criteria); // v 3.0.0
 		LinkedList<LinkInDbModel> links = getRepositoryModel().getLinks(criteria); // v 3.0.0
 		linksView.repopulate( links );
 		refreshCount();
@@ -281,11 +271,6 @@ import org.telosys.tools.repository.rules.RepositoryRulesProvider;
 		}
 		
 		//----- Line 2
-//		{
-//			Label label = new Label(composite, SWT.LEFT);
-//			label.setLayoutData( gd ) ;
-//			
-//		}
 		{
 			Button b = new Button(composite, SWT.PUSH);
 	        b.setText("Apply");
@@ -434,16 +419,6 @@ import org.telosys.tools.repository.rules.RepositoryRulesProvider;
 //		
 //	}
 	//----------------------------------------------------------------------------------------------
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.IEditorPart#init(org.eclipse.ui.IEditorSite, org.eclipse.ui.IEditorInput)
-	 */
-	public void init(IEditorSite site, IEditorInput input) {
-		super.init(site, input);
-		PluginLogger.log(this, "init(..,..) : site id = '" + site.getId() + "'" );
-		PluginLogger.log(this, "init(..,..) : input name = '" + input.getName() + "'" );
-	}
-
-	//----------------------------------------------------------------------------------------------
 	private void removeAllLinks() {
 		RepositoryModel repositoryModel = getRepositoryModel();
 		repositoryModel.removeAllLinks();
@@ -453,14 +428,10 @@ import org.telosys.tools.repository.rules.RepositoryRulesProvider;
 		int n = 0 ;
 		RepositoryModel repositoryModel = getRepositoryModel();
 		
-		//LinksGenerator linksGenerator = new LinksGenerator(getLogger());
-		//LinksGenerator linksGenerator = new LinksGenerator(RepositoryRulesProvider.getRepositoryRules(), getLogger()); // v 2.1.1
 		LinksManager linksGenerator = new LinksManager(RepositoryRulesProvider.getRepositoryRules() ); // v 3.0.0
 
 		try {
-			
 			n = linksGenerator.generateAllLinks(repositoryModel);
-			
 		} catch (TelosysToolsException e) {
 			MsgBox.error("Error /links generation - TelosysToolsException", e);
 		}

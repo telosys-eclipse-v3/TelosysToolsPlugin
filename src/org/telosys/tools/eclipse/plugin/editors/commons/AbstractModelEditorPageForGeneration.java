@@ -42,12 +42,12 @@ import org.telosys.tools.generic.model.Entity;
 import org.telosys.tools.generic.model.Model;
 
 /**
- * Generic Model Editor Page for "Code Generation"
+ * Generic page for "Code Generation" <br>
+ * used in "Database Model Editor" and "DSL Model Editor"
  * 
  */
 public abstract class AbstractModelEditorPageForGeneration extends AbstractModelEditorPage {
 
-//	private final static int RIGHT_PART_WIDTH = 484 ;
 	private final static int TABLE_HEIGHT = 380 ;
 	
 	private Table  _tableEntities = null ;
@@ -73,39 +73,18 @@ public abstract class AbstractModelEditorPageForGeneration extends AbstractModel
 	 * @param id
 	 * @param title
 	 */
-	//public RepositoryEditorPage2(FormEditor editor, String id, String title, List<TargetDefinition> initialTargetsList ) {
 	public AbstractModelEditorPageForGeneration(FormEditor editor, String id, String title ) {
 		super(editor, id, title);
-		//super(editor, id, null); // ERROR if title is null
-		
 		log(this, "constructor(.., '"+id+"', '"+ title +"')..." );
-		//this.initialTargetsList = initialTargetsList ;
 	}
-	
-	
+
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.forms.editor.FormPage#createFormContent(org.eclipse.ui.forms.IManagedForm)
 	 */
+	@Override
 	protected void createFormContent(IManagedForm managedForm) {
 		super.createFormContent(managedForm);
-		
-//		log(this, "createFormContent(..)..." );
-//		Control pageControl = getPartControl();
-//		
-////		if ( pageControl != null ) {
-////			log(this, "createFormContent(..) : getPartControl() != null " );
-////		}
-////		else {
-////			log(this, "createFormContent(..) : getPartControl() is null !!! " );
-////			return ;
-////		}
-//		
-//		if ( pageControl == null ) {
-//			MsgBox.error("Page control is null ! Cannot create form content.");
-//			return;
-//		}
-//		
-//		setPageBackgroundColor(pageControl) ;
+		log(this, "createFormContent(IManagedForm) ..." );
 		
 		// What do we have here ?
 		// * pageControl (a Composite)
@@ -127,7 +106,6 @@ public abstract class AbstractModelEditorPageForGeneration extends AbstractModel
 		// form.setText( repEditor.getDatabaseTitle() );
 		
 		Composite scrolledFormBody = form.getBody();
-		log(this, "- body class = " + scrolledFormBody.getClass() );
 		
 		GridLayout formGridLayout = new GridLayout(2, false); // Grid 2 columns
 
@@ -165,6 +143,8 @@ public abstract class AbstractModelEditorPageForGeneration extends AbstractModel
 		populateEntitiesTable();
 		
 		_comboBundles.refresh(); 
+		
+		setBodyBackgroundColor(); // KEEP IT AT THE END OF THE METHOD (for Eclipse 4.X compatibility )
 
 		log(this, "createFormContent(..) - END." );
 	}

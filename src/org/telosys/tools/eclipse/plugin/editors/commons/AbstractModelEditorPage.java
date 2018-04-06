@@ -4,6 +4,7 @@ import java.io.File;
 
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.telosys.tools.eclipse.plugin.commons.MsgBox;
+import org.telosys.tools.eclipse.plugin.commons.PluginColors;
 import org.telosys.tools.generic.model.Model;
 import org.telosys.tools.repository.model.RepositoryModel;
 
@@ -63,4 +64,12 @@ public abstract class AbstractModelEditorPage extends AbstractStandardEditorPage
 		return null ;
 	}
 	
+	/**
+	 * Set the body background color 
+	 */
+	protected void setBodyBackgroundColor() {
+		PluginColors.setStandardBackground(this.getManagedForm().getForm().getBody());
+		//PluginColors.setBackgroundColor(this.getManagedForm().getForm().getBody(), PluginColors.blue());
+	}
+
 }

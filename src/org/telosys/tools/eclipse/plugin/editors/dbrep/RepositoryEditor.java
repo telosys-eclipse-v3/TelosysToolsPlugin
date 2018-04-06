@@ -10,7 +10,6 @@ import org.telosys.tools.api.GenericModelLoader;
 import org.telosys.tools.commons.TelosysToolsException;
 import org.telosys.tools.eclipse.plugin.commons.ModelUtil;
 import org.telosys.tools.eclipse.plugin.commons.MsgBox;
-import org.telosys.tools.eclipse.plugin.commons.PluginLogger;
 import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditor;
 import org.telosys.tools.generic.model.Model;
 import org.telosys.tools.repository.model.RepositoryModel;
@@ -20,19 +19,14 @@ import org.telosys.tools.repository.persistence.PersistenceManagerFactory;
 /**
  * Main entry point for the "Database Model" editor <br>
  * This editor contains 4 pages : <br>
- * . 1 : the table view with the mapping table<br>
- * . 2 : the "Bulk Generation" page <br>
- * . 3 : the "Configuration" page <br>
+ * . Entities attributes and mapping (table view) <br>
+ * . Links between entities <br>
+ * . Information <br>
+ * . Code generation <br>
  * 
  */
 public class RepositoryEditor extends AbstractModelEditor
 {
-//	//--- Pages titles ( shown at the bottom of each page tab )
-//	private final static String PAGE_1_TITLE = " Model : Entities attributes and mapping " ;
-//	private final static String PAGE_2_TITLE = " Model : Links between entities " ;
-//	private final static String PAGE_4_TITLE = " Model : Information " ;
-//	private final static String PAGE_3_TITLE = " Code generation " ;
-	
 	//========================================================================================
 	// Editor plugin startup ( for each file to edit ) :
 	// Step 1 : init()
@@ -42,21 +36,14 @@ public class RepositoryEditor extends AbstractModelEditor
     @Override
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
 		super.init(site, input);
+		log(this, "init()..." );
 		loadModel();
 	}
 	
     //----------------------------------------------------------------------------------------
 	@Override
 	protected void addPages() {
-		PluginLogger.log(this, "addPages()..." );
-
-//		//--- Get the initial list of targets/templates
-//		List<TargetDefinition> targetsList = null ;
-//		ProjectConfig projectConfig = getProjectConfig();
-//		if ( projectConfig != null )
-//		{
-//			targetsList = projectConfig.getTemplates(null); // NB : the list can be null 
-//		}
+		log(this, "addPages()..." );
 
 		IFormPage page1 = new RepositoryEditorPageModelEntities(this, 
 								"RepositoryEditorPageId1", 
@@ -79,6 +66,7 @@ public class RepositoryEditor extends AbstractModelEditor
 			addPage(page2);
 			addPage(page3);
 			addPage(page4);
+			log(this, "addPages() : all pages added" );
 		} catch (PartInitException e) {
 			MsgBox.error("RepositoryEditor : addPage(page) throws PartInitException ", e);
 		}		
@@ -87,7 +75,7 @@ public class RepositoryEditor extends AbstractModelEditor
     //----------------------------------------------------------------------------------------
     @Override
     protected Model loadModel(File modelFile) {
-//		//log("loadModel(" + modelFile + ")");
+		log(this, "loadModel(" + modelFile + ")");
 		GenericModelLoader genericModelLoader = new GenericModelLoader( getProjectConfig() ) ;
 		try {
 			Model model = genericModelLoader.loadModel(modelFile);
@@ -101,7 +89,8 @@ public class RepositoryEditor extends AbstractModelEditor
     
     //----------------------------------------------------------------------------------------
 	@Override
-    public void saveModel( Model model, File file ) {
+    public void saveModel( Model model, File modelFile ) {
+		log(this, "saveModel(" + modelFile + ")");
 		RepositoryModel repositoryModel;
 		try {
 			repositoryModel = ModelUtil.toRepositoryModel( model );
@@ -110,11 +99,10 @@ public class RepositoryEditor extends AbstractModelEditor
 			return;
 		}
 		
-		//StandardFilePersistenceManager persistenceManager = new StandardFilePersistenceManager(repositoryFile, _logger);
-		PersistenceManager persistenceManager = PersistenceManagerFactory.createPersistenceManager(file, getLogger());
+		PersistenceManager persistenceManager = PersistenceManagerFactory.createPersistenceManager(modelFile, getLogger());
 		try {
 			persistenceManager.save(repositoryModel);
-			log("Repository saved.");
+			log(this, "Repository saved.");
 		} catch (TelosysToolsException e) {
 			MsgBox.error("Cannot save repository", e);
 		}

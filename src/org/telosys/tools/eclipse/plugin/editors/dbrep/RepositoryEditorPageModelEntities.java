@@ -18,7 +18,6 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Table;
@@ -47,15 +46,8 @@ import org.telosys.tools.repository.model.RepositoryModel;
  * First page of the editor : Model attributes mapping and foreign keys <br>
  *  
  */
-///* package */  class RepositoryEditorPage1 extends RepositoryEditorPage 
 /* package */  class RepositoryEditorPageModelEntities extends AbstractModelEditorPage
 {
-
-//	private final static int GROUP_X = 12 ;
-//	private final static int GROUP_WIDTH = 600 ;
-	
-//	private final static int TEXT_X = 10 ;
-//	private final static int TEXT_WIDTH = 180 ;
 
 	private final static int TEXT_HEIGHT = 24 ;
 	
@@ -72,7 +64,6 @@ import org.telosys.tools.repository.model.RepositoryModel;
 	private boolean  _bPopulateInProgress = false ;
 	
 	//-----------------------------------------------------------------
-	//private Entity _currentEntity = null ; 
 	private EntityInDbModel _currentEntity = null ; // v 3.0.0
 	
 	//-----------------------------------------------------------------
@@ -91,57 +82,49 @@ import org.telosys.tools.repository.model.RepositoryModel;
 	//--- Tab 2 : "Foreign Keys" 
 	private Table  _tableForeignKeys     = null ;
 
-//	//--- Tab 3 : "Generation Targets" 
-//	private Table  _tableSpecificTargets = null ;
-//	
-//	private BundleComboBox  _comboBundles = null ;
-
 	/**
+	 * Constructor
 	 * @param editor
 	 * @param id
 	 * @param title 
 	 */
-	//public RepositoryEditorPage1(FormEditor editor, String id, String title, List<TargetDefinition> targetsList) {
 	public RepositoryEditorPageModelEntities(FormEditor editor, String id, String title ) {
 		super(editor, id, title);
-		//super(editor, id, null); // ERROR if title is null
 		log(this, "constructor(.., '"+id+"', '"+ title +"')..." );
-		//this.initialTargetsList = targetsList ;
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.ui.IEditorPart#init(org.eclipse.ui.IEditorSite, org.eclipse.ui.IEditorInput)
+	 */
+	@Override
+	public void init(IEditorSite site, IEditorInput input) {
+		super.init(site, input);
+		log(this, "init(..,..) : input name = '" + input.getName() + "'" );
 	}
 
-	protected boolean isPopulateInProgress()
-	{
+	protected boolean isPopulateInProgress() {
 		return _bPopulateInProgress ;
 	}
 	
 	private final static int BEAN_JAVA_CLASS      = 1 ;
 	
-	protected String getModelValue( int id )
-	{
-		if ( _currentEntity != null )
-		{
-			switch (id) 
-			{
-			//case BEAN_JAVA_CLASS :      return _currentEntity.getBeanJavaClass() ;
+	protected String getModelValue( int id ) {
+		if ( _currentEntity != null ) {
+			switch (id) {
 			case BEAN_JAVA_CLASS :      return _currentEntity.getClassName() ;
 			}
 			MsgBox.error("getModelValue("+id+") : unknown id !");
 		}
-		else
-		{
+		else {
 			MsgBox.error("getModelValue("+id+") : current entity is null !");
 		}
 		return "" ;
 	}
 	
-	protected void setModelValue( int id, String v )
-	{		
-		if ( _currentEntity != null )
-		{
-			switch (id) 
-			{
+	protected void setModelValue( int id, String v ) {		
+		if ( _currentEntity != null ) {
+			switch (id) {
 			case BEAN_JAVA_CLASS :      
-				//_currentEntity.setBeanJavaClass(v) ; 
 				_currentEntity.setClassName(v) ; 
 				break ;
 			default : 
@@ -149,8 +132,7 @@ import org.telosys.tools.repository.model.RepositoryModel;
 				return ;
 			}
 		}
-		else
-		{
+		else {
 			MsgBox.error("getModelValue("+id+") : current entity is null !");
 		}
 	}
@@ -162,38 +144,8 @@ import org.telosys.tools.repository.model.RepositoryModel;
 	protected void createFormContent(IManagedForm managedForm) 
 	{
 		super.createFormContent(managedForm);
+		log(this, "createFormContent(IManagedForm) ..." );
 		
-//		log(this, "createFormContent(..)..." );
-//		Control pageControl = getPartControl();
-//		
-//		if ( pageControl != null )
-//		{
-//			log(this, "createFormContent(..) : getPartControl() != null " );
-//		}
-//		else
-//		{
-//			log(this, "createFormContent(..) : getPartControl() is null !!! " );
-//			return ;
-//		}
-		
-//		if ( pageControl instanceof Composite )
-//		{
-//			log(this, "- pageControl is a Composite  " );
-//			// Yes pageControl is a Composite
-//
-//			log(this, "- pageControl class = " + pageControl.getClass() );
-//			// class = org.eclipse.ui.forms.widgets.ScrolledForm
-//			
-//			Composite pageComposite = (Composite) pageControl ;
-//			Layout layout = pageComposite.getLayout();			
-//			log(this, "- pageControl layout class = " + layout.getClass() );
-//			// layout = org.eclipse.swt.custom.ScrolledCompositeLayout
-//		}
-//		else
-//		{
-//			log(this, "- pageControl() is NOT a Composite !!! " );
-//		}
-
 		// What do we have here ?
 		// * pageControl (Composite)
 		//  . class  : org.eclipse.ui.forms.widgets.ScrolledForm ( see API JavaDoc )
@@ -211,9 +163,6 @@ import org.telosys.tools.repository.model.RepositoryModel;
 		
 		ScrolledForm scrolledForm = managedForm.getForm();
 		
-		//--- Page title 
-		//scrolledForm.setText( _repEditor.getDatabaseTitle() );
-		
 		scrolledForm.setExpandHorizontal(true);
 		
 //		Specify the minimum width at which the ScrolledComposite will begin scrolling 
@@ -224,22 +173,8 @@ import org.telosys.tools.repository.model.RepositoryModel;
 //		form.setExpandHorizontal(false); // tout bout à bout !
 //		form.setExpandVertical(false);
 		
-		//scrolledForm.setMinWidth(700);
-		
 		Composite scrolledFormBody = scrolledForm.getBody();
-		log(this, "- body class = " + scrolledFormBody.getClass() );
 		
-		Layout layout = scrolledFormBody.getLayout();			
-		if ( layout != null )
-		{
-			log(this, "- body layout class = " + layout.getClass() );
-		}
-		else
-		{
-			log(this, "- body layout class = NO LAYOUT ! ");
-		}
-		
-		//Layout bodyLayout = new RowLayout(SWT.VERTICAL);
 		//--- New layout in v 1.0 : Grid with only 1 column
 		GridLayout bodyLayout = new GridLayout(1, false); 
 		
@@ -254,7 +189,6 @@ import org.telosys.tools.repository.model.RepositoryModel;
 		//---------------------------------------------------------------
 		// Line 0 - Column 1 : The page title
 		//---------------------------------------------------------------
-		//Util.setPageTitle(scrolledFormBody, "Entities mapping and generation" ) ;
 		Util.setPageTitle(scrolledFormBody, this.getTitle() ) ; // Title defined in the constructor
 		
 		//---------------------------------------------------------------
@@ -270,35 +204,28 @@ import org.telosys.tools.repository.model.RepositoryModel;
 
 		composite = new Composite(scrolledFormBody, SWT.NONE); // Add it in the form body
 		composite.setLayout(new FillLayout());
-		
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL)); // new #LGU
-		//composite.setLocation(GROUP_X, 100);
 		
 		// #LGU changed for tests
 		//composite.setSize(760, 200); 
 		
 		//composite.setBackground( getBackgroundColor() );
-		
 
 		TabFolder tabFolder = new TabFolder(composite, SWT.NONE);
 		
-		//tabFolder.setLocation(GROUP_X, 100);
-		//tabFolder.setSize(400, 200);
-		//tabFolder.setBackground( getBackgroundColor() ); // No effect : cannot change the TabFolder color 
-
-		//--- Creates the 3 tabs 
+		//--- Creates the tabs in the "tabFolder"
 		createTabFolderMapping(tabFolder);
 		createTabFolderForeignKeys(tabFolder);
-		// createTabFolderGeneration(tabFolder);
 
 		//--------------------------------------------------------------
 		
 		populateComboEntities(_comboTables) ;
+		
+		setBodyBackgroundColor(); // KEEP IT AT THE END OF THE METHOD (for Eclipse 4.X compatibility )
 	}
 	
 	//----------------------------------------------------------------------------------------------
-	private Composite createPageHeaderGroup(Composite scrolledFormBody) 
-	{
+	private Composite createPageHeaderGroup(Composite scrolledFormBody) {
 		//--- The group "Database table"
 		//Group group1 = new Group(scrolledFormBody, SWT.NONE); // Add it in the form body
 		//Composite group1 = new Composite(scrolledFormBody, SWT.NONE | SWT.BORDER );
@@ -391,8 +318,7 @@ import org.telosys.tools.repository.model.RepositoryModel;
     	return group1;
 	}
 	//----------------------------------------------------------------------------------------------
-	private void populateComboEntities(Combo combo) 
-	{
+	private void populateComboEntities(Combo combo) {
 		log(this, "Populate combo Tables/Entities..." );
 
 		RepositoryModel repositoryModel = getRepositoryModel();
@@ -402,14 +328,9 @@ import org.telosys.tools.repository.model.RepositoryModel;
 		
 		Arrays.sort(tableNames); // Sort by alphabetical order
 		
-		if ( tableNames != null )
-		{
-			for ( int i = 0 ; i < tableNames.length ; i++ )
-			{
-				//combo.add(tableNames[i]);
-				// ver 2.0.7
+		if ( tableNames != null ) {
+			for ( int i = 0 ; i < tableNames.length ; i++ ) {
 				String entityName = tableNames[i];
-				//Entity entity = repositoryModel.getEntityByName(entityName);
 				EntityInDbModel entity = repositoryModel.getEntityByTableName(entityName);
 				if ( ! StrUtil.nullOrVoid( entity.getDatabaseType() ) ) {
 					if ( ! entity.getDatabaseType().equalsIgnoreCase("TABLE") ) {
@@ -424,20 +345,9 @@ import org.telosys.tools.repository.model.RepositoryModel;
 		log(this, "Populate TABLES combo : done." );
 	}
 	//----------------------------------------------------------------------------------------------
-	private Composite createTabFolderContainer(TabFolder tabFolder) 
-	{
+	private Composite createTabFolderContainer(TabFolder tabFolder) {
 		log(this, "createTabFolderContainer() ..." );
 		Composite tabContent = new Composite(tabFolder, SWT.NONE);
-	/***
-		//FillLayout layout = new FillLayout();
-		RowLayout layout = new RowLayout();
-		
-		layout.type = SWT.VERTICAL; // for RowLayout
-		
-		layout.marginHeight = 5;
-		layout.marginWidth  = 5;
-		tabContent.setLayout(layout);
-	***/
 	    GridLayout gridLayout = new GridLayout();
 	    gridLayout.numColumns = 1 ;
 	    gridLayout.horizontalSpacing = 30 ;
@@ -517,18 +427,7 @@ import org.telosys.tools.repository.model.RepositoryModel;
 //		_comboBundles.refresh();
 //		//--- Re-populate the SWT table
 //		populateTableGenerationTargets(_tableSpecificTargets, targetslist);
-//	}
-	//----------------------------------------------------------------------------------------------
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.IEditorPart#init(org.eclipse.ui.IEditorSite, org.eclipse.ui.IEditorInput)
-	 */
-	public void init(IEditorSite site, IEditorInput input) {
-		super.init(site, input);
-		log(this, "init(..,..)..." );
-		log(this, "init(..,..) : site id = '" + site.getId() 
-				+ "'  input name = '" + input.getName() + "'");
-	}
-	
+//	}	
 	
 	private Table createTableMapping(Composite composite)
 	{
@@ -664,34 +563,21 @@ import org.telosys.tools.repository.model.RepositoryModel;
 		return tableViewer ;
 	}
 	
-	private void loadTableEntity( String sTableName )
-	{
+	private void loadTableEntity( String sTableName ) {
 		log(this, "loadTableEntity('" + sTableName + "')");
-		
-//		RepositoryModel repositoryModel = getRepositoryModel();
 		RepositoryModel repositoryModel = getRepositoryModel();
-
-		//_currentEntity = repositoryModel.getEntityByName(sTableName);
 		_currentEntity = repositoryModel.getEntityByTableName(sTableName);
-
 		//--- Tab 1
 		populateClassesFields(_currentEntity);
 		populateTableMapping(_currentEntity);
-		
 		//--- Tab 2
 		populateTableForeignKeys(_currentEntity, _tableForeignKeys);
-
 	}
 	
-	//private void populateTableMapping(Entity entity)
-	private void populateTableMapping(EntityInDbModel entity)
-	{
+	private void populateTableMapping(EntityInDbModel entity) {
 		log(this, "populateTableMapping()...");
 		
 		//--- Init the "jFace Table Viewer" with the table rows
-		
-//		_labelCatalog.setText( blankIfNull( entity.getCatalog() ) );
-//		_labelSchema.setText(  blankIfNull( entity.getSchema()  ) );
 		_labelCatalog.setText( blankIfNull( entity.getDatabaseCatalog() ) );
 		_labelSchema.setText(  blankIfNull( entity.getDatabaseSchema()  ) );
 			
@@ -708,24 +594,17 @@ import org.telosys.tools.repository.model.RepositoryModel;
 		//--- Check selected columns 
 		Table table = _tableViewer.getTable();
 		TableItem[] tableItems = table.getItems();
-		for ( int i = 0 ; i < tableItems.length ; i++ )
-		{
+		for ( int i = 0 ; i < tableItems.length ; i++ ) {
 			TableItem item = tableItems[i];
-			//Column column = TableUtil.getTableColumn( item ) ;
 			AttributeInDbModel column = TableUtil.getTableColumn( item ) ;
-			//item.setChecked(column.getSelected());
 			item.setChecked(column.isSelected());
 		}
 	}
 	
-	//private void populateClassesFields(Entity entity) {
-	private void populateClassesFields(EntityInDbModel entity) { // v 3.0.0
+	private void populateClassesFields(EntityInDbModel entity) {
 		log(this, "populateFields()...");		
 		_bPopulateInProgress = true ;
-		
-		//_textJavaBeanClass.setText( blankIfNull( entity.getBeanJavaClass() ) );
-		_textJavaBeanClass.setText( blankIfNull( entity.getClassName() ) ); // v 3.0.0
-		
+		_textJavaBeanClass.setText( blankIfNull( entity.getClassName() ) );
 		_bPopulateInProgress = false ;
 	}
 	
@@ -733,29 +612,19 @@ import org.telosys.tools.repository.model.RepositoryModel;
 		return ( s != null ? s : "" ) ;
 	}
 	
-	//private void populateTableForeignKeys(Entity entity, Table table) {
 	private void populateTableForeignKeys(EntityInDbModel entity, Table table) { // v 3.0.0
 		log(this, "populateForeignKeysTable()...");
 		
-		//ForeignKey[] foreignKeys = entity.getForeignKeys();
 		ForeignKeyInDbModel[] foreignKeys = entity.getForeignKeys(); // v 3.0.0
-		
-		if ( foreignKeys != null )
-		{
+		if ( foreignKeys != null ) {
 			table.removeAll();
 	        TableItem tableItem ; 
 			int n = foreignKeys.length ;
-			for ( int i = 0 ; i < n ; i++ ) // For each Foreign Key 
-			{
-				//ForeignKey fk = foreignKeys[i];
+			for ( int i = 0 ; i < n ; i++ ) { // For each Foreign Key 
 				ForeignKeyInDbModel fk = foreignKeys[i]; // v 3.0.0
-				
-				//ForeignKeyColumn fkColumns[] = fk.getForeignKeyColumns();
 				ForeignKeyColumnInDbModel fkColumns[] = fk.getForeignKeyColumns(); // v 3.0.0
 
-				for ( int c = 0 ; c < fkColumns.length ; c++ )  // For each column of the Foreign Key 
-				{
-					//ForeignKeyColumn fkCol = fkColumns[c];
+				for ( int c = 0 ; c < fkColumns.length ; c++ ) { // For each column of the Foreign Key 
 					ForeignKeyColumnInDbModel fkCol = fkColumns[c];
 					
 					//--- Create a new row in the table
@@ -764,24 +633,15 @@ import org.telosys.tools.repository.model.RepositoryModel;
 					String name = ( c == 0 ? fk.getName() : "" ) ;
 
 					tableItem.setText(col++, name );
-
 					tableItem.setText(col++, fkCol.getColumnName() );			
-			        
 					tableItem.setText(col++, fkCol.getTableRef() );
-			        
-					//tableItem.setText(col++, fkCol.getColumnRef());
 					tableItem.setText(col++, fkCol.getReferencedColumnName()); // v 3.0.0
-	
 					tableItem.setText(col++, fkCol.getUpdateRuleCode() + " : " + fkCol.getUpdateRuleText() );
-			        
 					tableItem.setText(col++, fkCol.getDeleteRuleCode() + " : " + fkCol.getDeleteRuleText() );
-			        
 					tableItem.setText(col++, fkCol.getDeferrableCode() + " : " + fkCol.getDeferrableText() );
-			        
 				}
 			}
 		}
-		
 	}
 	
 	private Table createTableForeignKeys(Composite composite)
@@ -833,38 +693,6 @@ import org.telosys.tools.repository.model.RepositoryModel;
 		return table;
 	}
 	
-	
-//	private void populateTableGenerationTargets(Table table, List<TargetDefinition> list) // v 2.0.7
-//	{
-////		ProjectConfig projectConfig = getProjectConfig();
-////		if ( projectConfig == null )
-////		{
-////			return ;
-////		}
-////		List<TargetDefinition> list = projectConfig.getTemplates(); // NB : the list can be null 
-//		if ( list != null )
-//		{
-//			table.removeAll();
-//	        TableItem tableItem ; 
-//	        for ( TargetDefinition t : list ) {
-//	        	// Do not add "once" target ( not entity dependent )
-//	        	if ( t.isOnce() != true ) {
-//	        		
-//					tableItem = new TableItem(table, SWT.NONE );
-//			        tableItem.setChecked(false);
-//			        tableItem.setText(0, t.getName() );
-//			        tableItem.setText(1, t.getFile() ) ; //  st.getTargetFile() );			
-//			        tableItem.setText(2, t.getFolder() ) ; // st.getTargetFolder() );
-//			        tableItem.setText(3, t.getTemplate() );
-//			        tableItem.setImage(4, PluginImages.getImage(PluginImages.EDIT_ICON ) );
-//			        
-//			        // Keep the target definition associated with the table item
-//			        tableItem.setData(t);		        
-//	        	}
-//			}
-//		}
-//	}
-	
     /**
      * Listener for DATABASE TABLE COMBO BOX 
      * Event fired when a table is selected
@@ -908,10 +736,8 @@ import org.telosys.tools.repository.model.RepositoryModel;
      * Listener for TableItem CheckBox (row selection in the table) 
      * @param table
      */
-    private void setSelectionListener(Table table)
-    {
-    	table.addSelectionListener(new SelectionListener()
-    	{
+    private void setSelectionListener(Table table) {
+    	table.addSelectionListener(new SelectionListener() {
 			public void widgetDefaultSelected(SelectionEvent e) {
         		log(this, "*** TABLE : widgetDefaultSelected" );				
 			}
@@ -921,10 +747,8 @@ import org.telosys.tools.repository.model.RepositoryModel;
         		TableItem tableItem = (TableItem) e.item ;
         		
         		log(this, "*** TABLE : widgetSelected : checked ? " + tableItem.getChecked()  );				
-        		// Column row = TableUtil.getTableColumn(tableItem);
         		AttributeInDbModel attribute = TableUtil.getTableColumn(tableItem); // v 3.0.0
         		log(this, "*** TABLE : widgetSelected : row : " + attribute );
-        		//if ( row.isPrimaryKey() ) {
             	if ( attribute.isKeyElement() ) { // v 3.0.0
     				// Must be always checked : unselect not allowed
             		tableItem.setChecked(true);
@@ -932,11 +756,9 @@ import org.telosys.tools.repository.model.RepositoryModel;
         		}
         		else {
     				// Can be checked or not
-        			//if ( row.getSelected() != tableItem.getChecked() ) {
             		if ( attribute.isSelected() != tableItem.getChecked() ) {
                 		attribute.setSelected( tableItem.getChecked() );
         				setDirty();
-        				
         			}
         		}
 			}

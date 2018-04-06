@@ -146,7 +146,7 @@ public abstract class AbstractModelEditor extends AbstractStandardEditor
 	//----------------------------------------------------------------------------------------
 	@Override
 	public void doSave(IProgressMonitor monitor) {
-		log("doSave()..." );
+		log(this, "doSave()..." );
 
 		monitor.beginTask( "Saving the model...", IProgressMonitor.UNKNOWN );
 		
@@ -171,7 +171,7 @@ public abstract class AbstractModelEditor extends AbstractStandardEditor
 	//----------------------------------------------------------------------------------------
 	@Override
 	public boolean isSaveAsAllowed() { // Allow the "Save as" ?
-		log("isSaveAsAllowed()..." );
+		log(this, "isSaveAsAllowed()..." );
 		return false ; // "Save as" not allowed
 	}
 }

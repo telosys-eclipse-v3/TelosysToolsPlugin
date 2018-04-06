@@ -15,9 +15,10 @@ import org.telosys.tools.eclipse.plugin.commons.Util;
 import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
 
 /**
- * First page of the editor : Model attributes mapping and foreign keys <br>
+ * DSL Model Editor Page : Model Info  <br>
  *  
  */
+
 /* package */  class ModelEditorPageModelInfo extends AbstractModelEditorPage 
 {
 	private boolean  _bPopulateInProgress = false ;
@@ -43,17 +44,18 @@ import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
 	@Override
 	public void init(IEditorSite site, IEditorInput input) {
 		super.init(site, input);
-		log(this, "init(..,..)..." );
-		log(this, "init(..,..) : site id = '" + site.getId() 
-				+ "'  input name = '" + input.getName() + "'");
-	}	
+		log(this, "init(..,..) :  input name = '" + input.getName() + "'");
+	}
+
 	//----------------------------------------------------------------------------------------------
 	@Override
 	protected void createFormContent(IManagedForm managedForm) {
 		super.createFormContent(managedForm);
 		
 		log(this, "createFormContent(..) : Model Info Page" );
-		
+
+		setBodyBackgroundColor(); // OK for Eclipse 4.X compatibility
+
 		//--- Set a LAYOUT to the BODY
 		GridLayout bodyLayout = new GridLayout();	
 		bodyLayout.numColumns = 2 ;
@@ -107,9 +109,6 @@ import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
 		String modelFileAbsolutePath = this.getModelEditor().getFileAbsolutePath();
 		_tFileName.setText( modelFileAbsolutePath );
 
-//		File modelFile = new File(modelFileAbsolutePath);
-//		ModelLoader modelLoader = new ModelLoader();
-//		DomainModelInfo modelInfo = modelLoader.loadModelInformation(modelFile);
 		DomainModelInfo modelInfo = ((ModelEditor)this.getModelEditor()).getDomainModelInfo();
 		if ( modelInfo != null ) {
 			_tName.setText(modelInfo.getName());
@@ -125,7 +124,6 @@ import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
 		label1.setText(labelText) ;
 
 		// Standard text field 
-		//Text text = new Text( c, SWT.LEFT );SWT.BORDER
 		Text text = new Text( c, SWT.BORDER );
 		text.addModifyListener( new TextFieldModifyListener(getStandardEditor()) );
 
@@ -145,7 +143,6 @@ import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
 		
 		// Multi-line text field 
 		Text text = new Text (c, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL );
-		
 		text.addModifyListener( new TextFieldModifyListener(getStandardEditor()) );
 		
 		new TextFieldModifyListener(getStandardEditor());

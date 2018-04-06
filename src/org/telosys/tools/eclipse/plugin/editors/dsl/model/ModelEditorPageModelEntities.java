@@ -38,7 +38,6 @@ import org.telosys.tools.eclipse.plugin.commons.PluginImages;
 import org.telosys.tools.eclipse.plugin.commons.Util;
 import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
 
-
 /**
  * First page of the editor : Model attributes mapping and foreign keys <br>
  *  
@@ -47,9 +46,7 @@ import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
 {
 
 	private Table _entitiesTable = null ;
-//	private boolean  _bPopulateInProgress = false ;
 	
-	//----------------------------------------------------------------------------------------------
 	/**
 	 * Constructor
 	 * @param editor
@@ -59,11 +56,49 @@ import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
 	public ModelEditorPageModelEntities(FormEditor editor, String id, String title ) {
 		super(editor, id, title);
 	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.ui.forms.editor.FormPage#createFormContent(org.eclipse.ui.forms.IManagedForm)
+	 */
+	@Override
+	protected void createFormContent(IManagedForm managedForm) {
+		super.createFormContent(managedForm);
+		
+		log(this, "createFormContent(..) : Entities Page" );
+
+		//--- Set a GRID LAYOUT to the BODY
+		GridLayout bodyLayout = new GridLayout();	
+		bodyLayout.numColumns = 1 ;
+		bodyLayout.makeColumnsEqualWidth = false ;
+		
+		Composite scrolledFormBody = initAndGetFormBody(managedForm, bodyLayout);
+		
+		//---------------------------------------------------------------
+		// Line 1 : Page title
+		//---------------------------------------------------------------
+		Composite titlePanel = createTitleAndButtons(scrolledFormBody);		
+		titlePanel.setLayoutData( new GridData(GridData.FILL_HORIZONTAL) );
+		
+		//---------------------------------------------------------------
+		// Line 2 : Entities table
+		//---------------------------------------------------------------
+		_entitiesTable = createEntitiesTable(scrolledFormBody);
+
+		// Fills available horizontal and vertical space, 
+		// grabs horizontal space, grabs vertical space
+		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
+		//gd.heightHint = 360 ;
+		_entitiesTable.setLayoutData(gd);
+		
+		setBodyBackgroundColor(); // KEEP IT AT THE END OF THE METHOD (for Eclipse 4.X compatibility )
+
+		refresh();
+	}
 	
+	//----------------------------------------------------------------------------------------------
 	private Shell getShell() {
 		return _entitiesTable.getDisplay().getActiveShell();
 	}
-	
 	//----------------------------------------------------------------------------------------------
 	protected void doOpenEntityInEditor(String entityAbsoluteFilePath) {
 		FileEditorUtil.openEntityFileInEditor( entityAbsoluteFilePath );
@@ -123,51 +158,6 @@ import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
 		}
 	}
 	
-	//----------------------------------------------------------------------------------------------
-//	protected boolean isPopulateInProgress() {
-//		return _bPopulateInProgress ;
-//	}
-	
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.forms.editor.FormPage#createFormContent(org.eclipse.ui.forms.IManagedForm)
-	 */
-	@Override
-	protected void createFormContent(IManagedForm managedForm) {
-		super.createFormContent(managedForm);
-		
-		log(this, "createFormContent(..) : Entities Page" );
-
-		//--- Set a GRID LAYOUT to the BODY
-		GridLayout bodyLayout = new GridLayout();	
-		bodyLayout.numColumns = 1 ;
-		bodyLayout.makeColumnsEqualWidth = false ;
-		
-		Composite scrolledFormBody = initAndGetFormBody(managedForm, bodyLayout);
-		
-		//---------------------------------------------------------------
-		// Line 1 : Page title
-		//---------------------------------------------------------------
-		//Label labelTitle = Util.setPageTitle(scrolledFormBody, this.getTitle() ) ; // Title defined in the constructor
-
-		Composite titlePanel = createTitleAndButtons(scrolledFormBody);		
-		
-		///GridData gdTitle = new GridData(GridData.FILL_HORIZONTAL);
-		titlePanel.setLayoutData( new GridData(GridData.FILL_HORIZONTAL) );
-		
-		//---------------------------------------------------------------
-		// Line 2 : Entities table
-		//---------------------------------------------------------------
-		_entitiesTable = createEntitiesTable(scrolledFormBody);
-
-		// Fills available horizontal and vertical space, 
-		// grabs horizontal space, grabs vertical space
-		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
-		//gd.heightHint = 360 ;
-		_entitiesTable.setLayoutData(gd);
-		
-		// populateEntities() ; 
-		refresh();
-	}
 	
 	//----------------------------------------------------------------------------------------------
 	/**
@@ -335,8 +325,6 @@ import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
 	private void refresh() {
 		log ( "refresh()..." ) ;
 		ModelEditor modelEditor = (ModelEditor) getModelEditor();
-//		modelEditor.loadModel();
-//		populateEntities();
 		modelEditor.refresh();
 	}
 	//----------------------------------------------------------------------------------------------

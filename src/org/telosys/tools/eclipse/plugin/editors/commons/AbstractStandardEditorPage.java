@@ -1,7 +1,6 @@
 package org.telosys.tools.eclipse.plugin.editors.commons;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Layout;
@@ -11,18 +10,12 @@ import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.telosys.tools.commons.cfg.TelosysToolsCfg;
 import org.telosys.tools.eclipse.plugin.commons.MsgBox;
-import org.telosys.tools.eclipse.plugin.commons.PluginColors;
 import org.telosys.tools.eclipse.plugin.commons.PluginLogger;
 
 public abstract class AbstractStandardEditorPage extends FormPage {
 
 	private final AbstractStandardEditor  _standardEditor ; // Ref on the Editor this page belongs to
 	
-//	private final TelosysToolsLogger      _logger ;
-	
-	private final Color                   _backgroundColor = PluginColors.widgetBackground();
-
-	//----------------------------------------------------------------------------------------------
 	/**
 	 * Constructor
 	 * @param editor
@@ -32,7 +25,6 @@ public abstract class AbstractStandardEditorPage extends FormPage {
 	public AbstractStandardEditorPage(FormEditor editor, String id, String title ) {
 		super(editor, id, title);
 		PluginLogger.log(this, "constructor(.., '"+id+"', '"+ title +"')..." );
-		//super(editor, id, null); // ERROR if title is null
 		if ( editor == null ) {
 			MsgBox.error("FormEditor is null");
 		}
@@ -43,15 +35,6 @@ public abstract class AbstractStandardEditorPage extends FormPage {
 			_standardEditor = null ;
 			MsgBox.error("FormEditor is not an instance of StandardEditor");
 		}
-		
-//		//--- Init the logger
-//		TelosysToolsLogger editorLogger = _standardEditor.getLogger();		
-//		if ( editorLogger != null ) {
-//			_logger = editorLogger;
-//		}
-//		else {
-//			_logger = new ConsoleLogger();
-//		}
 	}
 	
 	//----------------------------------------------------------------------------------------------
@@ -61,23 +44,10 @@ public abstract class AbstractStandardEditorPage extends FormPage {
 		super.createFormContent(managedForm);
 		log(this, "createFormContent(..) [ Abstract class ] ..." );
 		Control pageControl = getPartControl();
-		
 		if ( pageControl == null ) {
 			MsgBox.error("Page control is null ! Cannot create form content.");
 			return;
 		}
-		
-//		setPageBackgroundColor(pageControl) ;
-		
-//		if ( pageControl instanceof Composite ) {
-//			log(this, "- pageControl is a Composite, class = " + pageControl.getClass() );
-//			Layout layout = ((Composite)pageControl).getLayout();
-//			log(this, "- pageControl layout class = " + layout.getClass() );
-//			// layout = org.eclipse.swt.custom.ScrolledCompositeLayout
-//		}
-//		else {
-//			log(this, "- pageControl() is NOT a Composite !!! " );
-//		}
 	}
 	
 	//----------------------------------------------------------------------------------------------
@@ -89,10 +59,6 @@ public abstract class AbstractStandardEditorPage extends FormPage {
 	public void log(Object o, String s) {
 		PluginLogger.log(o,s);
 	}
-//	//----------------------------------------------------------------------------------------------
-//	public TelosysToolsLogger getLogger() {
-//		return _logger ;
-//	}
 
 	//----------------------------------------------------------------------------------------------
 	public void setDirty() {
@@ -109,23 +75,16 @@ public abstract class AbstractStandardEditorPage extends FormPage {
 	}
 
 	//----------------------------------------------------------------------------------------------
-	private void setPageBackgroundColor(Control pageControl) {
-		//Control pageControl = this.getPartControl();
-		if ( pageControl != null ) {
-			pageControl.setBackground(_backgroundColor) ;
-		}
-		else {
-			MsgBox.error("setPageBackgroundColor() : pageControl is null");
-		}		
-	}
-	//----------------------------------------------------------------------------------------------
-//	protected Color getBackgroundColor() {
-//		return _backgroundColor;
+//	private void setPageBackgroundColor(Control pageControl) {
+//		if ( pageControl != null ) {
+//			pageControl.setBackground(_backgroundColor) ;
+//		}
+//		else {
+//			MsgBox.error("setPageBackgroundColor() : pageControl is null");
+//		}		
 //	}
-	
+	//----------------------------------------------------------------------------------------------
 	public TelosysToolsCfg getProjectConfig () {
-//		PluginLogger.log(this, "getProjectConfig()..." );
-//		return ProjectConfigManager.loadProjectConfig( getProject() ); // v 3.0.0
 		return _standardEditor.getProjectConfig();
 	}
 	//----------------------------------------------------------------------------------------------

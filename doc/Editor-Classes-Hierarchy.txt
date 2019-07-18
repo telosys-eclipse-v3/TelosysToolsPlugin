@@ -1,0 +1,30 @@
+
+-----------------------------------------------------------------------------
+
+EDITOR  
+
+                    ( org.eclipse.ui.forms.editor.FormEditor ) 
+                          ^                    ^
+              AbstractStandardEditor       DbConfigEditor
+                         ^
+                AbstractModelEditor
+                   getModelFile()
+                 ^               ^
+          ModelEditor         RepositoryEditor
+      (DSL model editor)      (DB model editor)
+ 
+-----------------------------------------------------------------------------
+
+EDITOR PAGE 
+
+                    ( org.eclipse.ui.forms.editor.FormPage )
+                            ^                 ^
+         AbstractStandardEditorPage       DbConfigEditorPage
+                     ^
+          AbstractModelEditorPage  
+             ^               ^              
+  Pages (DSL & DbModel)     AbstractModelEditorPageForGeneration
+                                        ^              
+                            DSL : ModelEditorPageCodeGeneration
+                            DbModel : RepositoryEditorPageCodeGeneration
+

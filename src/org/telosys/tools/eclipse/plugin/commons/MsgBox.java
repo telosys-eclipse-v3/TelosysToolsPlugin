@@ -15,51 +15,22 @@ public class MsgBox
 	//----------------------------------------------------------------------------------
 	// ERROR
 	//----------------------------------------------------------------------------------
-	public static void error(String title, String message) 
-	{
+	public static void error(String title, String message) {
 		MessageDialog dialog = new MessageDialog(null, title, null, 
 				message, MessageDialog.ERROR, new String[]{IDialogConstants.OK_LABEL}, 0); 
 		dialog.open();
 		return;
 	}
 	//----------------------------------------------------------------------------------
-	public static void error(String message) 
-	{
+	public static void error(String message) {
 	    error(" Error ", message);
 	}
 	//----------------------------------------------------------------------------------
-//	private static String getExceptionInfo(Throwable e) 
-//	{
-//		if ( e != null )
-//		{
-//			return "Exception " + e.getClass().getName() + " : " + e.getMessage();
-//		}
-//		return "" ;
-//	}
-//	//----------------------------------------------------------------------------------
-//	public static void error(String message, Throwable e) 
-//	{
-//		StringBuffer sb = new StringBuffer( message + "\n\n" );
-//		if ( e != null )
-//		{
-//			sb.append( getExceptionInfo(e) + "\n" );
-//			Throwable cause = e.getCause() ;
-//			while ( cause != null )
-//			{
-//				sb.append(  "\n  " + getExceptionInfo(cause) );
-//				cause = cause.getCause();
-//			}
-//		}
-//	    error(" Error ", sb.toString() );
-//	}
-	//----------------------------------------------------------------------------------
-	public static void error(String title, String message, Throwable e) 
-	{
+	public static void error(String title, String message, Throwable e) {
 	    error( title, message + "\n\n" + ExceptionUtil.getExceptionSummary(e) );
 	}
 	//----------------------------------------------------------------------------------
-	public static void error(String message, Throwable e) 
-	{
+	public static void error(String message, Throwable e) {
 	    error(" Error ", message + "\n\n" + ExceptionUtil.getExceptionSummary(e) );
 	}
 	
@@ -73,8 +44,7 @@ public class MsgBox
 		return;
 	}
 	//----------------------------------------------------------------------------------
-	public static void info(String message) 
-	{
+	public static void info(String message) {
 	    info(" Information ", message);
 	}
 
@@ -88,26 +58,24 @@ public class MsgBox
 		return;
 	}
 	//----------------------------------------------------------------------------------
-	public static void warning(String message) 
-	{
+	public static void warning(String message) {
 	    warning(" Warning ", message);
 	}
 	
 	//----------------------------------------------------------------------------------
 	// CONFIRM
 	//----------------------------------------------------------------------------------
-	public static boolean confirm(String title, String message) 
-	{
+	public static boolean confirm(String title, String message) {
 		return MessageDialog.openConfirm(null, title, message);
 	}
-	public static boolean confirm(String message) 
-	{
+	public static boolean confirm(String message) {
 		return confirm( "Confirm", message);
 	}
 
 	//----------------------------------------------------------------------------------
-	public static void debug(String message) 
-	{
+	// DEBUG
+	//----------------------------------------------------------------------------------
+	public static void debug(String message) {
 	    if ( DEBUG ) info(" DEBUG ", message);
 	}
 }

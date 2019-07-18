@@ -8,7 +8,9 @@ import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
+import org.telosys.tools.api.TelosysProject;
 import org.telosys.tools.commons.cfg.TelosysToolsCfg;
+import org.telosys.tools.eclipse.plugin.commons.EclipseProjUtil;
 import org.telosys.tools.eclipse.plugin.commons.MsgBox;
 import org.telosys.tools.eclipse.plugin.commons.PluginLogger;
 
@@ -70,8 +72,23 @@ public abstract class AbstractStandardEditorPage extends FormPage {
 		return _standardEditor;
 	}
 	//----------------------------------------------------------------------------------------------
+	/**
+	 * Returns the Eclipse project containing the file open in the editor
+	 * @return
+	 */
 	public IProject getProject() {
 		return _standardEditor.getProject();
+	}
+
+	//----------------------------------------------------------------------------------------------
+	/**
+	 * Returns the Telosys project containing the file open in the editor
+	 * @return
+	 */
+	public TelosysProject getTelosysProject() {
+		IProject iProject = getProject();
+		String projectAbsolutePath = EclipseProjUtil.getAbsolutePathInFileSystem(iProject);
+		return new TelosysProject(projectAbsolutePath);
 	}
 
 	//----------------------------------------------------------------------------------------------

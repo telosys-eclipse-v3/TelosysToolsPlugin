@@ -150,7 +150,7 @@ public class EclipseProjUtil {
 	}
 
 	/**
-	 * Returns the filesystem absolute path <br>
+	 * Returns the filesystem absolute path for the given file path in the given project<br>
 	 * Example : returns "D:/aaa/bbbb/workspace/myproject/aa/bb/file" for "aa/bb/file"
 	 * @param project
 	 * @param sPath
@@ -160,6 +160,19 @@ public class EclipseProjUtil {
 	{
 		IResource resource = project.getFile( new Path(sPath) ) ;
 		IPath ipath = resource.getLocation(); // OS Path ( D:/aaa/bbbb/workspace/myproject/aa/bb/file )
+		File file = ipath.toFile();
+		return file.getAbsolutePath();
+	}
+	
+	/**
+	 * Returns the filesystem absolute path for the given project<br>
+	 * @param project
+	 * @return
+	 * @since  3.0.1
+	 */
+	public static String getAbsolutePathInFileSystem(IProject project) {
+		// Returns the absolute path in the local file system to this resource, or null if no path can be determined.
+		IPath ipath = project.getLocation(); // OS Path ( D:/aaa/bbbb/workspace/myproject/ )
 		File file = ipath.toFile();
 		return file.getAbsolutePath();
 	}

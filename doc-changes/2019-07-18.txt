@@ -1,0 +1,14 @@
+
+ Plugin ver 3.1.0.001  ( with telosys-tools-all-3.1.0.jar )
+ 
+ PopulateListTaskWithProgress
+   * Use new classes : BundlesFromGitHub, etc
+   
+ EclipseProjUtil
+   + getAbsolutePathInFileSystem(IProject project)
+   
+ AbstractStandardEditorPage
+   + getTelosysProject() 
+   
+ BundleComboBox
+   * getBundlesFromTemplatesFolder() : use TelosysProject

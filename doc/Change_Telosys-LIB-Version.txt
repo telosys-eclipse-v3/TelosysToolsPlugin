@@ -1,0 +1,26 @@
+
+=> Edit build_copy_jars.xml  
+    Change property name="VERSION"
+   
+=> Run As / Ant build
+
+=> Refresh (F5) "/lib"
+
+=> Configure project "Build Path" 
+    Remove old version : "telosys-tools-all-X.X.X.jar" 
+    Add new version :  [ Add JARs... ] : "lib/telosys-tools-all-X.X.X.jar"  
+  
+=> Open plugin.xml with plugin editor 
+
+    Overview : Change version ( eg 3.1.0.001 )
+  
+    Runtime  : [Add...] new library  ( eg lib/telosys-tools-all-3.1.0.jar )
+             [Remove] old library
+             
+=> Check updated files :
+    - MANIFEST.MF  ( plugin version + telosys library )
+    - build.properties ( telosys library )
+
+=> Project Clean
+
+  

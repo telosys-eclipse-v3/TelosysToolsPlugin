@@ -380,7 +380,7 @@ public class EclipseWksUtil {
 	 * @param iFile
 	 * @return
 	 */
-	public static File toFile(IFile iFile) {
+	public static File toFile_OLD(IFile iFile) {
 		
 //		log("toFile( IFile iFile ) : iFile.getLocationURI() = " + iFile.getLocationURI() ); // NB : can be null if iFile has been deleted 
 //		log("toFile( IFile iFile ) : iFile.getLocation() = " + iFile.getLocation() ); // NB : can be null if iFile has been deleted 
@@ -417,6 +417,26 @@ public class EclipseWksUtil {
 //		log("file absolute path = '" + fileAbsolutePath + "'");
 		
 		return new File(fileAbsolutePath) ;
+	}
+	
+	/**
+	 * Converts the given Eclipse "IFile" to a standard "File" instance<br>
+	 * If the IFile is in an imported project the returned File points to the original file
+	 * @param iFile
+	 * @return
+	 */
+	public static File toFile(IFile iFile) {
+		IPath iPath = iFile.getRawLocation();
+		if ( iPath != null ) {
+			MsgBox.debug("IPath : " + iPath.toString());
+			File file = iPath.toFile();
+			MsgBox.debug("File : " + file.getAbsolutePath());
+			return file ;
+		}
+		else {
+			MsgBox.error("Cannot get raw location for IFile " + iFile.getName());
+			throw new RuntimeException("Cannot get raw location for IFile " + iFile.getName());
+		}
 	}
 	
 	//----------------------------------------------------------------------------------

@@ -428,9 +428,9 @@ public class EclipseWksUtil {
 	public static File toFile(IFile iFile) {
 		IPath iPath = iFile.getRawLocation();
 		if ( iPath != null ) {
-			MsgBox.debug("IPath : " + iPath.toString());
+			//MsgBox.debug("IPath : " + iPath.toString());
 			File file = iPath.toFile();
-			MsgBox.debug("File : " + file.getAbsolutePath());
+			//MsgBox.debug("File : " + file.getAbsolutePath());
 			return file ;
 		}
 		else {

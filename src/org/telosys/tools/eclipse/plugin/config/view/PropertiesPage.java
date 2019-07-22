@@ -83,7 +83,7 @@ public class PropertiesPage extends PropertyPage {
 	private Text _tRootPackage = null ; 
 	
 	//--- Tab "Templates" ( "Download" )
-	private Text    _tGitHubUserName = null;
+	private Text    _tGitHubAccount = null;
 	private List    _listGitHubRepositories = null ;
 	private Button  _checkBoxUnzipDownload = null ;
 	private Text    _tLogger = null ;
@@ -799,12 +799,12 @@ public class PropertiesPage extends PropertyPage {
 		//------------------------------------------------------------------------------------
 		//--- Label + Text field 
 		label = new Label(tabContent, SWT.NONE);
-		label.setText("GitHub user name : ");
-		_tGitHubUserName = new Text(tabContent, SWT.BORDER);
+		label.setText("GitHub account : ");
+		_tGitHubAccount = new Text(tabContent, SWT.BORDER);
 		GridData gd = getCellGridData2();
 		gd.widthHint   = Col2With ;
-		_tGitHubUserName.setLayoutData(gd);
-		_tGitHubUserName.setText(DEFAULT_GITHUB_USER_NAME);
+		_tGitHubAccount.setLayoutData(gd);
+		_tGitHubAccount.setText(DEFAULT_GITHUB_USER_NAME);
 		
 		//------------------------------------------------------------------------------------
 		//--- Void Label + Button  
@@ -944,7 +944,8 @@ public class PropertiesPage extends PropertyPage {
 			PopulateListTaskWithProgress task = new PopulateListTaskWithProgress( 
 					getTelosysToolsCfgFromFields(),
 					sGitHubUserName, 
-					_listGitHubRepositories );
+					_listGitHubRepositories,
+					_tLogger);
 			
 			//--- Run the task with monitor
 			ProgressMonitorDialog progressMonitorDialog = new ProgressMonitorDialog( Util.getActiveWindowShell() ) ;
@@ -1057,9 +1058,9 @@ public class PropertiesPage extends PropertyPage {
 //	}
 	
 	private String getGitHubUserName() {
-		String user = _tGitHubUserName.getText().trim();
+		String user = _tGitHubAccount.getText().trim();
 		if ( user.length() == 0  ) {
-			MsgBox.warning("GitHub user name is void");
+			MsgBox.warning("GitHub account is void");
 			return "" ;
 		}
 		return user ;

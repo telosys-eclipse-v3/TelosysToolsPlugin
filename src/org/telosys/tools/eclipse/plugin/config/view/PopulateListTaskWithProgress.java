@@ -5,6 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.List;
+import org.eclipse.swt.widgets.Text;
 import org.telosys.tools.commons.bundles.BundlesFromGitHub;
 import org.telosys.tools.commons.bundles.BundlesManager;
 import org.telosys.tools.commons.bundles.BundlesNames;
@@ -19,17 +20,20 @@ import org.telosys.tools.eclipse.plugin.commons.MsgBox;
  */
 public class PopulateListTaskWithProgress implements IRunnableWithProgress 
 {
-	private final String    userName ;
+	private final String    account ;
 	private final List      swtListOfBundles ;
 	private final TelosysToolsCfg telosysToolsCfg ;
+	private final Text      loggerTextArea ;
 
 	//--------------------------------------------------------------------------------------------------
-	public PopulateListTaskWithProgress( TelosysToolsCfg telosysToolsCfg, String sGitHubUserName, List swtListToBePopulated )
+	public PopulateListTaskWithProgress( TelosysToolsCfg telosysToolsCfg, String sGitHubUserName, 
+			List swtListToBePopulated, Text loggerTextArea )
 	{
 		super();
 		this.telosysToolsCfg = telosysToolsCfg ;
-		this.userName = sGitHubUserName ;
+		this.account = sGitHubUserName ;
 		this.swtListOfBundles = swtListToBePopulated ;
+		this.loggerTextArea = loggerTextArea ;
 	}
 	
 	private BundlesFromGitHub getGitHubBundles() {
@@ -37,7 +41,7 @@ public class PopulateListTaskWithProgress implements IRunnableWithProgress
 		// Request GitHub 
 		BundlesFromGitHub bundlesFromGitHub = null;
 		try {
-			bundlesFromGitHub = bm.getGitHubBundlesList(this.userName);
+			bundlesFromGitHub = bm.getGitHubBundlesList(this.account);
 		} catch (Exception e) {
 			bundlesFromGitHub = null ;
 			MsgBox.error("Cannot get bundles from GitHub", e);
@@ -55,6 +59,7 @@ public class PopulateListTaskWithProgress implements IRunnableWithProgress
 		progressMonitor.beginTask("Requesting GitHub server ...", totalWorkTasks ); 
 		progressMonitor.worked(1);
 		
+		loggerTextArea.setText("");
 		swtListOfBundles.removeAll();
 		
 //		BundlesManager bm = new BundlesManager( this.telosysToolsCfg );
@@ -75,12 +80,19 @@ public class PopulateListTaskWithProgress implements IRunnableWithProgress
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
+		
+		loggerTextArea.append("Requesting GitHub...\n");
 		BundlesFromGitHub bundlesFromGitHub = getGitHubBundles();
 		progressMonitor.worked(2);
+		loggerTextArea.append("GitHub response received.\n");
 
 		// Use the result ( bundles or error )
 		if ( bundlesFromGitHub != null ) {
 			int httpStatusCode = bundlesFromGitHub.getHttpStatusCode();
+			loggerTextArea.append(" Http Status = " + httpStatusCode + "\n");
+			loggerTextArea.append(" GitHub API rate limit : remaining " + bundlesFromGitHub.getRemaining() 
+					+ " / " + bundlesFromGitHub.getLimit() + "\n");
+			loggerTextArea.append(" GitHub API reset : " + bundlesFromGitHub.getReset() + "\n" );
 			if ( httpStatusCode == 200 ) {
 				BundlesNames bundleNames = bundlesFromGitHub.getBundlesNames();
 				// Populate combo box 
@@ -92,7 +104,8 @@ public class PopulateListTaskWithProgress implements IRunnableWithProgress
 				StringBuffer sb = new StringBuffer();
 				sb.append("Cannot get bundles from GitHub." ) ;
 				sb.append("\n" ) ;
-				sb.append("\n GitHub API http status '" + httpStatusCode + "'" ) ;
+				sb.append("\n GitHub API http status '403 Forbidden'" ) ;
+				sb.append("\n" ) ;
 				sb.append("\n GitHub API rate limit status : " ) ; 
 				sb.append("\n  . remaining : " + bundlesFromGitHub.getRemaining() ) ; 
 				sb.append("\n  . limit     : " + bundlesFromGitHub.getLimit() ) ; 

@@ -61,7 +61,6 @@ public class PropertiesPage extends PropertyPage {
 	private final static boolean DEBUG_MODE = false ;
 
 	private final static String WEB_CONTENT     = "WebContent" ;
-	//private final static String DEFAULT_GITHUB_USER_NAME = "telosys-tools" ;
 	private final static String DEFAULT_GITHUB_USER_NAME = "telosys-templates-v3" ; // v 3.0.0
 	
 	private Composite _pageComposite ;
@@ -115,18 +114,6 @@ public class PropertiesPage extends PropertyPage {
 	private Link   _linkDestinationFolderBrowse ;
 	private Text   _tSpecificDestinationFolder ;
 	
-//	//--- Tab "Advanced" (OLD)
-//	private Label checkClassDirLabel;
-//	private Text checkClassDirText;
-//	//private Label checkClassLabel;
-//	private Text checkClassText;
-//	private Group checkGroup;
-//	private Button classDirPickerButton;
-//	private Button defaultCheck;
-//	private Label resultTest;
-//	private Button specificCheck;
-//	private Button testClassButton;
-
 	/**
 	 * Constructor
 	 */
@@ -166,8 +153,6 @@ public class PropertiesPage extends PropertyPage {
 		_tSpecificTemplatesFolder.setLayoutData(getColSpan(2));
 		_tSpecificTemplatesFolder.setEditable(false);
 
-//		browseLink.addSelectionListener( 
-//				new FolderChooserSelectionListener(this.getShell(), "Select templates folder", _tSpecificTemplatesFolder) );
 		_linkTemplatesFolderBrowse.addSelectionListener( new SelectionAdapter () {
 			public void widgetSelected(SelectionEvent event) {
 				String folder = FolderSelectionDialogBox.chooseFolder(_linkTemplatesFolderBrowse.getShell(), "Select templates folder") ;
@@ -208,7 +193,6 @@ public class PropertiesPage extends PropertyPage {
 		_rbDestinationFolderStandard = new Button(group, SWT.RADIO);
 		_rbDestinationFolderStandard.setText("Standard location : the current project ");
 		_rbDestinationFolderStandard.setLayoutData(getColSpan(2));
-		//_rbDestinationFolderStandard.setSelection(true); // Selected by default 
 		
 		_rbDestinationFolderFilesystem = new Button(group, SWT.RADIO);
 		_rbDestinationFolderFilesystem.setText("Specific location : a folder somewhere in the filesystem ");
@@ -254,40 +238,6 @@ public class PropertiesPage extends PropertyPage {
 		} );
 	}
 	
-//	private void createCheckGroup(Composite composite) {
-//		checkGroup = new Group(composite, SWT.NONE);
-//		checkGroup.setLayoutData(getColSpan(5));
-//		checkGroup.setText("Init / Check");
-//		checkGroup.setLayout(new GridLayout(3, false));
-//
-//		defaultCheck = new Button(checkGroup, SWT.RADIO);
-//		defaultCheck.setText("Default");
-//		defaultCheck.setLayoutData(getColSpan(3));
-//		specificCheck = new Button(checkGroup, SWT.RADIO);
-//		specificCheck.setText("Specific");
-//		specificCheck.setLayoutData(getColSpan(3));
-//		
-//		Label checkClassLabel = new Label(checkGroup, SWT.NONE);
-//		checkClassLabel.setText("Check class");
-//		checkClassText = new Text(checkGroup, SWT.BORDER);
-//		checkClassText.setLayoutData(getColSpan(2));
-//		
-//		checkClassDirLabel = new Label(checkGroup, SWT.NONE);
-//		checkClassDirLabel.setText("Directory");
-//		checkClassDirText = new Text(checkGroup, SWT.BORDER);
-//		checkClassDirText.setLayoutData(getColSpan(1));
-//
-//		createCheckDirPicker(checkGroup, composite);
-//		testClassButton = new Button(checkGroup, SWT.PUSH);
-//		testClassButton.setText("Test class loading");
-//		resultTest = new Label(checkGroup, SWT.BORDER);
-//		resultTest.setLayoutData(getColSpan(2));
-//	}
-//	private void createCheckDirPicker(Composite group, final Composite cevent) {
-//		classDirPickerButton = new Button(group, SWT.PUSH);
-//		classDirPickerButton.setText("...");
-//	}
-
 	private boolean isProjectInitialized() {
 		EnvironmentManager em = getEnvironmentManager();
 		return em.isEnvironmentInitialized();
@@ -344,9 +294,6 @@ public class PropertiesPage extends PropertyPage {
 		}
 		
 		//--- Populate fields values from configuration file
-//		ProjectConfig projectConfig = loadProjectConfig();
-////		configToFields( projectConfig );
-//		configToFields( projectConfig.getTelosysToolsCfg() ); // v 3.0.0
 		configToFields( loadProjectConfig() ) ; // v 3.0.0
 		
 		_pageComposite.layout(); // Mandatory when creating new controls dynamically 
@@ -355,13 +302,6 @@ public class PropertiesPage extends PropertyPage {
 	private void createContentsNotInitialized() {
 		
 		//--- Panel 
-//		Composite panelNotInitialized = new Composite(_pageComposite, SWT.NONE);
-//		// panelNotInitialized.setLayout( panelLayout );
-//
-//		final int nbCol = 1 ;
-//		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
-//		tabItem.setText(" Not initialized ");
-		
 		Composite panel = new Composite(_pageComposite, SWT.NONE);
 		GridLayout gridLayout = new GridLayout(1, false);
 		
@@ -446,13 +386,9 @@ public class PropertiesPage extends PropertyPage {
 	 * This method is called by the button listener
 	 */
 	protected void initializeProject() {
-		//MsgBox.info("initializeProject()");
-		
 		initTelosysToolsEnv();
-		
 		//--- Remove the current panel
 		_panelNotInitialized.dispose();
-		
 		//--- Creates the standard tab items
 		createContentsStandardAndInitFields();
 	}
@@ -560,22 +496,6 @@ public class PropertiesPage extends PropertyPage {
 		link.addSelectionListener(
 			new SelectionListener() {
 	            public void widgetSelected(SelectionEvent arg0) {
-//	            	final String helpResource = 
-//	            		// "/org.telosys.tools.eclipse.plugin.help" ; // OK : global help root 
-//	            		"/org.telosys.tools.eclipse.plugin.help/html/getting-started.html"; // OK : specific topic 
-//	            		// PB : no topic for TOC
-//	            		// "/org.telosys.tools.eclipse.plugin.help/html/toc.html"; // Topic not found
-//	            		// "/org.telosys.tools.eclipse.plugin.help/html";  // Topic not found
-//	            	
-//	            	// Add a Table Of Content ? : 
-//	            	// "/org.telosys.tools.eclipse.plugin.help/html/toc.html"
-//	            	// in PluginHelp : 
-//	            	//   create file html/toc.html 
-//	            	//   change TelosysToolsHelpTOC.xml : <toc ... topic="html/toc.html" >
-//	            	
-//	            	IWorkbenchHelpSystem helpSystem = PlatformUI.getWorkbench().getHelpSystem() ;
-//	            	//helpSystem.displayHelp(); // programmatically open the Help window
-//	            	helpSystem.displayHelpResource(helpResource);
 	            	Util.launchExternalBrowser("http://www.telosys.org/");
 	            }
 	            public void widgetDefaultSelected(SelectionEvent arg0) { }
@@ -619,10 +539,6 @@ public class PropertiesPage extends PropertyPage {
 		_tTmpFolder = createTextField(tabContent, "Temporary files", "${TMP}" ) ;
 		
 		createTabFoldersButtons(tabContent);
-		
-//		createOneLabel(tabContent, "" ); 
-//		createOneLabel(tabContent, "If you need more folders define them in the \"Variables\" " );
-		 
 	}
 	
 	//------------------------------------------------------------------------------------------
@@ -630,8 +546,7 @@ public class PropertiesPage extends PropertyPage {
 	 * Creates the "Variables" TabItem
 	 * @param tabFolder
 	 */
-	private void createTabVariables(TabFolder tabFolder) 
-	{
+	private void createTabVariables(TabFolder tabFolder) {
 		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
 		tabItem.setText(" Variables ");
 		
@@ -742,9 +657,6 @@ public class PropertiesPage extends PropertyPage {
 		Composite panelBouton = new Composite(composite, SWT.NONE);
 		panelBouton.setLayout( panelLayout );
 		
-//		Color color = new Color( panelBouton.getDisplay(), 0xFF, 0, 0 );
-//		panelBouton.setBackground(color);
-
 		Button button = null;
 		
 		//--- "Add" button 
@@ -814,14 +726,11 @@ public class PropertiesPage extends PropertyPage {
 		Button b = new Button(tabContent, SWT.PUSH);
 		b.setText("Get available bundles");
 		b.setToolTipText(" Get available bundles \n from GitHub site ");
-		b.addSelectionListener(new SelectionListener() 
-    	{
-            public void widgetSelected(SelectionEvent arg0)
-            {
+		b.addSelectionListener(new SelectionListener() {
+            public void widgetSelected(SelectionEvent arg0) {
             	populateGitHubRepoList();
             }
-            public void widgetDefaultSelected(SelectionEvent arg0)
-            {
+            public void widgetDefaultSelected(SelectionEvent arg0) {
             }
         }
 		);
@@ -832,31 +741,11 @@ public class PropertiesPage extends PropertyPage {
 		label.setText("GitHub bundles : ");	
 		label.setLayoutData(getCellGridData1());
 		
-//		_tableGitHubRepositories = createGitHubRepositiriesTable(tabContent, 400);
-//		GridData gd = getCellGridData2();
-//		//gd.minimumHeight = 200 ;
-//		gd.heightHint = 200 ;
-//		gd.widthHint  = 400 ;
-//		_tableGitHubRepositories.setLayoutData(gd);
-//		_tableGitHubRepositories.setSize(400, 200);
-//		//createTwoLabels(tabContent, "", "" ); // Separator
 		_listGitHubRepositories = new List(tabContent, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL );
 		gd = getCellGridData2();
 		gd.heightHint  = 120 ;
 		gd.widthHint   = Col2With - 10 ;
 		_listGitHubRepositories.setLayoutData(gd);
-		
-		//------------------------------------------------------------------------------------
-// Removed in v 2.1.1
-//		//--- Label + Text field 
-//		label = new Label(tabContent, SWT.NONE);
-//		label.setText("GitHub URL pattern : ");
-//		
-//		_tGitHubUrlPattern = new Text(tabContent, SWT.BORDER);
-//		gd = getCellGridData2();
-//		gd.widthHint   = Col2With ;
-//		_tGitHubUrlPattern.setLayoutData(gd);
-//		_tGitHubUrlPattern.setText("https://github.com/${USER}/${REPO}/archive/master.zip");
 		
 		//------------------------------------------------------------------------------------
 		//--- Void Label + Composite [ Button + CheckBox ]  
@@ -871,33 +760,32 @@ public class PropertiesPage extends PropertyPage {
 		gdComposite.marginWidth = 0 ;
 		composite1.setLayout(gdComposite);
 
-			b = new Button(composite1, SWT.PUSH);
-			b.setText("Download selected bundles(s)");
-			b.setToolTipText(" Download selected bundle(s) \n from GitHub site ");
-			b.addSelectionListener(new SelectionListener() 
-	    	{
-	            public void widgetSelected(SelectionEvent arg0)
-	            {
-	            	if ( _listGitHubRepositories.getSelectionCount() > 0 ) {
-	            		boolean bUnzip = _checkBoxUnzipDownload.getSelection() ;
-	        			String[] selectedRepo = _listGitHubRepositories.getSelection();
-	        			downloadSelectedFiles(selectedRepo, bUnzip);
-	            	}
-	            	else {
-	            		MsgBox.warning("Select at least one file");
-	            	}
-	            }
-	            public void widgetDefaultSelected(SelectionEvent arg0)
-	            {
-	            }
-	        }
-			);
+		b = new Button(composite1, SWT.PUSH);
+		b.setText("Download selected bundles(s)");
+		b.setToolTipText(" Download selected bundle(s) \n from GitHub site ");
+		b.addSelectionListener(new SelectionListener() 
+    	{
+            public void widgetSelected(SelectionEvent arg0)
+            {
+            	if ( _listGitHubRepositories.getSelectionCount() > 0 ) {
+            		boolean bUnzip = _checkBoxUnzipDownload.getSelection() ;
+        			String[] selectedRepo = _listGitHubRepositories.getSelection();
+        			downloadSelectedFiles(selectedRepo, bUnzip);
+            	}
+            	else {
+            		MsgBox.warning("Select at least one file");
+            	}
+            }
+            public void widgetDefaultSelected(SelectionEvent arg0)
+            {
+            }
+        }
+		);
 	
-			_checkBoxUnzipDownload = new Button(composite1, SWT.CHECK);
-			_checkBoxUnzipDownload.setText("Install downloaded bundle(s)");
-			_checkBoxUnzipDownload.setSelection(true);
-		
-		
+		_checkBoxUnzipDownload = new Button(composite1, SWT.CHECK);
+		_checkBoxUnzipDownload.setText("Install downloaded bundle(s)");
+		_checkBoxUnzipDownload.setSelection(true);
+
 		//------------------------------------------------------------------------------------
 		//--- Label + Text field 
 		label = new Label(tabContent, SWT.NONE);
@@ -917,10 +805,6 @@ public class PropertiesPage extends PropertyPage {
 		label = new Label(tabContent, SWT.NONE);
 		label.setText("If you experience download problems, check Eclipse proxy settings.");
 		label.setLayoutData(getColSpan(2));
-//		label = new Label(tabContent, SWT.NONE);
-//		label.setText("");
-//		label = new Label(tabContent, SWT.NONE);
-//		label.setText("");
 	}
 	//------------------------------------------------------------------------------------------
 	private GridData getCellGridData1() {
@@ -964,14 +848,6 @@ public class PropertiesPage extends PropertyPage {
 	//------------------------------------------------------------------------------------------
 	private long downloadSelectedFiles(String[] repoNames, boolean bUnzip) {
 
-//		String sDownloadFolder = getDownloadFolder();
-//		if ( null == sDownloadFolder ) {
-//			return 0 ;
-//		}
-//		String sGitHubUrlPattern = getGitHubUrlPattern() ;
-//		if ( null == sGitHubUrlPattern ) {
-//			return 0 ;
-//		}
 		if ( null == repoNames ) {
 			MsgBox.error("Selection is null !");
 			return 0 ;
@@ -1005,10 +881,7 @@ public class PropertiesPage extends PropertyPage {
 					telosysToolsCfg,
 					getGitHubUserName(), 
 					repoNames, 
-//					sDownloadFolder, 
-//					sGitHubUrlPattern, 
 					bUnzip, // Unzip or not the downloaded file
-//					sTemplatesFolder, // ie "TelosysTools/templates"
 					_tLogger );
 		} catch (TelosysPluginException e) {
     		MsgBox.error("Cannot create DownloadTaskWithProgress instance", e);
@@ -1026,36 +899,6 @@ public class PropertiesPage extends PropertyPage {
 		
 		return task.getResult();
 	}
-	
-//	private String getDownloadFolder() {
-//		String sFolder = _tDownloadsFolder.getText().trim();
-//		if ( sFolder.length() == 0  ) {
-//			MsgBox.warning("Download folder is not defined");
-//			return null ;
-//		}
-//		if ( EclipseProjUtil.folderExists(getCurrentProject(), sFolder) ) {
-//			return sFolder ;
-//		}
-//		else {
-//			MsgBox.warning("Download folder '" + sFolder + "' does not exist !");
-//			return null ;
-//		}
-//	}
-	
-//	private String getTemplatesFolder() {
-//		String sFolder = _tTemplatesFolder.getText().trim();
-//		if ( sFolder.length() == 0  ) {
-//			MsgBox.warning("Templates folder is not defined");
-//			return null ;
-//		}
-//		if ( EclipseProjUtil.folderExists(getCurrentProject(), sFolder) ) {
-//			return sFolder ;
-//		}
-//		else {
-//			MsgBox.warning("Templates folder '" + sFolder + "' does not exist !");
-//			return null ;
-//		}
-//	}
 	
 	private String getGitHubUserName() {
 		String user = _tGitHubAccount.getText().trim();
@@ -1081,7 +924,6 @@ public class PropertiesPage extends PropertyPage {
 
 		createTabAdvancedTemplatesFolderGroup(tabContent);
 		createTabAdvancedDestinationFolderGroup(tabContent);
-		//createCheckGroup(tabContent);
 	}
 	
 	//------------------------------------------------------------------------------------------
@@ -1089,8 +931,7 @@ public class PropertiesPage extends PropertyPage {
 	 * Creates the "About plugin" TabItem
 	 * @param tabFolder
 	 */
-	private void createTabAboutPlugin(TabFolder tabFolder) 
-	{
+	private void createTabAboutPlugin(TabFolder tabFolder) {
 		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
 		tabItem.setText(" About plugin ");
 		
@@ -1141,8 +982,7 @@ public class PropertiesPage extends PropertyPage {
 	 * Creates the "About plugin" TabItem
 	 * @param tabFolder
 	 */
-	private void createTabDebug(TabFolder tabFolder) 
-	{
+	private void createTabDebug(TabFolder tabFolder) {
 		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
 		tabItem.setText(" Debug ");
 		
@@ -1164,40 +1004,30 @@ public class PropertiesPage extends PropertyPage {
 //		button.setToolTipText(" Creates the Telosys Tools folders \n"
 //				+ " and the databases configuration file \n"
 //				+ " if they don't exist");
-		button.addSelectionListener(new SelectionListener() 
-    	{
-            public void widgetSelected(SelectionEvent arg0)
-            {
-            	
+		button.addSelectionListener( new SelectionListener() {
+            public void widgetSelected(SelectionEvent arg0) {
             	SettingsManager settingsManager = new SettingsManager( getCurrentProject() ) ;
             	boolean r = settingsManager.readBundleStaticResourcesCopiedFlag("fakeBundle");
             	MsgBox.info("Result = " + r );
             }
-            public void widgetDefaultSelected(SelectionEvent arg0)
-            {
+            public void widgetDefaultSelected(SelectionEvent arg0) {
             }
-        }
-		);
+        } );
 		
 		button = new Button(tabContent, SWT.PUSH);
 		button.setText("setBundleStaticResourcesCopied");
 //		button.setToolTipText(" Creates the Telosys Tools folders \n"
 //				+ " and the databases configuration file \n"
 //				+ " if they don't exist");
-		button.addSelectionListener(new SelectionListener() 
-    	{
-            public void widgetSelected(SelectionEvent arg0)
-            {
-            	
+		button.addSelectionListener(new SelectionListener() {
+            public void widgetSelected(SelectionEvent arg0) {
             	SettingsManager settingsManager = new SettingsManager( getCurrentProject() ) ;
             	settingsManager.updateBundleStaticResourcesCopiedFlag("fakeBundle", true);
             	MsgBox.info("Done (set to TRUE)");
             }
-            public void widgetDefaultSelected(SelectionEvent arg0)
-            {
+            public void widgetDefaultSelected(SelectionEvent arg0) {
             }
-        }
-		);
+        } );
 	}	
 	
 	//------------------------------------------------------------------------------------------
@@ -1232,12 +1062,8 @@ public class PropertiesPage extends PropertyPage {
 
 		Button projectButton = new Button(buttons, SWT.PUSH);
 		projectButton.setText("Eclipse project folders");
-		projectButton.addSelectionListener(new SelectionListener() 
-    	{
-            public void widgetSelected(SelectionEvent event)
-            {
-            	//Object source = event.getSource();
-            	//MsgBox.info("source : " + source.getClass().getCanonicalName() );
+		projectButton.addSelectionListener( new SelectionListener() {
+            public void widgetSelected(SelectionEvent event) {
             	String srcFolderName = getProjectSourceFolder() ;
             	if ( StrUtil.nullOrVoid(srcFolderName) ) {
             		srcFolderName = "src" ;
@@ -1252,11 +1078,9 @@ public class PropertiesPage extends PropertyPage {
             	_tTestSrcFolder.setText( srcFolderName + "-test-java" );
             	_tTestResFolder.setText( srcFolderName + "-test-resources" );
             }
-            public void widgetDefaultSelected(SelectionEvent event)
-            {
+            public void widgetDefaultSelected(SelectionEvent event) {
             }
-        }
-		);
+        } );
 	}
 	//------------------------------------------------------------------------------------------
 	/**
@@ -1369,10 +1193,8 @@ public class PropertiesPage extends PropertyPage {
 		Link link = new Link(composite, SWT.NONE);
 		link.setText(tabTitle);
 		link.addSelectionListener( new LinkSelectionListener(tabFolder, tabIndex) );
-		
 		//--- Col 2 : Label for description
 		new Label(composite, SWT.NONE).setText(tabDescription);
-		
 	}
 
 	//------------------------------------------------------------------------------------------
@@ -1411,20 +1233,13 @@ public class PropertiesPage extends PropertyPage {
 		return new EnvironmentManager( projectFolderFullPath );
 	}
 	//------------------------------------------------------------------------------------------
-//	private ProjectConfig loadProjectConfig() 
-	private TelosysToolsCfg loadProjectConfig() 
-	{
+	private TelosysToolsCfg loadProjectConfig() {
 		log("loadProjectConfig()...");
-//		ProjectConfig projectConfig = ProjectConfigManager.loadProjectConfig( getCurrentProject() ) ;
-//		return projectConfig ;
 		return ProjectConfigManager.loadProjectConfig( getCurrentProject() ) ;
 	}
 	//------------------------------------------------------------------------------------------
-//	private void saveProjectConfig(ProjectConfig projectConfig ) 
-	private void saveProjectConfig(TelosysToolsCfg telosysToolsCfg ) // v 3.0.0
-	{
+	private void saveProjectConfig(TelosysToolsCfg telosysToolsCfg ) {
 		log("saveProjectConfig()...");
-//		ProjectConfigManager.saveProjectConfig(getCurrentProject(), projectConfig);
 		ProjectConfigManager.saveProjectConfig(getCurrentProject(), telosysToolsCfg); // v 3.0.0
 	}
 	
@@ -1433,22 +1248,13 @@ public class PropertiesPage extends PropertyPage {
 	 * overwritten method for "Apply" button
 	 */
 	@Override
-	protected void performApply() 
-	{
+	protected void performApply() {
 		try {
-			//ProjectConfig projectConfig = new ProjectConfig(getCurrentProject());
-//			ProjectConfig projectConfig = ProjectConfigManager.loadProjectConfig(getCurrentProject()); // v 3.0.0
 			TelosysToolsCfg telosysToolsCfg = loadProjectConfig(); // v 3.0.0
-			
-//			fieldsToConfig( projectConfig.getTelosysToolsCfg() );
 			fieldsToConfig( telosysToolsCfg ); // v 3.0.0
-			
 			//-- Save the Telosys-Tools configuration for the current project
-//			saveProjectConfig( projectConfig.getTelosysToolsCfg() ); 
 			saveProjectConfig( telosysToolsCfg );  // v 3.0.0
-			
 			configToFieldsInGeneralTab(telosysToolsCfg); // Refresh "General" Tab - v 3.0.0 
-			
 		} catch ( Exception e ) {
 			MsgBox.error("Cannot save properties.", e );
 		}
@@ -1465,42 +1271,22 @@ public class PropertiesPage extends PropertyPage {
 	//------------------------------------------------------------------------------------------
 	private void configToFieldsInGeneralTab( TelosysToolsCfg telosysToolsCfg  )  { // v 3.0.0
 		IProject project = getCurrentProject();
-//		_tProjectName.setText( projectConfig.getProjectName() );
 		_tProjectName.setText( project.getName() ); // v 3.0.0
-		
-//		_tProjectLocation.setText(projectConfig.getProjectFolder() );
 		_tProjectLocation.setText( telosysToolsCfg.getProjectAbsolutePath() ); // v 3.0.0
-		
-//		_tWorkspaceLocation.setText(projectConfig.getWorkspaceFolder() );
 		String workspaceFolderFullPath = getCurrentWorkspaceAbsolutePath() ;
 		_tWorkspaceLocation.setText( workspaceFolderFullPath ); // v 3.0.0
-		
-//		TelosysToolsEnv telosysToolsEnv = TelosysToolsEnv.getInstance();
-
 		_tPluginConfigFile.setText( telosysToolsCfg.getCfgFileAbsolutePath() );
-
-		// v 3.0.0 : "telosysToolsCfg" replaced by "telosysToolsEnv"
-//		_tModelsFolder.setText( telosysToolsEnv.getModelsFolder() ) ; // telosysToolsCfg.getRepositoriesFolder() );
 		_tModelsFolder.setText( telosysToolsCfg.getModelsFolderAbsolutePath() ) ;
-//		_tDownloadsFolder.setText( telosysToolsEnv.getDownloadsFolder() );  // telosysToolsCfg.getDownloadsFolder() );
 		_tDownloadsFolder.setText( telosysToolsCfg.getDownloadsFolderAbsolutePath() ); 
-//		_tLibrariesFolder.setText( telosysToolsEnv.getLibrariesFolder() ) ; // telosysToolsCfg.getLibrariesFolder() );
 		_tLibrariesFolder.setText( telosysToolsCfg.getLibrariesFolderAbsolutePath() ) ;
-
-//		_tTemplatesFolder.setText( telosysToolsEnv.getTemplatesFolder() );  // telosysToolsCfg.getTemplatesFolder() );
 		_tTemplatesFolder.setText( telosysToolsCfg.getTemplatesFolderAbsolutePath() );
-
 		_tDestinationFolder.setText( telosysToolsCfg.getDestinationFolderAbsolutePath() ) ; 		
 	}
 	/**
 	 * @param projectConfig
 	 */
-//	private void configToFields( ProjectConfig projectConfig  ) 
-	private void configToFields( TelosysToolsCfg telosysToolsCfg  )  // v 3.0.0
-	{
+	private void configToFields( TelosysToolsCfg telosysToolsCfg ) {
 		log("propertiesToFields ...");
-//		TelosysToolsCfg telosysToolsCfg = projectConfig.getTelosysToolsCfg();
-
 		//--- Tab "Folders" ( considered as pre-defined variables )
 		_tSrcFolder.setText( telosysToolsCfg.getSRC() ) ;
 		_tResFolder.setText( telosysToolsCfg.getRES() ) ;
@@ -1522,33 +1308,6 @@ public class PropertiesPage extends PropertyPage {
 		}
 
 		//--- Tab "General"
-//		IProject project = getCurrentProject();
-////		_tProjectName.setText( projectConfig.getProjectName() );
-//		_tProjectName.setText( project.getName() ); // v 3.0.0
-//		
-////		_tProjectLocation.setText(projectConfig.getProjectFolder() );
-//		_tProjectLocation.setText( telosysToolsCfg.getProjectAbsolutePath() ); // v 3.0.0
-//		
-////		_tWorkspaceLocation.setText(projectConfig.getWorkspaceFolder() );
-//		String workspaceFolderFullPath = getCurrentWorkspaceAbsolutePath() ;
-//		_tWorkspaceLocation.setText( workspaceFolderFullPath ); // v 3.0.0
-//		
-////		TelosysToolsEnv telosysToolsEnv = TelosysToolsEnv.getInstance();
-//
-//		_tPluginConfigFile.setText( telosysToolsCfg.getCfgFileAbsolutePath() );
-//
-//		// v 3.0.0 : "telosysToolsCfg" replaced by "telosysToolsEnv"
-////		_tModelsFolder.setText( telosysToolsEnv.getModelsFolder() ) ; // telosysToolsCfg.getRepositoriesFolder() );
-//		_tModelsFolder.setText( telosysToolsCfg.getModelsFolderAbsolutePath() ) ;
-////		_tTemplatesFolder.setText( telosysToolsEnv.getTemplatesFolder() );  // telosysToolsCfg.getTemplatesFolder() );
-//		_tTemplatesFolder.setText( telosysToolsCfg.getTemplatesFolderAbsolutePath() );
-////		_tDownloadsFolder.setText( telosysToolsEnv.getDownloadsFolder() );  // telosysToolsCfg.getDownloadsFolder() );
-//		_tDownloadsFolder.setText( telosysToolsCfg.getDownloadsFolderAbsolutePath() ); 
-////		_tLibrariesFolder.setText( telosysToolsEnv.getLibrariesFolder() ) ; // telosysToolsCfg.getLibrariesFolder() );
-//		_tLibrariesFolder.setText( telosysToolsCfg.getLibrariesFolderAbsolutePath() ) ;
-//
-//		_tDestinationFolder.setText( telosysToolsCfg.getDestinationFolderAbsolutePath() ) ; 
-//		
 		configToFieldsInGeneralTab(telosysToolsCfg); 
 		
 		//--- Tab "Advanced" ( v 3.0.0 )
@@ -1588,10 +1347,8 @@ public class PropertiesPage extends PropertyPage {
 	 * Populates the given properties with screen fields values
 	 * @param props
 	 */
-//	private void fieldsToConfig( ProjectConfig projectConfig ) {
 	private void fieldsToConfig( TelosysToolsCfg telosysToolsCfg ) { // v 3.0.0
 		log("fieldsToConfig ...");
-//		TelosysToolsCfg telosysToolsCfg = projectConfig.getTelosysToolsCfg();
 		
 		//--- Tab "Folders" ( considered as pre-defined variables )
 		telosysToolsCfg.setSRC     ( _tSrcFolder.getText()     );
@@ -1639,14 +1396,8 @@ public class PropertiesPage extends PropertyPage {
 	}
 	//------------------------------------------------------------------------------------------
 	private TelosysToolsCfg getTelosysToolsCfgFromFields() {
-		//ProjectConfig projectConfig = new ProjectConfig(getCurrentProject());
-		//ProjectConfig projectConfig = ProjectConfigManager.loadProjectConfig( getCurrentProject() ) ; // v 3.0.0
-//		TelosysToolsCfg telosysToolsCfg = ProjectConfigManager.loadProjectConfig( getCurrentProject() ); // v 3.0.0		
 		TelosysToolsCfg telosysToolsCfg = loadProjectConfig(); // v 3.0.0		
-
-		//fieldsToConfig( projectConfig.getTelosysToolsCfg() );
 		fieldsToConfig( telosysToolsCfg );
-		//return projectConfig.getTelosysToolsCfg();
 		return telosysToolsCfg;
 	}	
 	//------------------------------------------------------------------------------------------

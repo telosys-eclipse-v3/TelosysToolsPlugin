@@ -21,6 +21,7 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
@@ -681,6 +682,16 @@ public class PropertiesPage extends PropertyPage {
 	}
 	
 	//------------------------------------------------------------------------------------------
+	private Composite createComposite(Composite parent, int numColumns, int horizontalSpacing) {
+		GridLayout gl = new GridLayout(numColumns, false);
+		gl.marginLeft = 0 ;
+		gl.horizontalSpacing = horizontalSpacing ;
+		gl.marginWidth = 0 ;
+		Composite c = new Composite(parent, SWT.NONE);
+		c.setLayout(gl);
+		return c ;
+	}
+	
 	/**
 	 * Creates the "Packages" TabItem
 	 * @param tabFolder
@@ -688,6 +699,7 @@ public class PropertiesPage extends PropertyPage {
 	private void createTabTemplates(TabFolder tabFolder) {
 		
 		final int Col2With = 400 ;
+		Button b ;
 		
 		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
 		tabItem.setText(" Templates ");
@@ -723,7 +735,12 @@ public class PropertiesPage extends PropertyPage {
 		label = new Label(tabContent, SWT.NONE);
 		label.setText("");
 		
-		Button b = new Button(tabContent, SWT.PUSH);
+		//--- Composite with 2 columns
+		Composite composite0 = createComposite(tabContent, 2, 80);
+
+//		Button b = new Button(tabContent, SWT.PUSH);
+		// Button 1
+		b = new Button(composite0, SWT.PUSH);
 		b.setText("Get available bundles");
 		b.setToolTipText(" Get available bundles \n from GitHub site ");
 		b.addSelectionListener(new SelectionListener() {
@@ -732,8 +749,22 @@ public class PropertiesPage extends PropertyPage {
             }
             public void widgetDefaultSelected(SelectionEvent arg0) {
             }
-        }
-		);
+        });
+		// Button 2
+		b = new Button(composite0, SWT.PUSH);
+		b.setText("GitHub authentication");
+		b.setToolTipText(" GitHub authentication \n with user and password ");
+		b.addSelectionListener(new SelectionListener() {
+            public void widgetSelected(SelectionEvent arg0) {
+        		//--- Create a new DialogBox instance and open it
+        		DialogBoxGitHubCredentials dialogBox = new DialogBoxGitHubCredentials(Display.getCurrent().getActiveShell() );
+        		log( "openDialogBox() : before dialog.open() ----- " );		
+        		dialogBox.open();
+        		log( "openDialogBox() : after dialog.open() ----- " );		
+            }
+            public void widgetDefaultSelected(SelectionEvent arg0) {
+            }
+        });
 
 		//------------------------------------------------------------------------------------
 		//--- Label + List of Repositories 
@@ -753,20 +784,13 @@ public class PropertiesPage extends PropertyPage {
 		label.setText("");
 		label.setLayoutData(getCellGridData1());
 		
-		Composite composite1 = new Composite(tabContent, SWT.NONE);
-		GridLayout gdComposite = new GridLayout(2, false);
-		gdComposite.marginLeft = 0 ;
-		gdComposite.horizontalSpacing = 80 ;
-		gdComposite.marginWidth = 0 ;
-		composite1.setLayout(gdComposite);
+		Composite composite1 = createComposite(tabContent, 2, 60);
 
 		b = new Button(composite1, SWT.PUSH);
-		b.setText("Download selected bundles(s)");
+		b.setText("Download selected bundle(s)");
 		b.setToolTipText(" Download selected bundle(s) \n from GitHub site ");
-		b.addSelectionListener(new SelectionListener() 
-    	{
-            public void widgetSelected(SelectionEvent arg0)
-            {
+		b.addSelectionListener(new SelectionListener() {
+            public void widgetSelected(SelectionEvent arg0) {
             	if ( _listGitHubRepositories.getSelectionCount() > 0 ) {
             		boolean bUnzip = _checkBoxUnzipDownload.getSelection() ;
         			String[] selectedRepo = _listGitHubRepositories.getSelection();
@@ -776,11 +800,9 @@ public class PropertiesPage extends PropertyPage {
             		MsgBox.warning("Select at least one file");
             	}
             }
-            public void widgetDefaultSelected(SelectionEvent arg0)
-            {
+            public void widgetDefaultSelected(SelectionEvent arg0) {
             }
-        }
-		);
+        } );
 	
 		_checkBoxUnzipDownload = new Button(composite1, SWT.CHECK);
 		_checkBoxUnzipDownload.setText("Install downloaded bundle(s)");

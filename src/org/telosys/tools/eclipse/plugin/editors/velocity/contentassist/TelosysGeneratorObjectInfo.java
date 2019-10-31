@@ -8,8 +8,7 @@ import java.util.Map;
 
 import org.telosys.tools.eclipse.plugin.commons.PluginImages;
 import org.telosys.tools.eclipse.plugin.editors.velocity.model.VelocityKeyWord;
-import org.telosys.tools.generator.context.doc.ContextInfo;
-import org.telosys.tools.generator.context.doc.MethodInfo;
+import org.telosys.tools.generator.context.doc.tooling.MethodInfo;
 
 public class TelosysGeneratorObjectInfo implements IContextObjectInfo {
 	

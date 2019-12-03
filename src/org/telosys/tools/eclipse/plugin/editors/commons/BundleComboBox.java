@@ -95,9 +95,9 @@ public class BundleComboBox {
 
 		TelosysProject telosysProject = _page.getTelosysProject();
 		
-		MsgBox.debug("getBundlesFromTemplatesFolder("+eclipseProject.getName() +") " 
-					+ "\n Eclipse IProject : "+ eclipseProject.getLocation().toString()
-					+ "\n Telosys Project  : "+ telosysProject.getProjectFolder() );
+//		MsgBox.debug("getBundlesFromTemplatesFolder("+eclipseProject.getName() +") " 
+//					+ "\n Eclipse IProject : "+ eclipseProject.getLocation().toString()
+//					+ "\n Telosys Project  : "+ telosysProject.getProjectFolder() );
 		
 		// get all installed bundles
 		BundlesNames bundlesNames;

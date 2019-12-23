@@ -5,7 +5,7 @@ Hey, developers!   Stop writing repetitive code, let Telosys do it for you!
 # Telosys Eclipse Plugin 
 
 [![Eclipse Marketplace](https://img.shields.io/eclipse-marketplace/favorites/telosys-tools)](https://marketplace.eclipse.org/content/telosys-tools)
-[![License](https://img.shields.io/badge/License-EPL%202.0-blue.svg)](https://opensource.org/licenses/EPL-2.0)
+[![License](https://img.shields.io/badge/License-EPL%202.0-blue.svg)](https://www.eclipse.org/legal/epl-2.0/)
 [![Twitter](https://img.shields.io/twitter/follow/telosys?label=Follow&style=social)](https://twitter.com/telosys)
 
 Telosys Eclipse Plugin allows to use all the features of the Telosys generator in Eclipse.
@@ -34,7 +34,7 @@ Telosys Eclipse Plugin allows to use all the features of the Telosys generator i
 
 Telosys Eclipse Plugin is available under the *Eclipse Public License*. 
 
-Please see [Eclipse Public License](https://opensource.org/licenses/EPL-2.0) for more information.
+Please see [Eclipse Public License](https://www.eclipse.org/legal/epl-2.0/) for more information.
 
 
 ## Support the project

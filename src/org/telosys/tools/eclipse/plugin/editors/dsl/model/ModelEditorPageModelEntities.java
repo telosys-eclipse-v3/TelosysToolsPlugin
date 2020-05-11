@@ -4,6 +4,10 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
@@ -358,6 +362,7 @@ import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
 		}
 		return null ; // No error found 
 	}
+	
 	/**
 	 * Populates the list of entities <br>
 	 * 
@@ -373,34 +378,27 @@ import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
     	List<String> entitiesFileNames = modelEditor.getEntitiesAbsoluteFileNames();
 		PluginLogger.debug("populateEntities() : entitiesFileNames = " + entitiesFileNames.size() ) ;
 
-
     	Map<String,List<String>> entitiesErrors = modelEditor.getEntitiesErrors();
 //		// #TMP
 //		MsgBox.debug("modelEditor.getEntitiesErrors() : " + 
 //				" \n errors size : " + entitiesErrors.size() ) ;
 
 		for ( String entityFile : entitiesFileNames ) {
+			// Entity file name ( eg "Person.entity" )
 			String entityFileName = (new File(entityFile)).getName() ;
+			// Entity name without ".entity" extension 
+			String entityName = StrUtil.removeEnd(entityFileName, Const.DOT_ENTITY);
+
+			// Update errors markers
+			IFile iFile = EclipseWksUtil.toIFile(entityFile);
+			deleteErrorMarkers(iFile);
+			if ( entitiesErrors != null ) {
+				addErrorMarkers(iFile, entitiesErrors.get(entityName));
+			}
+			
+			// Update entities list in model editor
 			String imageId = PluginImages.ENTITY_FILE ;
-			//String entityErrorMessage = "" ;
 			String entityErrorMessage = getEntityError(entityFileName, entitiesErrors);
-//			if ( entitiesErrors != null ) {
-//				List<String> entityErrorsList = entitiesErrors.get(entityFileName);
-//				if ( entityErrorsList != null ) {
-//					if ( ! entityErrorsList.isEmpty() ) {
-//						if ( entityErrorsList.size() == 1 ) {
-//							// get unique error 
-//							entityErrorMessage = entityErrorsList.get(0);
-//						}
-//						else {
-//							// just report number of errors  
-//							entityErrorMessage = entityErrorsList.size() + " errors" ;
-//						}
-//					}
-//					imageId = PluginImages.ERROR ;
-//					errorsCount++;
-//				}
-//			}
 			if ( entityErrorMessage != null ) {
 				imageId = PluginImages.ERROR ;
 				errorsCount++;
@@ -419,15 +417,41 @@ import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
             tableItem.setImage( PluginImages.getImage(imageId) );
             //tableItem.addListener(eventType, listener)
             //tableItem.addListener(eventType, listener)
-		}
-		
-//		if ( entitiesErrors != null ) {
-//			String globalError =  entitiesErrors.get("");
-//			if ( globalError != null ) {
-//				MsgBox.error(globalError);
-//			}
-//		}
+		}		
 		return errorsCount ;
 	}
 	
+	// The platform standard markers : task, problem, and bookmark
+//	private void updateErrorMarkers(String absoluteFilePath, List<String> entityErrorsList) {
+//		IFile iFile = EclipseWksUtil.toIFile(absoluteFilePath);
+//		deleteErrorMarkers(iFile);
+//		addErrorMarkers(iFile, entityErrorsList);
+//	}
+	
+	private void deleteErrorMarkers(IFile iFile) {
+		try {
+			iFile.deleteMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
+		} catch (CoreException e) {
+			MsgBox.error("Cannot delete markers", e);
+		}
+	}
+	
+	private void addErrorMarkers(IFile iFile, List<String> entityErrorsList) {
+		if ( entityErrorsList != null ) {
+			for ( String msg : entityErrorsList ) {
+				addErrorMarker(iFile, msg); 
+			}
+		}
+	}
+	private void addErrorMarker(IFile iFile, String message) {
+		try {
+			// add new marker
+			IMarker marker = iFile.createMarker(IMarker.PROBLEM);
+			marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR);
+			marker.setAttribute(IMarker.LINE_NUMBER, 1 );
+			marker.setAttribute(IMarker.MESSAGE, message );
+		} catch (CoreException e) {
+			MsgBox.error("Cannot create marker", e);
+		}
+	}
 }

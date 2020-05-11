@@ -7,7 +7,7 @@ package org.telosys.tools.eclipse.plugin.commons;
  */
 public class PluginLoggerConfig
 {
-	protected final static boolean DEBUG = false ;
+	protected final static boolean DEBUG = true ;
 	
 	protected final static boolean LOG   = false ;
 	

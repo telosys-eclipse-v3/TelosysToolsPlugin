@@ -31,7 +31,7 @@ public class ModelEditor extends AbstractModelEditor {
 	private ModelEditorPageModelInfo     _modelInformationPage = null ;
 	
 	private List<String>        _entitiesFileNames = null ;
-	private Map<String,String>  _entitiesErrors = null ;
+	private Map<String,List<String>>  _entitiesErrors = null ;
 	private DomainModelInfo     _modelInfo = null ; 
 	
 	//----------------------------------------------------------------------------------------
@@ -43,7 +43,7 @@ public class ModelEditor extends AbstractModelEditor {
     	return _entitiesFileNames ;
     }
     
-	public Map<String, String> getEntitiesErrors() {
+	public Map<String,List<String>> getEntitiesErrors() {
 		return _entitiesErrors;
 	}
 	public DomainModelInfo getDomainModelInfo() {
@@ -65,12 +65,10 @@ public class ModelEditor extends AbstractModelEditor {
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
 		super.init(site, input);
 		log(this, "init()..." );
-		//_imageWithoutError = getTitleImage();
 		ImageDescriptor imageDescriptor = input.getImageDescriptor();
 		if ( imageDescriptor != null ) {
 			_imageWithoutError = imageDescriptor.createImage();
 		}
-		//loadModel();
 	}
 
     @Override
@@ -106,7 +104,7 @@ public class ModelEditor extends AbstractModelEditor {
 	}
 
     //----------------------------------------------------------------------------------------
-    @Override
+    @Override // implements super class abstract method
     protected Model loadModel(File modelFile) {
 		//log("loadModel(" + modelFile + ")");
     	//--- 1) Load entities absolute file names 
@@ -128,27 +126,16 @@ public class ModelEditor extends AbstractModelEditor {
 			return model;
 		} catch (TelosysModelException modelException) {
 			//--- 3.2) Invalid Model : keep parsing errors
+//			// #TMP
+//			MsgBox.debug("Invalid model !\n TelosysModelException : " + 
+//					" \n message : " + modelException.getMessage() + 
+//					" \n errors size : " + modelException.getParsingErrors().size() ) ;
 			_entitiesErrors = modelException.getParsingErrors();
 			return null ;
 		} catch (TelosysToolsException e) {
 			MsgBox.error("Cannot load model !\n Unexpected exception" , e );
 			return null ;
 		}
-		
-//		//--- 4) Errors reporting if any
-//		if ( model != null ) {
-//			//--- Model OK : no parsing error
-//			_entitiesErrors = null ;
-//			// FileMarker.removeErrorMarker(this.getFile());
-//		}
-//		else {
-//			//--- Invalid Model : parsing errors
-//			_entitiesErrors = genericModelLoader.getParsingErrors();
-//			// FileMarker.setErrorMarker(this.getFile());
-//		}
-//		//EclipseWksUtil.refresh(this.getFile());
-//		
-//		return model;
     }
     //----------------------------------------------------------------------------------------
     @Override

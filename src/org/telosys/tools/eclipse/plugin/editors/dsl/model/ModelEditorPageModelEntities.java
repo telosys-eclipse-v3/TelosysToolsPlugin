@@ -30,11 +30,14 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
+import org.telosys.tools.commons.StrUtil;
 import org.telosys.tools.dsl.DslModelUtil;
+import org.telosys.tools.eclipse.plugin.commons.Const;
 import org.telosys.tools.eclipse.plugin.commons.EclipseWksUtil;
 import org.telosys.tools.eclipse.plugin.commons.FileEditorUtil;
 import org.telosys.tools.eclipse.plugin.commons.MsgBox;
 import org.telosys.tools.eclipse.plugin.commons.PluginImages;
+import org.telosys.tools.eclipse.plugin.commons.PluginLogger;
 import org.telosys.tools.eclipse.plugin.commons.Util;
 import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
 
@@ -329,6 +332,33 @@ import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
 	}
 	//----------------------------------------------------------------------------------------------
 	/**
+	 * Returns entity error message for the given entity file name
+	 * @param entityFileName
+	 * @param entitiesErrors
+	 * @return
+	 */
+	protected String getEntityError(String entityFileName, Map<String,List<String>> entitiesErrors) {
+		// Entity name without ".entity" extension 
+		String entityName = StrUtil.removeEnd(entityFileName, Const.DOT_ENTITY);
+		// Check if this entity has 1 or more error(s)
+		if ( entitiesErrors != null ) {
+			List<String> entityErrorsList = entitiesErrors.get(entityName);
+			if ( entityErrorsList != null ) {
+				if ( ! entityErrorsList.isEmpty() ) {
+					if ( entityErrorsList.size() == 1 ) {
+						// get unique error 
+						return entityErrorsList.get(0);
+					}
+					else {
+						// just report number of errors  
+						return entityErrorsList.size() + " errors" ;
+					}
+				}
+			}
+		}
+		return null ; // No error found 
+	}
+	/**
 	 * Populates the list of entities <br>
 	 * 
 	 */
@@ -341,25 +371,45 @@ import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
 		ModelEditor modelEditor = (ModelEditor) getModelEditor();
 		
     	List<String> entitiesFileNames = modelEditor.getEntitiesAbsoluteFileNames();
+		PluginLogger.debug("populateEntities() : entitiesFileNames = " + entitiesFileNames.size() ) ;
 
-    	Map<String,String> entitiesErrors = modelEditor.getEntitiesErrors();
+
+    	Map<String,List<String>> entitiesErrors = modelEditor.getEntitiesErrors();
+//		// #TMP
+//		MsgBox.debug("modelEditor.getEntitiesErrors() : " + 
+//				" \n errors size : " + entitiesErrors.size() ) ;
+
 		for ( String entityFile : entitiesFileNames ) {
 			String entityFileName = (new File(entityFile)).getName() ;
-			String entityError = null ;
 			String imageId = PluginImages.ENTITY_FILE ;
-			if ( entitiesErrors != null ) {
-				entityError = entitiesErrors.get(entityFileName);
-				if ( entityError != null ) {
-					imageId = PluginImages.ERROR ;
-					errorsCount++;
-				}
+			//String entityErrorMessage = "" ;
+			String entityErrorMessage = getEntityError(entityFileName, entitiesErrors);
+//			if ( entitiesErrors != null ) {
+//				List<String> entityErrorsList = entitiesErrors.get(entityFileName);
+//				if ( entityErrorsList != null ) {
+//					if ( ! entityErrorsList.isEmpty() ) {
+//						if ( entityErrorsList.size() == 1 ) {
+//							// get unique error 
+//							entityErrorMessage = entityErrorsList.get(0);
+//						}
+//						else {
+//							// just report number of errors  
+//							entityErrorMessage = entityErrorsList.size() + " errors" ;
+//						}
+//					}
+//					imageId = PluginImages.ERROR ;
+//					errorsCount++;
+//				}
+//			}
+			if ( entityErrorMessage != null ) {
+				imageId = PluginImages.ERROR ;
+				errorsCount++;
+			} else {
+				entityErrorMessage = "" ;
 			}
-			if ( entityError == null ) {
-				entityError = "" ;
-			}
+
 			//--- Create the TableItem and set the row content 
-			
-            String[] row = new String[] { entityFileName, entityError };
+            String[] row = new String[] { entityFileName, entityErrorMessage };
 
         	TableItem tableItem = new TableItem( _entitiesTable, SWT.NONE );
             tableItem.setText( row );
@@ -371,12 +421,12 @@ import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
             //tableItem.addListener(eventType, listener)
 		}
 		
-		if ( entitiesErrors != null ) {
-			String globalError =  entitiesErrors.get("");
-			if ( globalError != null ) {
-				MsgBox.error(globalError);
-			}
-		}
+//		if ( entitiesErrors != null ) {
+//			String globalError =  entitiesErrors.get("");
+//			if ( globalError != null ) {
+//				MsgBox.error(globalError);
+//			}
+//		}
 		return errorsCount ;
 	}
 	

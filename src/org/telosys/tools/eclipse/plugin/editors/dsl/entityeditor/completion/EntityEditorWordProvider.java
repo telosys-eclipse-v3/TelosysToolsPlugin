@@ -13,6 +13,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
+import org.telosys.tools.eclipse.plugin.commons.Const;
 import org.telosys.tools.eclipse.plugin.editors.dsl.entityeditor.EntityEditorUtil;
 
 /**
@@ -21,7 +22,7 @@ import org.telosys.tools.eclipse.plugin.editors.dsl.entityeditor.EntityEditorUti
  */
 public class EntityEditorWordProvider {
 
-	private final static String DOT_ENTITY = ".entity";
+	//private final static String DOT_ENTITY = ".entity";
 	
 //    public List<String> suggest(String word, int context)
     /**
@@ -83,8 +84,7 @@ public class EntityEditorWordProvider {
         
         FilenameFilter entitiesFilter = new FilenameFilter() {
             public boolean accept(File arg0, String arg1) {
-                //return arg1.endsWith(".enum") || arg1.endsWith(".entity");
-                return arg1.endsWith(DOT_ENTITY);
+                return arg1.endsWith(Const.DOT_ENTITY);
             }
         };
 
@@ -97,16 +97,8 @@ public class EntityEditorWordProvider {
 
         File currentFolder = new File(path.toFile().getParent());
         for (String str : currentFolder.list(entitiesFilter)) {
-//            if (str.contains(".enum")) {
-//                str = str.replace(".enum", "");
-//                str = str.substring(0, 1).toUpperCase() + str.substring(1);
-//                str = "#" + str;
-//            } else {
-//                str = str.replace(".entity", "");
-//                str = str.substring(0, 1).toUpperCase() + str.substring(1);
-//            }
         	// transform "foo.entity" or "Foo.entity" to "Foo"
-            str = str.replace(DOT_ENTITY, "");
+            str = str.replace(Const.DOT_ENTITY, "");
             str = str.substring(0, 1).toUpperCase() + str.substring(1);
             fileList.add(str);
         }

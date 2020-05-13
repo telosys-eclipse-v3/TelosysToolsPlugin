@@ -1,7 +1,7 @@
 <project default="copy-jars">
 
 	<property name="maven_repo" value="D:\MAVEN\.m2\repository"/>
-	<property name="VERSION"    value="3.2.2" />
+	<property name="VERSION"    value="3.2.3" />
 	
 	<!-- set "-SNAPSHOT" to copy the current SNAPSHOT or "" to copy the current RELEASE -->
 	<property name="SNAPSHOT"   value="" />

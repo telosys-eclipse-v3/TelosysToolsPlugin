@@ -367,7 +367,8 @@ import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
 	 * Populates the list of entities <br>
 	 * 
 	 */
-	protected int populateEntities() {
+/***	
+	protected int populateEntities_OLD() {
 		log(this, "populateEntities(table)");
 		
 		int errorsCount = 0 ;
@@ -420,6 +421,57 @@ import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
 		}		
 		return errorsCount ;
 	}
+**/
+	protected int populateEntities(List<String> entitiesFileNames, Map<String,List<String>> entitiesErrors) {
+		log(this, "populateEntities()");
+		
+		int errorsCount = 0 ;
+		_entitiesTable.removeAll();
+		
+//		ModelEditor modelEditor = (ModelEditor) getModelEditor();		
+//    	List<String> entitiesFileNames = modelEditor.getEntitiesAbsoluteFileNames();
+		PluginLogger.debug("populateEntities() : entitiesFileNames = " + entitiesFileNames.size() ) ;
+
+//    	Map<String,List<String>> entitiesErrors = modelEditor.getEntitiesErrors();
+
+		for ( String entityFile : entitiesFileNames ) {
+			// Entity file name ( eg "Person.entity" )
+			String entityFileName = (new File(entityFile)).getName() ;
+			
+//			// Entity name without ".entity" extension 
+//			String entityName = StrUtil.removeEnd(entityFileName, Const.DOT_ENTITY);
+
+//			// Update errors markers
+//			IFile iFile = EclipseWksUtil.toIFile(entityFile);
+//			deleteErrorMarkers(iFile);
+//			if ( entitiesErrors != null ) {
+//				addErrorMarkers(iFile, entitiesErrors.get(entityName));
+//			}
+			
+			// Update entities list in model editor
+			String imageId = PluginImages.ENTITY_FILE ;
+			String entityErrorMessage = getEntityError(entityFileName, entitiesErrors);
+			if ( entityErrorMessage != null ) {
+				imageId = PluginImages.ERROR ;
+				errorsCount++;
+			} else {
+				entityErrorMessage = "" ;
+			}
+
+			//--- Create the TableItem and set the row content 
+            String[] row = new String[] { entityFileName, entityErrorMessage };
+
+        	TableItem tableItem = new TableItem( _entitiesTable, SWT.NONE );
+            tableItem.setText( row );
+            tableItem.setChecked(false);
+            tableItem.setData( entityFile );
+            
+            tableItem.setImage( PluginImages.getImage(imageId) );
+            //tableItem.addListener(eventType, listener)
+            //tableItem.addListener(eventType, listener)
+		}		
+		return errorsCount ;
+	}
 	
 	// The platform standard markers : task, problem, and bookmark
 //	private void updateErrorMarkers(String absoluteFilePath, List<String> entityErrorsList) {
@@ -427,7 +479,7 @@ import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
 //		deleteErrorMarkers(iFile);
 //		addErrorMarkers(iFile, entityErrorsList);
 //	}
-	
+/*
 	private void deleteErrorMarkers(IFile iFile) {
 		try {
 			iFile.deleteMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
@@ -454,4 +506,5 @@ import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
 			MsgBox.error("Cannot create marker", e);
 		}
 	}
+*/
 }

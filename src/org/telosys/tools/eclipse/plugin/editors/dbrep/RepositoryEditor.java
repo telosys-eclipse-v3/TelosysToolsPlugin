@@ -76,7 +76,8 @@ public class RepositoryEditor extends AbstractModelEditor
     @Override
     protected Model loadModel(File modelFile) {
 		log(this, "loadModel(" + modelFile + ")");
-		GenericModelLoader genericModelLoader = new GenericModelLoader( getProjectConfig() ) ;
+//		GenericModelLoader genericModelLoader = new GenericModelLoader( getProjectConfig() ) ;
+		GenericModelLoader genericModelLoader = new GenericModelLoader() ; // API 3.2.3 
 		try {
 			Model model = genericModelLoader.loadModel(modelFile);
 			//log("loadModel() : done. Model name = " + model.getName() + " - " + model.getEntities().size() + " entities");

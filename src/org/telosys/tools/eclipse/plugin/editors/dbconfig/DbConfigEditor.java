@@ -138,7 +138,7 @@ public class DbConfigEditor extends FormEditor
 		PluginLogger.log(this, "--- INIT ---" );
 		PluginLogger.log(this, "init(..,..) : site id = '" + site.getId() + "'" );
 		PluginLogger.log(this, "init(..,..) : input name = '" + input.getName() + "'" );
-		setPartName(input.getName());
+		setPartName(input.getName()); // An editor can update its title using EditorPart.setPartName()
 		
 		if ( input instanceof IFileEditorInput ) {
 			IFileEditorInput fileInput = (IFileEditorInput) input;

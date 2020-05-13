@@ -18,6 +18,8 @@ import org.telosys.tools.dsl.parser.model.DomainModelInfo;
 import org.telosys.tools.eclipse.plugin.commons.MsgBox;
 import org.telosys.tools.eclipse.plugin.commons.PluginImages;
 import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditor;
+import org.telosys.tools.eclipse.plugin.editors.dsl.commons.ModelLoadingResult;
+import org.telosys.tools.eclipse.plugin.editors.dsl.commons.ModelManager;
 import org.telosys.tools.generic.model.Model;
 
 /**
@@ -104,8 +106,9 @@ public class ModelEditor extends AbstractModelEditor {
 	}
 
     //----------------------------------------------------------------------------------------
+/***
     @Override // implements super class abstract method
-    protected Model loadModel(File modelFile) {
+    protected Model loadModel_OLD(File modelFile) {
 		//log("loadModel(" + modelFile + ")");
     	//--- 1) Load entities absolute file names 
     	_entitiesFileNames = DslModelUtil.getEntitiesAbsoluteFileNames(modelFile);
@@ -137,8 +140,34 @@ public class ModelEditor extends AbstractModelEditor {
 			return null ;
 		}
     }
+***/
+    @Override // implements super class abstract method
+    protected Model loadModel(File modelFile) { // called by super.loadModel()
+    	// Try to load the DSL model
+    	ModelManager modelManager = new ModelManager();
+    	ModelLoadingResult r = modelManager.load(modelFile);
+    	// Update editor views with the result (model OK or errors)
+    	updateEditor(r);
+    	return r.getModel(); 
+    }
+    
+    public void updateEditor(ModelLoadingResult r) {
+
+    	// Set editor title image : errors or not
+		if ( r.getEntitiesErrors() != null && ! r.getEntitiesErrors().isEmpty() ) {
+			Image errorImage = PluginImages.getImage(PluginImages.ERROR);
+			log(this, "refresh() : setTitleImage(errorImage) " );
+			setTitleImage(errorImage);
+		} else {
+			setTitleImage(_imageWithoutError);
+		}
+
+		// Refresh entities list in first page
+		_modelEntitiesPage.populateEntities(r.getEntitiesFileNames(), r.getEntitiesErrors()); 
+    }
+    
     //----------------------------------------------------------------------------------------
-    @Override
+    @Override // implements super class abstract method
     protected void saveModel( Model model, File modelFile ) {
     	if ( _modelInformationPage != null ) {
         	if  ( _modelInfo != null ) {
@@ -164,16 +193,28 @@ public class ModelEditor extends AbstractModelEditor {
      */
     public void refresh() {
 		log(this, "refresh()..." );
-		this.loadModel();
-		int errorsCount = _modelEntitiesPage.populateEntities();    
-		log(this, "refresh() : errorsCount = " + errorsCount);
-		if ( errorsCount > 0 ) {
-			Image errorImage = PluginImages.getImage(PluginImages.ERROR);
-			log(this, "refresh() : setTitleImage(errorImage) " );
-			setTitleImage(errorImage);
-		}
-		else {
-			setTitleImage(_imageWithoutError);
-		}
+
+		this.loadModel(); // call super.loadModel() --> call this.loadModel(File) 
+    	
+//    	// Set title image : errors or not
+//		if ( r.getEntitiesErrors() != null && ! r.getEntitiesErrors().isEmpty() ) {
+//			Image errorImage = PluginImages.getImage(PluginImages.ERROR);
+//			log(this, "refresh() : setTitleImage(errorImage) " );
+//			setTitleImage(errorImage);
+//		} else {
+//			setTitleImage(_imageWithoutError);
+//		}
+//		_modelEntitiesPage.populateEntities(r.getEntitiesFileNames(), r.getEntitiesErrors()); 
+		
+//		int errorsCount = _modelEntitiesPage.populateEntities();    
+//		log(this, "refresh() : errorsCount = " + errorsCount);
+//		if ( errorsCount > 0 ) {
+//			Image errorImage = PluginImages.getImage(PluginImages.ERROR);
+//			log(this, "refresh() : setTitleImage(errorImage) " );
+//			setTitleImage(errorImage);
+//		}
+//		else {
+//			setTitleImage(_imageWithoutError);
+//		}
     }
 }

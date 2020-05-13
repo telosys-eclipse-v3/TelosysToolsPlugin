@@ -9,6 +9,6 @@ public class PluginLoggerConfig
 {
 	protected final static boolean DEBUG = true ;
 	
-	protected final static boolean LOG   = false ;
+	protected final static boolean LOG   = true ;
 	
 }

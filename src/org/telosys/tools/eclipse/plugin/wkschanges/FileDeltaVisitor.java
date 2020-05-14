@@ -5,6 +5,8 @@ import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.runtime.CoreException;
 import org.telosys.tools.eclipse.plugin.commons.Const;
 import org.telosys.tools.eclipse.plugin.commons.PluginLogger;
+import org.telosys.tools.eclipse.plugin.editors.dsl.wkschanges.EntityChangesProcessor;
+import org.telosys.tools.eclipse.plugin.editors.dsl.wkschanges.ModelChangesProcessor;
 
 public class FileDeltaVisitor implements IResourceDeltaVisitor {
 

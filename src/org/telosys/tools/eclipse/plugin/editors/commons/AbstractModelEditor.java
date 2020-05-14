@@ -58,7 +58,12 @@ public abstract class AbstractModelEditor extends AbstractStandardEditor
 	}
 	
 	//----------------------------------------------------------------------------------------
-	private void setModel(Model model) {
+	/**
+	 * Set a new model for this editor <br>
+	 * This method automatically refresh the entities table in the "Code generation" page
+	 * @param model
+	 */
+	protected void setModel(Model model) {
 		log(this, "setModel(Model)..." );
 		_model = model ;
 		if ( _codeGenerationPage != null ) {

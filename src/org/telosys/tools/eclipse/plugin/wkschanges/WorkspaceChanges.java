@@ -12,8 +12,19 @@ import org.eclipse.core.resources.ResourcesPlugin;
  * 
  */
 
+/**
+ * 
+ * 
+ * @author Laurent Guerin
+ *
+ */
 public class WorkspaceChanges {
 
+	/**
+	 * Starts workspace changes tracking by adding a "ResourceChangeListener" <br>
+	 * This method is called when the plugin in launched <br>
+	 * it is called by plugin "start(BundleContext bundleContext)"
+	 */
 	public static void startTracking() {
 		
 //		IResourceChangeListener listener = new ResourceChangeListener();

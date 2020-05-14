@@ -23,12 +23,14 @@ import org.telosys.tools.generic.model.Model;
 
 public class ModelManager {
 
+	private ModelManager() {}
+	
 	/**
 	 * Loads the DSL model defined by the given Eclipse IFile 
 	 * @param eclipseModelFile the model file ( eg "xxx/xxx.model")
 	 * @return
 	 */
-	public ModelLoadingResult load(IFile eclipseModelFile) {
+	public static ModelLoadingResult load(IFile eclipseModelFile) {
 		File modelFile = EclipseWksUtil.toFile(eclipseModelFile);
 		return load(modelFile);
 	}
@@ -38,13 +40,13 @@ public class ModelManager {
 	 * @param modelFile the model file ( eg "xxx/xxx.model")
 	 * @return
 	 */
-	public ModelLoadingResult load(File modelFile) {
+	public static ModelLoadingResult load(File modelFile) {
 		ModelLoadingResult r = loadModel(modelFile);
 		updateErrorMarkers(r.getEntitiesFileNames(), r.getEntitiesErrors());
 		return r;
 	}
 	
-	private ModelLoadingResult loadModel(File modelFile) {
+	private static ModelLoadingResult loadModel(File modelFile) {
 
 		// --- 1) Load entities absolute file names
 		List<String> entitiesFileNames = DslModelUtil
@@ -77,7 +79,7 @@ public class ModelManager {
 		}
 	}
 
-	private void updateErrorMarkers(List<String> entitiesFileNames, Map<String,List<String>> entitiesErrors) {
+	private static void updateErrorMarkers(List<String> entitiesFileNames, Map<String,List<String>> entitiesErrors) {
 		for (String entityFile : entitiesFileNames) {
 			// Entity file name ( eg "Person.entity" )
 			String entityFileName = (new File(entityFile)).getName();
@@ -93,7 +95,7 @@ public class ModelManager {
 		}
 	}
 	
-	private void deleteErrorMarkers(IFile iFile) {
+	private static void deleteErrorMarkers(IFile iFile) {
 		try {
 			iFile.deleteMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
 		} catch (CoreException e) {
@@ -101,14 +103,14 @@ public class ModelManager {
 		}
 	}
 	
-	private void addErrorMarkers(IFile iFile, List<String> entityErrorsList) {
+	private static void addErrorMarkers(IFile iFile, List<String> entityErrorsList) {
 		if ( entityErrorsList != null ) {
 			for ( String msg : entityErrorsList ) {
 				addErrorMarker(iFile, msg); 
 			}
 		}
 	}
-	private void addErrorMarker(IFile iFile, String message) {
+	private static void addErrorMarker(IFile iFile, String message) {
 		try {
 			// add new marker
 			IMarker marker = iFile.createMarker(IMarker.PROBLEM);

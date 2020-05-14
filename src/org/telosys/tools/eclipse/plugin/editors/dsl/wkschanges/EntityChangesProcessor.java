@@ -1,4 +1,4 @@
-package org.telosys.tools.eclipse.plugin.wkschanges;
+package org.telosys.tools.eclipse.plugin.editors.dsl.wkschanges;
 
 import java.io.File;
 
@@ -10,6 +10,7 @@ import org.eclipse.swt.widgets.Display;
 import org.telosys.tools.dsl.DslModelUtil;
 import org.telosys.tools.eclipse.plugin.commons.EclipseWksUtil;
 import org.telosys.tools.eclipse.plugin.commons.PluginLogger;
+import org.telosys.tools.eclipse.plugin.editors.dsl.wkschanges.tasks.ReloadModelTask;
 
 /**
  * Processor for entity changes ( when ".entity" files has changed ) <br>
@@ -104,7 +105,10 @@ public class EntityChangesProcessor {
     	if ( entityFile != null ) {
         	File modelFile = DslModelUtil.getModelFileForEntityFile(entityFile);
         	if ( modelFile != null ) {
-        		notifyModelEditorIfAny(modelFile);
+        		//notifyModelEditorIfAny(modelFile);
+        		
+        		// Use a async task to reload the model  
+        		reloadModel(modelFile);
         	}
     	}
     }
@@ -121,14 +125,23 @@ public class EntityChangesProcessor {
      * Ask the model editor to refresh and then to show the new entities and the errors if any
      * @param modelFile
      */
-    private static void notifyModelEditorIfAny(File modelFile) {
+//    private static void notifyModelEditorIfAny(File modelFile) {
+//    	if ( modelFile.exists() ) {
+//    		log(" The model file exists ( it can be parsed ): " + modelFile.getName() );
+//    	    Display.getDefault().asyncExec( new TaskModelEditorRefresh(modelFile) );
+//    	}
+//    	else {
+//    		log(" The model file deosn't exist ( it cannot be parsed => no refresh ): " + modelFile.getName() );
+//    	}
+//    }
+    
+    private static void reloadModel(File modelFile) {
     	if ( modelFile.exists() ) {
-    		log(" The model file exists ( it can be parsed ): " + modelFile.getName() );
-    	    Display.getDefault().asyncExec( new TaskModelEditorRefresh(modelFile) );
+    		log(" The model file exists ( it can be reloaded ): " + modelFile.getName() );
+    	    Display.getDefault().asyncExec( new ReloadModelTask(modelFile) );
     	}
     	else {
     		log(" The model file deosn't exist ( it cannot be parsed => no refresh ): " + modelFile.getName() );
     	}
     }
-    
 }

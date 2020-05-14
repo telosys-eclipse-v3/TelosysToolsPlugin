@@ -1,4 +1,4 @@
-package org.telosys.tools.eclipse.plugin.editors.dsl.entityeditor;
+package org.telosys.tools.eclipse.plugin.editors.dsl.wkschanges;
 
 public class _PackageLoggerConfig {
 	

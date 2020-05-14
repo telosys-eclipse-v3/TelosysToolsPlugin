@@ -1,21 +1,20 @@
-package org.telosys.tools.eclipse.plugin.wkschanges;
+package org.telosys.tools.eclipse.plugin.editors.dsl.wkschanges.tasks;
 
 import java.io.File;
 
 import org.telosys.tools.eclipse.plugin.commons.PluginLogger;
 import org.telosys.tools.eclipse.plugin.editors.dsl.model.ModelEditor;
+import org.telosys.tools.eclipse.plugin.editors.dsl.wkschanges.ModelEditorFinder;
 
-public class TaskModelEditorClose implements Runnable {
+public class CloseModelEditorTask implements Runnable {
 
 	private static void log(String msg) {
-		if ( _PackageLoggerConfig.LOG ) {
-			PluginLogger.log(TaskModelEditorClose.class, msg);
-		}
+		PluginLogger.debug("CloseModelEditorTask : " +  msg);
 	}
 
 	private final File modelFile ;
 	
-	public TaskModelEditorClose(File modelFile) {
+	public CloseModelEditorTask(File modelFile) {
 		super();
 		this.modelFile = modelFile;
 		log("TASK created");

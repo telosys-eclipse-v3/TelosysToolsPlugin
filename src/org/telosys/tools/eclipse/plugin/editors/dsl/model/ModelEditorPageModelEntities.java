@@ -4,10 +4,6 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
@@ -41,9 +37,9 @@ import org.telosys.tools.eclipse.plugin.commons.EclipseWksUtil;
 import org.telosys.tools.eclipse.plugin.commons.FileEditorUtil;
 import org.telosys.tools.eclipse.plugin.commons.MsgBox;
 import org.telosys.tools.eclipse.plugin.commons.PluginImages;
-import org.telosys.tools.eclipse.plugin.commons.PluginLogger;
 import org.telosys.tools.eclipse.plugin.commons.Util;
 import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
+import org.telosys.tools.eclipse.plugin.editors.dsl.commons.ModelLoadingResult;
 
 /**
  * First page of the editor : Model attributes mapping and foreign keys <br>
@@ -99,7 +95,8 @@ import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
 		
 		setBodyBackgroundColor(); // KEEP IT AT THE END OF THE METHOD (for Eclipse 4.X compatibility )
 
-		refresh();
+		//refresh();
+		populateEntities();
 	}
 	
 	//----------------------------------------------------------------------------------------------
@@ -364,96 +361,38 @@ import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
 	}
 	
 	/**
-	 * Populates the list of entities <br>
-	 * 
+	 * Populates entities table with the current model loading result
 	 */
-/***	
-	protected int populateEntities_OLD() {
-		log(this, "populateEntities(table)");
-		
-		int errorsCount = 0 ;
-		_entitiesTable.removeAll();
-		
-		ModelEditor modelEditor = (ModelEditor) getModelEditor();
-		
-    	List<String> entitiesFileNames = modelEditor.getEntitiesAbsoluteFileNames();
-		PluginLogger.debug("populateEntities() : entitiesFileNames = " + entitiesFileNames.size() ) ;
-
-    	Map<String,List<String>> entitiesErrors = modelEditor.getEntitiesErrors();
-//		// #TMP
-//		MsgBox.debug("modelEditor.getEntitiesErrors() : " + 
-//				" \n errors size : " + entitiesErrors.size() ) ;
-
-		for ( String entityFile : entitiesFileNames ) {
-			// Entity file name ( eg "Person.entity" )
-			String entityFileName = (new File(entityFile)).getName() ;
-			// Entity name without ".entity" extension 
-			String entityName = StrUtil.removeEnd(entityFileName, Const.DOT_ENTITY);
-
-			// Update errors markers
-			IFile iFile = EclipseWksUtil.toIFile(entityFile);
-			deleteErrorMarkers(iFile);
-			if ( entitiesErrors != null ) {
-				addErrorMarkers(iFile, entitiesErrors.get(entityName));
-			}
-			
-			// Update entities list in model editor
-			String imageId = PluginImages.ENTITY_FILE ;
-			String entityErrorMessage = getEntityError(entityFileName, entitiesErrors);
-			if ( entityErrorMessage != null ) {
-				imageId = PluginImages.ERROR ;
-				errorsCount++;
-			} else {
-				entityErrorMessage = "" ;
-			}
-
-			//--- Create the TableItem and set the row content 
-            String[] row = new String[] { entityFileName, entityErrorMessage };
-
-        	TableItem tableItem = new TableItem( _entitiesTable, SWT.NONE );
-            tableItem.setText( row );
-            tableItem.setChecked(false);
-            tableItem.setData( entityFile );
-            
-            tableItem.setImage( PluginImages.getImage(imageId) );
-            //tableItem.addListener(eventType, listener)
-            //tableItem.addListener(eventType, listener)
-		}		
-		return errorsCount ;
-	}
-**/
-	protected int populateEntities(List<String> entitiesFileNames, Map<String,List<String>> entitiesErrors) {
+	protected void populateEntities() {
 		log(this, "populateEntities()");
+		ModelEditor modelEditor = (ModelEditor) getModelEditor();
+		ModelLoadingResult r = modelEditor.getModelLoadingResult();
+		if ( r != null ) {
+			populateEntities(r.getEntitiesFileNames(), r.getEntitiesErrors()) ;
+		}
+	}
+	
+	/**
+	 * Populates entities table with the given data
+	 * @param entitiesFileNames
+	 * @param entitiesErrors
+	 */
+	protected void populateEntities(List<String> entitiesFileNames, Map<String,List<String>> entitiesErrors) {
+		log(this, "populateEntities(entitiesFileNames, entitiesErrors)");
 		
-		int errorsCount = 0 ;
 		_entitiesTable.removeAll();
 		
-//		ModelEditor modelEditor = (ModelEditor) getModelEditor();		
-//    	List<String> entitiesFileNames = modelEditor.getEntitiesAbsoluteFileNames();
-		PluginLogger.debug("populateEntities() : entitiesFileNames = " + entitiesFileNames.size() ) ;
-
-//    	Map<String,List<String>> entitiesErrors = modelEditor.getEntitiesErrors();
+		//PluginLogger.debug("populateEntities() : entitiesFileNames = " + entitiesFileNames.size() ) ;
 
 		for ( String entityFile : entitiesFileNames ) {
 			// Entity file name ( eg "Person.entity" )
 			String entityFileName = (new File(entityFile)).getName() ;
 			
-//			// Entity name without ".entity" extension 
-//			String entityName = StrUtil.removeEnd(entityFileName, Const.DOT_ENTITY);
-
-//			// Update errors markers
-//			IFile iFile = EclipseWksUtil.toIFile(entityFile);
-//			deleteErrorMarkers(iFile);
-//			if ( entitiesErrors != null ) {
-//				addErrorMarkers(iFile, entitiesErrors.get(entityName));
-//			}
-			
-			// Update entities list in model editor
+			// Update entities list : | image(std or error)  | "xxx.entity" | "error message" if any |
 			String imageId = PluginImages.ENTITY_FILE ;
 			String entityErrorMessage = getEntityError(entityFileName, entitiesErrors);
 			if ( entityErrorMessage != null ) {
 				imageId = PluginImages.ERROR ;
-				errorsCount++;
 			} else {
 				entityErrorMessage = "" ;
 			}
@@ -470,41 +409,6 @@ import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
             //tableItem.addListener(eventType, listener)
             //tableItem.addListener(eventType, listener)
 		}		
-		return errorsCount ;
 	}
 	
-	// The platform standard markers : task, problem, and bookmark
-//	private void updateErrorMarkers(String absoluteFilePath, List<String> entityErrorsList) {
-//		IFile iFile = EclipseWksUtil.toIFile(absoluteFilePath);
-//		deleteErrorMarkers(iFile);
-//		addErrorMarkers(iFile, entityErrorsList);
-//	}
-/*
-	private void deleteErrorMarkers(IFile iFile) {
-		try {
-			iFile.deleteMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
-		} catch (CoreException e) {
-			MsgBox.error("Cannot delete markers", e);
-		}
-	}
-	
-	private void addErrorMarkers(IFile iFile, List<String> entityErrorsList) {
-		if ( entityErrorsList != null ) {
-			for ( String msg : entityErrorsList ) {
-				addErrorMarker(iFile, msg); 
-			}
-		}
-	}
-	private void addErrorMarker(IFile iFile, String message) {
-		try {
-			// add new marker
-			IMarker marker = iFile.createMarker(IMarker.PROBLEM);
-			marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR);
-			marker.setAttribute(IMarker.LINE_NUMBER, 1 );
-			marker.setAttribute(IMarker.MESSAGE, message );
-		} catch (CoreException e) {
-			MsgBox.error("Cannot create marker", e);
-		}
-	}
-*/
 }

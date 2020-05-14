@@ -1,4 +1,4 @@
-package org.telosys.tools.eclipse.plugin.wkschanges;
+package org.telosys.tools.eclipse.plugin.editors.dsl.wkschanges;
 
 import java.io.File;
 
@@ -12,7 +12,7 @@ import org.telosys.tools.eclipse.plugin.commons.PluginLogger;
 import org.telosys.tools.eclipse.plugin.editors.dsl.model.ModelEditor;
 
 /**
- * Processor for entity changes ( when ".entity" files has changed ) <br>
+ * Utility class to find the DSL Model Editor currently open and associated with the given file 
  * 
  * @author L. Guerin
  *

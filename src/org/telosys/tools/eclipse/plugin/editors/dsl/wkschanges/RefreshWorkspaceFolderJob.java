@@ -1,4 +1,4 @@
-package org.telosys.tools.eclipse.plugin.wkschanges;
+package org.telosys.tools.eclipse.plugin.editors.dsl.wkschanges;
 
 import java.io.File;
 
@@ -10,17 +10,17 @@ import org.eclipse.core.runtime.Status;
 import org.telosys.tools.eclipse.plugin.commons.EclipseWksUtil;
 import org.telosys.tools.eclipse.plugin.commons.PluginLogger;
 
-public class RefreshJob extends WorkspaceJob  {
+public class RefreshWorkspaceFolderJob extends WorkspaceJob  {
 
 	private static void log(String msg) {
 		if ( _PackageLoggerConfig.LOG ) {
-			PluginLogger.log(RefreshJob.class, msg);
+			PluginLogger.log(RefreshWorkspaceFolderJob.class, msg);
 		}
 	}
 
 	private final File modelsFolder ;
 	
-	public RefreshJob(File modelsFolder) {
+	public RefreshWorkspaceFolderJob(File modelsFolder) {
 		super("RefreshJob");
 		this.modelsFolder = modelsFolder ;
 	}

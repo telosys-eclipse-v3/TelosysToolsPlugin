@@ -96,9 +96,11 @@ import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
 	 * @param modelInfo
 	 */
 	protected void updateModelInformation( DomainModelInfo modelInfo ) {
-		modelInfo.setName(_tName.getText());
-		modelInfo.setVersion(_tVersion.getText());
-		modelInfo.setDescription(_tDescription.getText());
+		// TODO : CREATE A TEXT EDITOR FOR MODEL
+		// v 3.3.0
+//		modelInfo.setName(_tName.getText());
+//		modelInfo.setVersion(_tVersion.getText());
+//		modelInfo.setDescription(_tDescription.getText());
 	}
 	//----------------------------------------------------------------------------------------------
 	private void populateFields() {
@@ -109,12 +111,14 @@ import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
 		String modelFileAbsolutePath = this.getModelEditor().getFileAbsolutePath();
 		_tFileName.setText( modelFileAbsolutePath );
 
-		DomainModelInfo modelInfo = ((ModelEditor)this.getModelEditor()).getDomainModelInfo();
-		if ( modelInfo != null ) {
-			_tName.setText(modelInfo.getName());
-			_tVersion.setText(modelInfo.getVersion());
-			_tDescription.setText(modelInfo.getDescription());
-		}
+		// TODO : CREATE A TEXT EDITOR FOR MODEL
+		// v 3.3.0
+//		DomainModelInfo modelInfo = ((ModelEditor)this.getModelEditor()).getDomainModelInfo();
+//		if ( modelInfo != null ) {
+//			_tName.setText(modelInfo.getName());
+//			_tVersion.setText(modelInfo.getVersion());
+//			_tDescription.setText(modelInfo.getDescription());
+//		}
 		
 		getStandardEditor().setPopulateInProgress(false);
 	}

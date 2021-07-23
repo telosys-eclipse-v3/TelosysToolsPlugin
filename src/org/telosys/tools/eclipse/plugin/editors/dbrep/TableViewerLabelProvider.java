@@ -91,18 +91,23 @@ class TableViewerLabelProvider 	extends LabelProvider implements ITableLabelProv
 				return modelColumn.getDatabaseName();
 				
 			case ColumnNames.DB_TYPE_INDEX : // SMALLINT, VARCHAR(n), DATE, ...
-				return modelColumn.getDatabaseTypeNameWithSize(); 
+//				return modelColumn.getDatabaseTypeNameWithSize(); 
+				// v 3.3.0 : getDatabaseTypeNameWithSize() REMOVED
+				if ( modelColumn.getDatabaseSize() != null ) {
+					String size = modelColumn.getDatabaseSize().trim();
+					if ( ! size.isEmpty() ) {
+						return modelColumn.getDatabaseType() + "(" + size + ")";
+					}
+				}
+				return modelColumn.getDatabaseType();
 				
 			case ColumnNames.JDBC_TYPE_INDEX :
 				return "" + modelColumn.getJdbcTypeCodeWithText();
 				
 			case ColumnNames.JAVA_NAME_INDEX :
-				//return modelColumn.getJavaName();
-				return modelColumn.getName(); // v 3.0.0
+				return modelColumn.getName();
 				
 			case ColumnNames.JAVA_TYPE_INDEX :
-				//String sType = modelColumn.getJavaType(); // Java Type stored in the model 
-				//String sType = modelColumn.getFullType(); // Java Type stored in the model  // v 3.0.0
 				String sType = modelColumn.getModelFullType(); // Java Type stored in the model  // v 3.0.0
 				JavaTypes types = JavaTypesManager.getJavaTypes();
 				String sText = types.getTextForType(sType);
@@ -147,15 +152,12 @@ class TableViewerLabelProvider 	extends LabelProvider implements ITableLabelProv
 		switch (columnIndex) 
 		{
 		case ColumnNames.PRIMARY_KEY_INDEX : // Column for PK / FK images
-			// if ( column.isPrimaryKey() ) 
 			if ( column.isKeyElement() )  // v 3.0.0
 			{
 				if ( column.isAutoIncremented() ) {
 					//--- Primary Key and Auto-incremented
 					return PluginImages.getImage(PluginImages.PRIMARYKEY_AUTOINCR);
 				}
-				//if ( column.isForeignKey() ) {
-				//if ( column.isUsedInForeignKey() ) { // v 3.0.0
 				if ( column.isFK() ) { // v 3.0.0
 					//--- Primary Key and Foreign Key
 					return PluginImages.getImage(PluginImages.PRIMARYKEY_FK);
@@ -163,8 +165,6 @@ class TableViewerLabelProvider 	extends LabelProvider implements ITableLabelProv
 				//--- Simple Primary Key
 				return PluginImages.getImage(PluginImages.PRIMARYKEY);
 			}
-			//else if ( column.isForeignKey() )
-			//else if ( column.isUsedInForeignKey() ) // v 3.0.0
 			else if ( column.isFK() ) // v 3.0.0
 			{
 				//--- Simple Foreign Key

@@ -401,9 +401,9 @@ public class PropertiesPage extends PropertyPage {
 	private void initTelosysToolsEnv() {
 		IProject currentProject = getCurrentProject();
 		EnvironmentManager em = getEnvironmentManager();
-		StringBuffer sb = new StringBuffer();
+//		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder(); // v 3.3.0
 		sb.append("Project initialization \n");
-//		sb.append("Project folder : '" + projectFolderFullPath + "' \n");
 		sb.append("\n");
 				
 		//-- Specific variables to be used in initialization
@@ -430,7 +430,6 @@ public class PropertiesPage extends PropertyPage {
 		EclipseProjUtil.refreshFolder(currentProject, telosysToolsEnv.getLibrariesFolder() ); // e.g. "TelosysTools/libs"
 		EclipseProjUtil.refreshFolder(currentProject, telosysToolsEnv.getTemplatesFolder() ); // e.g. "TelosysTools/templates"
 		
-		// initFieldsFromConfigurationFile() ;
 		MsgBox.info(sb.toString());		
 	}
 	

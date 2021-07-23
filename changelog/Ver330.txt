@@ -1,0 +1,65 @@
+
+Ver 3.3.0 IMPACTS :
+-------------------
+
+ - TelosysToolsCfgManager :
+    . loadTelosysToolsCfg() : No TelosysToolsException 
+ 
+ - AttributeInDbModel :
+    . getDatabaseTypeNameWithSize() : REMOVED
+    
+ - LinkInDbModel :
+    . getFieldType()  REMOVED
+    . setFieldType(x) REMOVED
+
+ - DomainModelInfo :
+    . setName(x)    getName()    REMOVED 
+    . setVersion(x) getVersion() REMOVED
+    
+ - ErrorReport :
+    . getErrorType() REMOVED
+    . getMessage()   REMOVED
+    
+ 
+CHANGES IN PLUGIN :
+-------------------
+
+ EDITORS COMMONS :
+
+   AbstractStandardEditor ( TelosysToolsException ) :
+    - cfgManager.loadTelosysToolsCfg() : no Exception 
+ 
+ DBREP EDITOR :
+ 
+   DialogBoxForLink ( LinkInDbModel getFieldType / setFieldType ) :
+    - Combo _comboJavaFieldType  : useless
+    - viewToData(LinkInDbModel link) : link.setFieldType REMOVED
+    - dataToView(LinkInDbModel link) --> populateComboJavaFieldType(link) : VOID COMBOBOX
+
+   LinksList ( LinkInDbModel getFieldType / setFieldType ) :
+    - addRow( Composite parent, Object item ) : label.setText( link.getFieldType() ) REMOVED
+    - buttonEditLink(Button b) : link.setFieldType() REMOVED
+
+   TableViewerLabelProvider 
+    - getColumnText(Object element, int columnIndex) : getDatabaseTypeNameWithSize() REMOVED
+    
+    
+ DSL MODEL EDITOR :
+ 
+   ModelEditorPageModelInfo ( DomainModelInfo ) :
+    - DomainModelInfo get/set REMOVED : TMP for TESTS => TODO : replace by text editor ?
+  
+ GENERATION / ERROR MESSAGES :
+ 
+   GenerationTaskMsgBox :
+    - error(ErrorReport errorReport)
+    
+   GenerationTaskWithProgress :
+    - onError(ErrorReport errorReport) : call GenerationTaskMsgBox.error(errorReport)
+ 
+
+PLUGIN CONFIGURATION :
+---------------------- 
+ 
+ Unused Dependencies :
+  org.eclipse.jdt.ui => REMOVED (in MANIFEST.MF )

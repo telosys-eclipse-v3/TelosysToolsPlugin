@@ -26,19 +26,16 @@ import org.telosys.tools.repository.persistence.util.RepositoryConst;
 
 public class LinksList extends CompositesList 
 {
-//	private LinksManager           linksManager ;
 	private final RepositoryModel        repositoryModel ; // v 3.0.0 replaces linksManager
 	private final RepositoryEditorPageModelLinks  _editorPage;
 	
 	//----------------------------------------------------------------------------------------
-//	public LinksList(Composite parent, Object layoutData, LinksManager linksManager, RepositoryEditorPage2 pluginPage) 
 	public LinksList(Composite parent, Object layoutData, RepositoryEditorPageModelLinks editorPage) // v 3.0.0
 	{
 		super(parent, layoutData);
 		if ( editorPage.getRepositoryModel() == null ) {
 			MsgBox.error("Repository model is not yet set in the editor page");
 		}
-//		this.linksManager = linksManager ;
 		this.repositoryModel = editorPage.getRepositoryModel() ; // v 3.0.0
 		this._editorPage = editorPage ;
 	}
@@ -72,19 +69,16 @@ public class LinksList extends CompositesList
 		row.setLayout( gridLayout );
 		row.setBackground(white);
 
-		//if ( ! ( item instanceof Link) ) {
 		if ( ! ( item instanceof LinkInDbModel) ) { // v 3.0.0
 			MsgBox.error("Links list - addRow() : item is not an instance of Link");
 			return row ;
 		}
 		
-		//Link link = (Link)item;
 		LinkInDbModel link = (LinkInDbModel)item; // v 3.0.0
 		row.setData(link);
 
 		String side = "owning side " ;
 		if ( ! link.isOwningSide() ) {
-			//side = "inverse side of \"" + link.getInverseSideOf() + "\" " ;
 			side = "inverse side of \"" + link.getInverseSideLinkId() + "\" " ;
 		}
 		String toolTip = " Link id : \"" + link.getId() + "\" "
@@ -107,7 +101,6 @@ public class LinksList extends CompositesList
 	        b.setData(row);
 	        //b.setText(text);
 	        b.setLayoutData( gd ) ;
-//	        b.setSelection( link.isUsed() );
 	        b.setSelection( link.isSelected() ); // v 3.0.0
 	        b.setBackground(white);
 	        b.addSelectionListener( new SelectionListener() 
@@ -162,10 +155,6 @@ public class LinksList extends CompositesList
 		{
 			Label label2 = new Label( row, SWT.CENTER );
 			String s = "" ;
-//			if ( link.isTypeOneToMany() )  { s = "1  ----->  *"; } 
-//			if ( link.isTypeManyToOne() )  { s = "*  ----->  1"; } 
-//			if ( link.isTypeManyToMany() ) { s = "*  ----->  *"; } 
-//			if ( link.isTypeOneToOne() )   { s = "1  ----->  1"; } 
 			if ( link.getCardinality() == Cardinality.ONE_TO_MANY )  { s = "1  ----->  *"; } 
 			if ( link.getCardinality() == Cardinality.MANY_TO_ONE )  { s = "*  ----->  1"; } 
 			if ( link.getCardinality() == Cardinality.MANY_TO_MANY ) { s = "*  ----->  *"; } 
@@ -250,8 +239,8 @@ public class LinksList extends CompositesList
 		//--- 2.1
 		{
 			Label l = new Label( row, SWT.LEFT );
-//			l.setText( link.getJavaFieldType() + "  " + link.getJavaFieldName() ) ;
-			l.setText( link.getFieldType() + "  " + link.getFieldName() ) ; // v 3.0.0
+			// l.setText( link.getFieldType() + "  " + link.getFieldName() ) ; // v 3.0.0
+			l.setText( link.getFieldName() ) ; // v 3.3.0 : link.getFieldType() REMOVED
 			l.setLayoutData( new GridData(width1, height) ) ; 
 			l.setBackground(white);
 			l.setToolTipText(toolTip);
@@ -274,7 +263,6 @@ public class LinksList extends CompositesList
 		//--- 2.3
 		{
 			Label l = new Label( row, SWT.CENTER );
-//			l.setText(  link.getCardinality() ) ;
 			l.setText(  link.getCardinality().getText() ) ; // v 3.0.0
 			l.setLayoutData( new GridData(width2, height) ) ; 
 			l.setBackground(white);
@@ -363,15 +351,12 @@ public class LinksList extends CompositesList
 	}
 	
 	//----------------------------------------------------------------------------------------
-	//private void setForeignKeyOrJoinTable(Link link, Label label, boolean bOwningSide )
 	private void setForeignKeyOrJoinTable(LinkInDbModel link, Label label, boolean bOwningSide )
 	{
 		if ( bOwningSide == link.isOwningSide() ) 
 		{
 			if ( link.isBasedOnForeignKey() ) {
 				String fkName = link.getForeignKeyName();
-				// ForeignKey fk = linksManager.getForeignKey(fkName);
-//				ForeignKeyInDbModel fk = linksManager.getForeignKey(fkName); // v 3.0.0
 				ForeignKeyInDbModel fk = repositoryModel.getForeignKeyByName(fkName); // v 3.0.0
 				if ( fk != null ) {
 					label.setImage( PluginImages.getImage(PluginImages.FOREIGNKEY) );
@@ -383,10 +368,7 @@ public class LinksList extends CompositesList
 				}
 			}
 			else if ( link.isBasedOnJoinTable() ) {
-				//JoinTable joinTable = link.getJoinTable();
 				String joinTableName = link.getJoinTableName();
-				//Entity entity = linksManager.getEntity(joinTableName);
-//				EntityInDbModel entity = linksManager.getEntityByTableName(joinTableName);
 				EntityInDbModel entity = repositoryModel.getEntityByTableName(joinTableName);// v 3.0.0
 				if ( entity != null ) {
 					label.setImage( PluginImages.getImage(PluginImages.JOINTABLE) );
@@ -420,11 +402,9 @@ public class LinksList extends CompositesList
 		return (Composite) buttonData ;
 	}
 	//----------------------------------------------------------------------------------------
-	//private Link getLinkFromButton(Button button)
 	private LinkInDbModel getLinkFromButton(Button button) // v 3.0.0
 	{
 		Composite row = getRowFromWidget(button);
-		//Link link = getLinkFromRow(row);
 		LinkInDbModel link = getLinkFromRow(row); // v 3.0.0
 		if ( null == link ) {
 			MsgBox.error("Row data is null (no link for this row) !");
@@ -435,14 +415,8 @@ public class LinksList extends CompositesList
 	//----------------------------------------------------------------------------------------
 	private void buttonChangeUseFlag(Button button)
 	{
-//		Link link = getLinkFromButton(button);
 		LinkInDbModel link = getLinkFromButton(button); // v 3.0.0
 		if ( null == link ) return ;
-
-//		if ( button.getSelection() != link.isUsed() ) {
-//			link.setUsed( button.getSelection() );
-//			pluginPage.setDirty();
-//		}
 		if ( button.getSelection() != link.isSelected() ) { // v 3.0.0
 			link.setSelected( button.getSelection() );
 			_editorPage.setDirty();
@@ -452,7 +426,6 @@ public class LinksList extends CompositesList
 	private void buttonEditLink(Button b)
 	{
 		log("EDIT link ...");
-		//Link link = getLinkFromButton(b);
 		LinkInDbModel link = getLinkFromButton(b); // v 3.0.0
 		if ( null == link ) return ;
 		
@@ -462,7 +435,6 @@ public class LinksList extends CompositesList
 		TitleAreaDialog dialog = new DialogBoxForLink( b.getDisplay().getActiveShell(), link ); 
 		//--- Open the Dialog Box Window ( Modal Window )
 		int iRet = dialog.open();
-		//Object oRet = dialog.getValue() ;
 		if ( Window.OK == iRet )
 		{
 			String linkAfter = link.getComparableString();
@@ -472,41 +444,27 @@ public class LinksList extends CompositesList
 				if ( link.isOwningSide() ) 
 				{
 					//--- Owning side => update inverse side if any 
-//					RelationLinks relation = linksManager.getRelationByLinkId( link.getId() );
-//					RelationLinksInDbModel relation = linksManager.getRelationByLinkId( link.getId() ); // v 3.0.0
 					RelationLinksInDbModel relation = repositoryModel.getRelationByLinkId( link.getId() ); // v 3.0.0
-//					Link inverseSideLink = relation.getInverseSideLink();
 					LinkInDbModel inverseSideLink = relation.getInverseSideLink(); // v 3.0.0
 					if ( inverseSideLink != null ) {
 						//--- Set reverse cardinality
-//						String sOwningSideCardinality = link.getCardinality();
 						Cardinality sOwningSideCardinality = link.getCardinality(); // v 3.0.0
-//						String sOldInverseSideCardinality = inverseSideLink.getCardinality() ;
 						Cardinality sOldInverseSideCardinality = inverseSideLink.getCardinality() ; // v 3.0.0
-//						String sNewInverseSideCardinality = null ;
 						Cardinality sNewInverseSideCardinality = Cardinality.UNDEFINED ; // v 3.0.0
-//						if ( RepositoryConst.MAPPING_ONE_TO_ONE.equals( sOwningSideCardinality ) )
 						if ( sOwningSideCardinality == Cardinality.ONE_TO_ONE )
 						{
-//							sNewInverseSideCardinality = RepositoryConst.MAPPING_ONE_TO_ONE ;
 							sNewInverseSideCardinality = Cardinality.ONE_TO_ONE ;
 						}
-//						else if ( RepositoryConst.MAPPING_ONE_TO_MANY.equals( sOwningSideCardinality ) )
 						else if ( sOwningSideCardinality == Cardinality.ONE_TO_MANY )
 						{
-//							sNewInverseSideCardinality = RepositoryConst.MAPPING_MANY_TO_ONE ;
 							sNewInverseSideCardinality = Cardinality.MANY_TO_ONE ;
 						}
-//						else if ( RepositoryConst.MAPPING_MANY_TO_ONE.equals( sOwningSideCardinality ) )
 						else if ( sOwningSideCardinality == Cardinality.MANY_TO_ONE )
 						{
-//							sNewInverseSideCardinality = RepositoryConst.MAPPING_ONE_TO_MANY ;
 							sNewInverseSideCardinality = Cardinality.ONE_TO_MANY;
 						}
-//						else if ( RepositoryConst.MAPPING_MANY_TO_MANY.equals( sOwningSideCardinality ) )
 						else if ( sOwningSideCardinality == Cardinality.MANY_TO_MANY )
 						{
-//							sNewInverseSideCardinality = RepositoryConst.MAPPING_MANY_TO_MANY ;
 							sNewInverseSideCardinality = Cardinality.MANY_TO_MANY  ;
 						}
 						if ( sNewInverseSideCardinality != null ) 
@@ -516,28 +474,22 @@ public class LinksList extends CompositesList
 								// Change the cardinality 
 								inverseSideLink.setCardinality( sNewInverseSideCardinality );
 								
-								// Change the cardinality => change the type if necessary
-//								if ( sNewInverseSideCardinality.endsWith( RepositoryConst.MAPPING_TO_ONE )
-//										&& ( ! sOldInverseSideCardinality.endsWith( RepositoryConst.MAPPING_TO_ONE ) ) ) 
-								if ( sNewInverseSideCardinality.isToOne() && ( ! sOldInverseSideCardinality.isToOne() ) )
-								{
-									// Change to "TO ONE" => change the Java Type in order to hold a single value
-//									inverseSideLink.setJavaFieldType( inverseSideLink.getTargetEntityJavaType() );
-									inverseSideLink.setFieldType( inverseSideLink.getTargetEntityClassName() );
-								}
-//								if ( sNewInverseSideCardinality.endsWith( RepositoryConst.MAPPING_TO_MANY )
-//										&& ( ! sOldInverseSideCardinality.endsWith( RepositoryConst.MAPPING_TO_MANY ) ) ) 
-								if ( sNewInverseSideCardinality.isToMany() && ( ! sOldInverseSideCardinality.isToMany() ) )
-								{
-									// Change to "TO MANY" => change the Java Type in order to hold a single value
-//									inverseSideLink.setJavaFieldType( RepositoryConst.COLLECTION_JAVA_TYPE );
-									inverseSideLink.setFieldType( RepositoryConst.COLLECTION_JAVA_TYPE );
-								}								
+								// v 3.3.0 : link.setFieldType() REMOVED
+//								// Change the cardinality => change the type if necessary
+//								if ( sNewInverseSideCardinality.isToOne() && ( ! sOldInverseSideCardinality.isToOne() ) )
+//								{
+//									// Change to "TO ONE" => change the Java Type in order to hold a single value
+//									inverseSideLink.setFieldType( inverseSideLink.getTargetEntityClassName() );
+//								}
+//								if ( sNewInverseSideCardinality.isToMany() && ( ! sOldInverseSideCardinality.isToMany() ) )
+//								{
+//									// Change to "TO MANY" => change the Java Type in order to hold a single value
+//									inverseSideLink.setFieldType( RepositoryConst.COLLECTION_JAVA_TYPE );
+//								}								
 							}
 						}
 						
 						//--- Set "mapped by" field name
-//						inverseSideLink.setMappedBy( link.getJavaFieldName() );
 						inverseSideLink.setMappedBy( link.getFieldName() );
 					}
 				}
@@ -554,7 +506,6 @@ public class LinksList extends CompositesList
 	{
 		log("REMOVE link ...");
 		Composite row = getRowFromWidget(b);
-//		Link link = getLinkFromRow(row);
 		LinkInDbModel link = getLinkFromRow(row); // v 3.0.0
 		if ( null == link ) {
 			MsgBox.error("Row data is null (no link for this row) !");
@@ -564,11 +515,8 @@ public class LinksList extends CompositesList
 		if ( link.isOwningSide() ) 
 		{
 			//--- Owning side => remove inverse side if any 
-//			RelationLinks relation = linksManager.getRelationByLinkId( link.getId() );
-//			RelationLinksInDbModel relation = linksManager.getRelationByLinkId( link.getId() ); // v 3.0.0
 			RelationLinksInDbModel relation = repositoryModel.getRelationByLinkId( link.getId() ); // v 3.0.0
 			String s = "\n ( no inverse side )" ;
-//			Link inverseSideLink = relation.getInverseSideLink();
 			LinkInDbModel inverseSideLink = relation.getInverseSideLink(); // v 3.0.0
 			Composite rowInvSide = null ;
 			if ( inverseSideLink != null ) {
@@ -578,7 +526,6 @@ public class LinksList extends CompositesList
 			if ( MsgBox.confirm("Do you realy want to remove this link (owning side)"
 					+ s 
 					+ "\n from the repository ? ") ) {
-//				linksManager.removeRelation(relation); // Remove the 2 links
 				repositoryModel.removeRelation(relation); // Remove the 2 links // v 3.0.0
 				deleteRow(row);
 				if ( rowInvSide != null ) {
@@ -594,8 +541,6 @@ public class LinksList extends CompositesList
 			//--- Inverse side => remove only the current link
 			if ( MsgBox.confirm("Do you realy want to remove this link (inverse side)"
 					+ "\n from the repository ? ") ) {
-//				linksManager.removeLink( link.getId() );
-//				linksManager.removeLink( link.getId() );
 				repositoryModel.removeLinkById( link.getId() ); // v 3.0.0
 				deleteRow(row);
 				refresh();
@@ -612,7 +557,6 @@ public class LinksList extends CompositesList
 			Composite[] rows = getAllRows();
 			for ( int i = 0 ; i < rows.length ; i++ ) {
 				Composite row = rows[i];
-//				Link link = getLinkFromRow(row);
 				LinkInDbModel link = getLinkFromRow(row); // v 3.0.0
 				if ( id.equals( link.getId() ) ) {
 					return row;
@@ -627,14 +571,11 @@ public class LinksList extends CompositesList
 	}
 	
 	//----------------------------------------------------------------------------------------
-//	private Link getLinkFromRow(Composite row)
 	private LinkInDbModel getLinkFromRow(Composite row) // v 3.0.0
 	{
 		Object data = row.getData();
 		if ( data != null ) {
-//			if ( data instanceof Link ) {
 			if ( data instanceof LinkInDbModel ) { // v 3.0.0
-//				return (Link) data ;
 				return (LinkInDbModel) data ; // v 3.0.0
 			}
 			else {
@@ -650,12 +591,8 @@ public class LinksList extends CompositesList
 	protected void deleteItemInModel (Object item)
 	{
 		if ( item != null ) {
-				
-//			if ( item instanceof Link ) {
 			if ( item instanceof LinkInDbModel ) { // v 3.0.0
-//				Link link = (Link)item ;
 				LinkInDbModel link = (LinkInDbModel)item ; // v 3.0.0
-//				linksManager.removeLink( link.getId() );
 				repositoryModel.removeLinkById( link.getId() );// v 3.0.0
 			}
 			else

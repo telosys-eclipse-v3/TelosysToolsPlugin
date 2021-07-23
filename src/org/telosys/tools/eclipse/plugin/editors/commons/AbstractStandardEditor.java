@@ -10,7 +10,6 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.editor.FormEditor;
-import org.telosys.tools.commons.TelosysToolsException;
 import org.telosys.tools.commons.TelosysToolsLogger;
 import org.telosys.tools.commons.cfg.TelosysToolsCfg;
 import org.telosys.tools.commons.cfg.TelosysToolsCfgManager;
@@ -92,18 +91,18 @@ public abstract class AbstractStandardEditor extends FormEditor {
 	//----------------------------------------------------------------------------------------
 	public TelosysToolsCfg getProjectConfig() {
 		TelosysToolsCfgManager cfgManager = new TelosysToolsCfgManager( getProjectFolderAbsolutePath() );
-		try {
-			return cfgManager.loadTelosysToolsCfg() ;
-		} catch (TelosysToolsException e) {
-			MsgBox.error("Cannot load Telosys Tools configuration", e);
-			return null;
-		}
+//		try {
+//			return cfgManager.loadTelosysToolsCfg() ;
+//		} catch (TelosysToolsException e) {
+//			MsgBox.error("Cannot load Telosys Tools configuration", e);
+//			return null;
+//		}
+		return cfgManager.loadTelosysToolsCfg() ; // v 3.3.0
 	}
 	
 	//----------------------------------------------------------------------------------------
 	public String getShortFileName() {
 		return _iFile.getName();
-		//return _fileName ;
 	}
 	
 	//----------------------------------------------------------------------------------------

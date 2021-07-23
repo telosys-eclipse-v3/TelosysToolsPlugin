@@ -49,13 +49,11 @@ public class GenerationTaskWithProgress extends AbstractGenerationTask implement
 	 * @throws TelosysToolsException
 	 */
 	public GenerationTaskWithProgress(
-//			RepositoryModel model,
 			Model model,
 			LinkedList<String> selectedEntities,
 			String bundleName,
 			LinkedList<TargetDefinition> selectedTargets,
 			List<TargetDefinition> resourcesTargets,
-			//GeneratorConfig generatorConfig, 
 			TelosysToolsCfg telosysToolsCfg,
 			TelosysToolsLogger logger)
 			throws TelosysToolsException 
@@ -71,11 +69,11 @@ public class GenerationTaskWithProgress extends AbstractGenerationTask implement
 	//--------------------------------------------------------------------------------------
 	@Override  // Implementation for AbstractGenerationTask
 	protected boolean onError(ErrorReport errorReport) {
-		boolean r = GenerationTaskMsgBox.error(errorReport.getErrorType(),
-					errorReport.getMessage(), 
-					errorReport.getException() );
-//		MsgBox.info("Continue ? : " + r );
-		return r ; // continue the task or cancel
+//		boolean r = GenerationTaskMsgBox.error(errorReport.getErrorType(),
+//					errorReport.getMessage(), 
+//					errorReport.getException() );
+		// v 3.3.0
+		return GenerationTaskMsgBox.error(errorReport); // return : continue the task or cancel
 	}
 	
 	@Override  // Implementation for AbstractGenerationTask

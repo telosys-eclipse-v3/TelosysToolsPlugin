@@ -38,25 +38,25 @@ public class DialogBoxForLink extends TitleAreaDialog
 	};
 
 	
-	private final static int ONE_TO_ONE   = 0 ;
-	private final static int MANY_TO_ONE  = 1 ;
-	private final static int ONE_TO_MANY  = 2 ;
-	private final static int MANY_TO_MANY = 3 ;
+	private static final int ONE_TO_ONE   = 0 ;
+	private static final int MANY_TO_ONE  = 1 ;
+	private static final int ONE_TO_MANY  = 2 ;
+	private static final int MANY_TO_MANY = 3 ;
 	
-	private final static int OPTIONAL_UNDEFINED = 0 ;
-	private final static int OPTIONAL_TRUE      = 1 ;
-	private final static int OPTIONAL_FALSE     = 2 ;
+	private static final int OPTIONAL_UNDEFINED = 0 ;
+	private static final int OPTIONAL_TRUE      = 1 ;
+	private static final int OPTIONAL_FALSE     = 2 ;
 	
-	private final static int FETCH_DEFAULT = 0 ;
-	private final static int FETCH_LAZY    = 1 ;
-	private final static int FETCH_EAGER   = 2 ;
+	private static final int FETCH_DEFAULT = 0 ;
+	private static final int FETCH_LAZY    = 1 ;
+	private static final int FETCH_EAGER   = 2 ;
 	
 	//--- Widgets
 	
 	Combo _comboCardinality  = null ;
 	Combo _comboFecthType    = null ;
 	Text  _textJavaFieldName = null ;
-	Combo _comboJavaFieldType = null ;
+	Combo _comboJavaFieldType = null ; // Unused since v 3.3.0 : TODO : remove it !
 	Combo _comboOptional      = null ;
 	
 	Button _checkBoxCascadeAll     = null ; 
@@ -66,12 +66,9 @@ public class DialogBoxForLink extends TitleAreaDialog
 	Button _checkBoxCascadeRemove  = null ; 
 
 	//--- Current value
-	//Link _link = null ;
 	LinkInDbModel _link = null ;
 
-	//public DialogBoxForLink( Shell parentShell, Link link ) 
-	public DialogBoxForLink( Shell parentShell, LinkInDbModel link )  // v 3.0.0
-	{
+	public DialogBoxForLink( Shell parentShell, LinkInDbModel link ) {
 		super(parentShell);
 		PluginLogger.log(this, "DialogBox CONSTRUCTOR ..." );
 		this.setHelpAvailable(false);	
@@ -101,19 +98,6 @@ public class DialogBoxForLink extends TitleAreaDialog
 			message = "" ;
 		}
 		
-//		String sFkName = _link.getForeignKeyName();
-//		if ( StrUtil.nullOrVoid(sFkName) ) {
-//			JoinTable jt = _link.getJoinTable() ;
-//			if (  jt != null  ) {
-//				message = "Based on Join Table \"" + jt.getName() + "\"";
-//			}
-//			else {
-//				message = "No Foreign Key" ;
-//			}
-//		}
-//		else {
-//			message = "Based on Foreign Key \"" + sFkName.trim() + "\"";
-//		}
 		setMessage(	message, IMessageProvider.INFORMATION);
 		
 		return result;
@@ -238,10 +222,6 @@ public class DialogBoxForLink extends TitleAreaDialog
 		{
 			_comboCardinality = new Combo(content, SWT.READ_ONLY );
 			_comboCardinality.setItems(cardinalityAll);			
-//			_comboCardinality.add("One To One");
-//			_comboCardinality.add("Many To One");			
-//			_comboCardinality.add("One To Many");
-//			_comboCardinality.add("Many To Many");
 			_comboCardinality.setLayoutData (gd2); 			
 		}
 		
@@ -253,9 +233,7 @@ public class DialogBoxForLink extends TitleAreaDialog
 		}
 		{
 			Text text = new Text(content, SWT.BORDER | SWT.READ_ONLY );
-			//text.setText( _link.getTargetEntityJavaType() );
-			text.setText( _link.getTargetEntityClassName() ); // v 3.0.0
-			
+			text.setText( _link.getTargetEntityClassName() ); // v 3.0.0			
 			text.setLayoutData (gd2_long); 
 		}
 		
@@ -364,48 +342,35 @@ public class DialogBoxForLink extends TitleAreaDialog
 		return true ;
 	}
 	
-	//private void viewToData(Link link) 
-	private void viewToData(LinkInDbModel link)  // v 3.0.0
-	{
+	private void viewToData(LinkInDbModel link) {
 		log( "viewToData() ..." );
 
 		//--- Cardinality 
 		switch ( _comboCardinality.getSelectionIndex() ) 
 		{
 		case ONE_TO_ONE : 
-			//link.setCardinality( RepositoryConst.MAPPING_ONE_TO_ONE ) ; 
-			link.setCardinality( Cardinality.ONE_TO_ONE ) ;  // v 3.0.0
+			link.setCardinality( Cardinality.ONE_TO_ONE ) ; 
 			break ;
 		case MANY_TO_ONE : 
-			//link.setCardinality( RepositoryConst.MAPPING_MANY_TO_ONE ) ; 
-			link.setCardinality( Cardinality.MANY_TO_ONE ) ;  // v 3.0.0
+			link.setCardinality( Cardinality.MANY_TO_ONE ) ;
 			break ;
 		case ONE_TO_MANY : 
-			//link.setCardinality( RepositoryConst.MAPPING_ONE_TO_MANY ) ; 
-			link.setCardinality( Cardinality.ONE_TO_MANY ) ;  // v 3.0.0
+			link.setCardinality( Cardinality.ONE_TO_MANY ) ;
 			break ;
 		case MANY_TO_MANY : 
-			//link.setCardinality( RepositoryConst.MAPPING_MANY_TO_MANY ) ; 
-			link.setCardinality( Cardinality.MANY_TO_MANY ) ;  // v 3.0.0
+			link.setCardinality( Cardinality.MANY_TO_MANY ) ;
 			break ;
 		}
 		
 		//--- Java Field Name 
-		//link.setJavaFieldName( _textJavaFieldName.getText() );
 		link.setFieldName( _textJavaFieldName.getText() ); // v 3.0.0
 		
 		//--- Java Field Type 
-		//link.setJavaFieldType( _comboJavaFieldType.getText() );
-		link.setFieldType( _comboJavaFieldType.getText() ); // v 3.0.0
+		//link.setFieldType( _comboJavaFieldType.getText() ); // unused since v 3.3.0
 		
 		//--- Optional ( "Undefined"/"True"/"False" ) 
-//		boolean optional = ( _comboOptional.getSelectionIndex() == 0 ) ;
-//		link.setOptional(optional);
 		switch ( _comboOptional.getSelectionIndex() )
 		{
-//		case OPTIONAL_UNDEFINED : link.setOptional( RepositoryConst.OPTIONAL_UNDEFINED ) ; break ;
-//		case OPTIONAL_TRUE      : link.setOptional( RepositoryConst.OPTIONAL_TRUE ) ; break ;
-//		case OPTIONAL_FALSE     : link.setOptional( RepositoryConst.OPTIONAL_FALSE ) ; break ;
 		case OPTIONAL_UNDEFINED : link.setOptional( Optional.UNDEFINED ) ; break ; // v 3.0.0
 		case OPTIONAL_TRUE      : link.setOptional( Optional.TRUE ) ; break ; // v 3.0.0
 		case OPTIONAL_FALSE     : link.setOptional( Optional.FALSE ) ; break ; // v 3.0.0
@@ -414,9 +379,6 @@ public class DialogBoxForLink extends TitleAreaDialog
 		//--- Fetch Type ( "Default"/"Lazy"/"Eager" ) 
 		switch ( _comboFecthType.getSelectionIndex() ) 
 		{
-//		case FETCH_DEFAULT : link.setFetch( RepositoryConst.FETCH_DEFAULT ) ; break ;
-//		case FETCH_LAZY    : link.setFetch( RepositoryConst.FETCH_LAZY ) ; break ;
-//		case FETCH_EAGER   : link.setFetch( RepositoryConst.FETCH_EAGER ) ; break ;
 		case FETCH_DEFAULT : link.setFetchType( FetchType.DEFAULT ) ; break ;
 		case FETCH_LAZY    : link.setFetchType( FetchType.LAZY ) ; break ;
 		case FETCH_EAGER   : link.setFetchType( FetchType.EAGER ) ; break ;
@@ -424,22 +386,12 @@ public class DialogBoxForLink extends TitleAreaDialog
 		
 		//--- Cascade
 		if ( true == _checkBoxCascadeAll.getSelection() ) {
-//			link.setCascadeALL(true) ;
-//			link.setCascadeMERGE  (false) ;
-//			link.setCascadePERSIST(false) ;
-//			link.setCascadeREFRESH(false) ;
-//			link.setCascadeREMOVE (false) ;
 			// v 3.0.0
 			CascadeOptions cascadeOptions = new CascadeOptions() ;
 			cascadeOptions.add(CascadeOption.ALL);
 			link.setCascadeOptions(cascadeOptions) ;
 		}
 		else {
-//			link.setCascadeALL(false) ;
-//			link.setCascadeMERGE  (_checkBoxCascadeMerge.getSelection() ) ;
-//			link.setCascadePERSIST(_checkBoxCascadePersist.getSelection() ) ;
-//			link.setCascadeREFRESH(_checkBoxCascadeRefresh.getSelection()) ;
-//			link.setCascadeREMOVE (_checkBoxCascadeRemove.getSelection() ) ;
 			// v 3.0.0
 			CascadeOptions cascadeOptions = new CascadeOptions() ;
 			if ( _checkBoxCascadeMerge.getSelection() == true )   cascadeOptions.add(CascadeOption.MERGE);
@@ -452,31 +404,25 @@ public class DialogBoxForLink extends TitleAreaDialog
 		log( "viewToData() : END " );
 	}
 
-	// private void dataToView(Link link)
-	private void dataToView(LinkInDbModel link) // v 3.0.0
-	{
+	private void dataToView(LinkInDbModel link) {
 		log( "dataToView() ..." );
 
 		//--- Cardinality 
-		// if      ( link.isTypeOneToOne() ) {
 		if      ( link.getCardinality() == Cardinality.ONE_TO_ONE ) { // v 3.0.0
 			_comboCardinality.setItems(cardinalityToOne);			
 			_comboCardinality.select(ONE_TO_ONE) ;
 			_comboCardinality.setEnabled(true); // can be changed 
 		}
-		//else if ( link.isTypeManyToOne() ) {
 		else if ( link.getCardinality() == Cardinality.MANY_TO_ONE ) { // v 3.0.0
 			_comboCardinality.setItems(cardinalityToOne);			
 			_comboCardinality.select(MANY_TO_ONE) ;
 			_comboCardinality.setEnabled(true); // can be changed 
 		}
-		//else if ( link.isTypeOneToMany() ) {
 		else if ( link.getCardinality() == Cardinality.ONE_TO_MANY ) { // v 3.0.0
 			_comboCardinality.setItems(cardinalityAll);			
 			_comboCardinality.select(ONE_TO_MANY) ;
 			_comboCardinality.setEnabled(false); // cannot be changed 
 		}
-		//else if ( link.isTypeManyToMany() ) {
 		else if ( link.getCardinality() == Cardinality.MANY_TO_MANY ) { // v 3.0.0
 			_comboCardinality.setItems(cardinalityAll);			
 			_comboCardinality.select(MANY_TO_MANY) ;
@@ -488,18 +434,13 @@ public class DialogBoxForLink extends TitleAreaDialog
 		}
 		
 		//--- Java Field Name 
-		//_textJavaFieldName.setText( link.getJavaFieldName() );
 		_textJavaFieldName.setText( link.getFieldName() ); // v 3.0.0
 
 		//--- Java Field Type 
 		populateComboJavaFieldType(link);
 		
 		//--- Optional ( "Undefined"/"True"/"False" ) 
-		//if  ( link.isTypeOneToOne() || link.isTypeManyToOne() ) {
 		if  ( link.isCardinalityOneToOne() || link.isCardinalityManyToOne() ) { // v 3.0.0
-//			if ( link.isOptionalUndefined()) _comboOptional.select( OPTIONAL_UNDEFINED );
-//			if ( link.isOptionalTrue()     ) _comboOptional.select( OPTIONAL_TRUE );
-//			if ( link.isOptionalFalse()    ) _comboOptional.select( OPTIONAL_FALSE );
 			if ( link.getOptional() == Optional.UNDEFINED ) _comboOptional.select( OPTIONAL_UNDEFINED ); // v 3.0.0
 			if ( link.getOptional() == Optional.TRUE      ) _comboOptional.select( OPTIONAL_TRUE ); // v 3.0.0
 			if ( link.getOptional() == Optional.FALSE     ) _comboOptional.select( OPTIONAL_FALSE ); // v 3.0.0
@@ -511,19 +452,11 @@ public class DialogBoxForLink extends TitleAreaDialog
 		}
 		
 		//--- Fetch Type ( "Default"/"Lazy"/"Eager" ) 
-//		if ( link.isFetchDEFAULT() ) _comboFecthType.select( FETCH_DEFAULT );
-//		if ( link.isFetchLAZY()    ) _comboFecthType.select( FETCH_LAZY );
-//		if ( link.isFetchEAGER()   ) _comboFecthType.select( FETCH_EAGER );
 		if ( link.getFetchType() == FetchType.DEFAULT ) _comboFecthType.select( FETCH_DEFAULT ); // v 3.0.0
 		if ( link.getFetchType() == FetchType.LAZY    ) _comboFecthType.select( FETCH_LAZY ); // v 3.0.0
 		if ( link.getFetchType() == FetchType.EAGER   ) _comboFecthType.select( FETCH_EAGER ); // v 3.0.0
 		
 		//--- Cascade
-//		_checkBoxCascadeAll.setSelection(  link.isCascadeALL() ) ;
-//		_checkBoxCascadeMerge.setSelection ( link.isCascadeMERGE() ) ;
-//		_checkBoxCascadePersist.setSelection ( link.isCascadePERSIST() ) ;
-//		_checkBoxCascadeRefresh.setSelection ( link.isCascadeREFRESH() ) ;
-//		_checkBoxCascadeRemove.setSelection ( link.isCascadeREMOVE() ) ;
 		// v 3.0.0
 		CascadeOptions cascadeOptions = link.getCascadeOptions() ; // never null
 		_checkBoxCascadeAll.setSelection( cascadeOptions.isCascadeAll() ) ;
@@ -535,62 +468,62 @@ public class DialogBoxForLink extends TitleAreaDialog
 		log( "dataToView() : END" );
 	}
 
-	private static final String [] collectionItems = 
-		{ 
-		"java.util.List", 
-		"java.util.Set",
-		"java.util.Collection",
-		"java.util.Map"
-		};
+	// Unused since v 3.3.0
+//	private static final String [] collectionItems = 
+//		{ 
+//		"java.util.List", 
+//		"java.util.Set",
+//		"java.util.Collection",
+//		"java.util.Map"
+//		};
 	
-	//private void populateComboJavaFieldType(Link link)
-	private void populateComboJavaFieldType(LinkInDbModel link) // v 3.0.0
+	private void populateComboJavaFieldType(LinkInDbModel link)
 	{
-		//String cardinality = link.getCardinality();
-		Cardinality cardinality = link.getCardinality();
-		if ( cardinality != null ) {
-			//if ( cardinality.trim().toUpperCase().endsWith("ONE") ) {
-			if ( cardinality == Cardinality.MANY_TO_ONE || cardinality == Cardinality.ONE_TO_ONE ) { // v 3.0.0 
-				// ...ToOne : offers only 2 choices : void or Java Target
-				String [] entityItems = {
-						// link.getTargetEntityJavaType() 
-						link.getTargetEntityClassName() // v 3.0.0 
-						};
-				_comboJavaFieldType.setItems(entityItems);
-				//selectComboJavaFieldType( link.getJavaFieldType() );
-				selectComboJavaFieldType( link.getFieldType() ); // v 3.0.0 
-			}
-			//else if ( cardinality.trim().toUpperCase().endsWith("MANY") ) {
-			else if ( cardinality == Cardinality.ONE_TO_MANY || cardinality == Cardinality.MANY_TO_MANY ) { // v 3.0.0 
-				// ...ToMany 
-				_comboJavaFieldType.setItems(collectionItems);
-				//selectComboJavaFieldType( link.getJavaFieldType() );
-				selectComboJavaFieldType( link.getFieldType() ); // v 3.0.0 
-			}
-		}
-		else {
-			String [] nothing = { "" };
-			_comboJavaFieldType.setItems(nothing);
-			_comboJavaFieldType.select(0);
-		}
+//		Cardinality cardinality = link.getCardinality();
+//		if ( cardinality != null ) {
+//			if ( cardinality == Cardinality.MANY_TO_ONE || cardinality == Cardinality.ONE_TO_ONE ) { 
+//				// ...ToOne : offers only 2 choices : void or Java Target
+//				String [] entityItems = {
+//						link.getTargetEntityClassName() 
+//						};
+//				_comboJavaFieldType.setItems(entityItems);
+//				selectComboJavaFieldType( link.getFieldType() ); 
+//			}
+//			else if ( cardinality == Cardinality.ONE_TO_MANY || cardinality == Cardinality.MANY_TO_MANY ) { 
+//				// ...ToMany 
+//				_comboJavaFieldType.setItems(collectionItems);
+//				selectComboJavaFieldType( link.getFieldType() );
+//			}
+//		}
+//		else {
+//			String [] nothing = { "" };
+//			_comboJavaFieldType.setItems(nothing);
+//			_comboJavaFieldType.select(0);
+//		}
+		// Unused since v 3.3.0
+		String [] nothing = { "" };
+		_comboJavaFieldType.setItems(nothing);
+		_comboJavaFieldType.select(0);
 	}
-	private void selectComboJavaFieldType( String type )
-	{
-		if ( null == type ) {
-			_comboJavaFieldType.setText("");
-			return ;
-		}
-		else {
-			// Try to found the given type in the items list 
-			String [] items = _comboJavaFieldType.getItems();
-			for ( int i = 0 ; i < items.length ; i++ ) {
-				if ( type.equals(items[i]) ) {
-					_comboJavaFieldType.select(i);
-					return ;
-				}
-			}
-			// Not found 
-			_comboJavaFieldType.setText(type);
-		}
-	}
+
+// Unused since v 3.3.0
+//	private void selectComboJavaFieldType( String type )
+//	{
+//		if ( null == type ) {
+//			_comboJavaFieldType.setText("");
+//			return ;
+//		}
+//		else {
+//			// Try to found the given type in the items list 
+//			String [] items = _comboJavaFieldType.getItems();
+//			for ( int i = 0 ; i < items.length ; i++ ) {
+//				if ( type.equals(items[i]) ) {
+//					_comboJavaFieldType.select(i);
+//					return ;
+//				}
+//			}
+//			// Not found 
+//			_comboJavaFieldType.setText(type);
+//		}
+//	}
 }

@@ -24,8 +24,9 @@ import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
 	private boolean  _bPopulateInProgress = false ;
 	
 	private Text     _tFileName ;
-	private Text     _tName ;
-	private Text     _tVersion ;
+//	private Text     _tName ; // removed in v 3.3.0
+//	private Text     _tVersion ; // removed in v 3.3.0
+	private Text     _tTitle ; // added in v 3.3.0
 	private Text     _tDescription ;
 
 	//----------------------------------------------------------------------------------------------
@@ -79,8 +80,9 @@ import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
 //		_tFileName.setEnabled(false);
 		_tFileName.setEditable(false);
 		
-		_tName        = addLabelAndText(scrolledFormBody, "Name : ") ;
-		_tVersion     = addLabelAndText(scrolledFormBody, "Version : ") ;
+//		_tName        = addLabelAndText(scrolledFormBody, "Name : ") ; // removed in v 3.3.0
+//		_tVersion     = addLabelAndText(scrolledFormBody, "Version : ") ; // removed in v 3.3.0
+		_tTitle       = addLabelAndText(scrolledFormBody, "Title : ") ; // added in v 3.3.0
 		_tDescription = addLabelAndTextMulti(scrolledFormBody, "Description : ") ;
 		
 		populateFields() ;
@@ -100,7 +102,8 @@ import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
 		// v 3.3.0
 //		modelInfo.setName(_tName.getText());
 //		modelInfo.setVersion(_tVersion.getText());
-//		modelInfo.setDescription(_tDescription.getText());
+		modelInfo.setTitle(_tTitle.getText()); // added in v 3.3.0
+		modelInfo.setDescription(_tDescription.getText());
 	}
 	//----------------------------------------------------------------------------------------------
 	private void populateFields() {
@@ -113,13 +116,13 @@ import org.telosys.tools.eclipse.plugin.editors.commons.AbstractModelEditorPage;
 
 		// TODO : CREATE A TEXT EDITOR FOR MODEL
 		// v 3.3.0
-//		DomainModelInfo modelInfo = ((ModelEditor)this.getModelEditor()).getDomainModelInfo();
-//		if ( modelInfo != null ) {
-//			_tName.setText(modelInfo.getName());
-//			_tVersion.setText(modelInfo.getVersion());
-//			_tDescription.setText(modelInfo.getDescription());
-//		}
-		
+		DomainModelInfo modelInfo = ((ModelEditor)this.getModelEditor()).getDomainModelInfo();
+		if ( modelInfo != null ) {
+//			_tName.setText(modelInfo.getName()); // removed in v 3.3.0
+//			_tVersion.setText(modelInfo.getVersion()); // removed in v 3.3.0
+			_tTitle.setText(modelInfo.getTitle()); // added in v 3.3.0
+			_tDescription.setText(modelInfo.getDescription());
+		}		
 		getStandardEditor().setPopulateInProgress(false);
 	}
 	//----------------------------------------------------------------------------------------------

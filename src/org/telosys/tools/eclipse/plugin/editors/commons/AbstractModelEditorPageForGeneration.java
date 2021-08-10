@@ -475,9 +475,11 @@ public abstract class AbstractModelEditorPageForGeneration extends AbstractModel
 			List<Entity> entities = model.getEntities();
 			populateEntitiesTable(_tableEntities, entities);
 		}
-//		else {
-//			MsgBox.error("Model is null !");
-//		}
+		else {
+			// no model (due to model loading error (invalid model)
+			//TODO : "Left side : Invalid model"
+			//MsgBox.error("Model is null !");
+		}
 	}		
 	
 	/**

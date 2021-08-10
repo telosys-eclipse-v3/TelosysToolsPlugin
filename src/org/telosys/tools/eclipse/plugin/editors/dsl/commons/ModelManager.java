@@ -70,6 +70,7 @@ public class ModelManager {
 					entitiesFileNames, voidMap);
 		} catch (TelosysModelException modelException) {
 			// --- 3.2) Invalid Model : keep parsing errors
+			MsgBox.error("Cannot load model !", buildErrorsMessage(modelException));
 			return new ModelLoadingResult(null, modelInfo,
 					entitiesFileNames, modelException.getParsingErrors());
 		} catch (TelosysToolsException e) {
@@ -78,7 +79,24 @@ public class ModelManager {
 					entitiesFileNames, voidMap);
 		}
 	}
-
+	
+	private static String buildErrorsMessage(TelosysModelException modelException) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Invalid model").append("\n");
+		sb.append("\n");
+		sb.append(modelException.getMessage()).append("\n");
+		sb.append("\n");
+		if ( modelException.hasParsingErrors() ) {
+			for (Map.Entry<String, List<String>> entry : modelException.getParsingErrors().entrySet()) {
+				sb.append(entry.getKey()).append(" : \n");
+				for ( String err : entry.getValue() ) {
+					sb.append(" . ").append(err).append("\n");
+				}
+			}
+		}
+		return sb.toString();
+	}
+	
 	private static void updateErrorMarkers(List<String> entitiesFileNames, Map<String,List<String>> entitiesErrors) {
 		for (String entityFile : entitiesFileNames) {
 			// Entity file name ( eg "Person.entity" )

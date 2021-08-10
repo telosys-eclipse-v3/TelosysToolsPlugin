@@ -13,6 +13,13 @@ public class ModelLoadingResult {
 	private final List<String> entitiesFileNames;
 	private final Map<String, List<String>> entitiesErrors;
 
+	/**
+	 * Constructor
+	 * @param model
+	 * @param modelInfo
+	 * @param entitiesFileNames
+	 * @param entitiesErrors
+	 */
 	public ModelLoadingResult(Model model, DomainModelInfo modelInfo,
 			List<String> entitiesFileNames,
 			Map<String, List<String>> entitiesErrors) {

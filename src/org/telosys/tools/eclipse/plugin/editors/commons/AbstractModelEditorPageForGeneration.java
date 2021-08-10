@@ -830,14 +830,18 @@ public abstract class AbstractModelEditorPageForGeneration extends AbstractModel
 //    }
 
     /**
-     * Returns a "warning image" if the entity has warnings, or null if none
+     * Returns a "warning image" if the entity has warnings, 
+     *  or null if none "entity icon" if no warning
      * @param entity
      * @return
      */
     protected Image getEntityWarningImage(Entity entity) {
 		if ( hasWarnings(entity) ) {
-			return PluginImages.getImage(PluginImages.WARNING ) ; 
+			return PluginImages.getImage(PluginImages.WARNING ) ; // 16 pix
 		}
-		return null ;
+		else {
+			// do not return null to keep same TableItem checkbox size
+			return PluginImages.getImage(PluginImages.ENTITY_FILE ); // 16 pix
+		}
     }
 }

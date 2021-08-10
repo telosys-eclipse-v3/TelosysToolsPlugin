@@ -55,8 +55,10 @@ import org.telosys.tools.generic.model.Entity;
 	 */
 	@Override
 	protected void populateEntitiesTable(Table table, List<Entity> entities) {
+		int i = 0;
 		if ( table != null && entities != null ) {
 			for ( Entity entity : entities ) { 
+				i++;
 				String entityClassName = entity.getClassName(); 
 				
 	            //--- Create the row content : a single column for "entity class name"
@@ -67,14 +69,25 @@ import org.telosys.tools.generic.model.Entity;
 	            //tableItem.setChecked(false);
 	            tableItem.setChecked(true); // All entities checked by default
 	            tableItem.setText(row);      
+	            tableItem.setData(entityClassName);
 	            
 	            // ROW HEIGHT TESTS 
 	            // tableItem.setImage( PluginImages.getImage(PluginImages.FILE1 ) ); // JUST FOR TESTS
 	            // The row height is fixed from the image height ( here 16 px ) !
 	            
-	            tableItem.setImage( getEntityWarningImage(entity) ) ;
-	            		
-	            tableItem.setData( entityClassName ); 
+	            tableItem.setImage( getEntityWarningImage(entity) ) ; // NB : set checkbox size 
+	            //tableItem.setImage( PluginImages.getImage(PluginImages.FILE1 ) ); // Small checkbox
+	            //tableItem.setImage( PluginImages.getImage(PluginImages.WARNING ) ); // Small checkbox
+	            //tableItem.setImage( PluginImages.getImage(null ) ); // Big checkbox
+	            //tableItem.setImage( PluginImages.getImage(PluginImages.BLANK ) ); // OK 16 pix
+	            //tableItem.setImage( PluginImages.getImage(PluginImages.ENTITY_FILE ) ); // OK 16 pix 
+	            
+//	            if ( i%2 != 0 ) {
+//	            	tableItem.setImage( PluginImages.getImage(PluginImages.WARNING ) );
+//	            }
+//	            else {
+//	            	tableItem.setImage( PluginImages.getImage(null ) );
+//	            }
 			}
 		}
 		else {

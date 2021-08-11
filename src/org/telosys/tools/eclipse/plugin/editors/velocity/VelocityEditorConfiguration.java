@@ -34,17 +34,17 @@ public class VelocityEditorConfiguration extends SourceViewerConfiguration {
 		return VelocityPartitionScanner.TYPES;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.text.source.SourceViewerConfiguration#getDoubleClickStrategy(org.eclipse.jface.text.source.ISourceViewer, java.lang.String)
-	 */
-	@Override
-	public ITextDoubleClickStrategy getDoubleClickStrategy(
-		ISourceViewer sourceViewer,
-		String contentType) {
-		if (doubleClickStrategy == null)
-			doubleClickStrategy = new VelocityDoubleClickStrategy();
-		return doubleClickStrategy;
-	}
+//	/* (non-Javadoc)
+//	 * @see org.eclipse.jface.text.source.SourceViewerConfiguration#getDoubleClickStrategy(org.eclipse.jface.text.source.ISourceViewer, java.lang.String)
+//	 */
+//	@Override
+//	public ITextDoubleClickStrategy getDoubleClickStrategy(
+//		ISourceViewer sourceViewer,
+//		String contentType) {
+//		if (doubleClickStrategy == null)
+//			doubleClickStrategy = new VelocityDoubleClickStrategy();
+//		return doubleClickStrategy;
+//	}
 
 	private VelocityCodeScanner getVelocityCodeScanner() {
 		if (codeScanner == null) {

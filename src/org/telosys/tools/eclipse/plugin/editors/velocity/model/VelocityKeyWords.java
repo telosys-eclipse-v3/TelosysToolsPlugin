@@ -9,15 +9,21 @@ import org.telosys.tools.eclipse.plugin.editors.velocity.contentassist.ContentAs
 public class VelocityKeyWords {
 
 	private static List<VelocityKeyWord> keyWords;
-	private static String directives[] = null;
+	private static String[] directives = null;
 	
 	/**
-	 * Return all Velocity Directives.
+	 * Private constructor
+	 */
+	private VelocityKeyWords() {
+	}
+	
+	/**
+	 * Return all Velocity directives.
 	 * @return
 	 */
 	public static String[] getAllDirectives() {
 		if (directives == null) {
-			List<String> list = new ArrayList<String>();
+			List<String> list = new ArrayList<>();
 			for (VelocityKeyWord keyWord : getKeyWords()) {
 				list.add(keyWord.getValue());
 			}
@@ -40,9 +46,8 @@ public class VelocityKeyWords {
 	
 	private static void initKeyWords() {
 		
-		// TODO Better on XML file for example
 		// Keep alphabetical order
-		keyWords = new ArrayList<VelocityKeyWord>();
+		keyWords = new ArrayList<>();
 
 		// Telosys specific directives (added in ver 2.0.7 )
 		keyWords.add(new VelocityKeyWord("#assertFalse", "#assertFalse()", docHTML(ContentAssistConfiguration.DIRECTIVE_ASSERTFALSE_DOC),PluginImages.VELOCITY_DIRECTIVE));
@@ -50,6 +55,10 @@ public class VelocityKeyWords {
 
 		keyWords.add(new VelocityKeyWord("#break",  "#break",    docHTML(ContentAssistConfiguration.DIRECTIVE_BREAK_DOC),PluginImages.VELOCITY_DIRECTIVE));
 		
+		// Telosys specific directive (added in ver 3.3.0 )
+		keyWords.add(new VelocityKeyWord("#cancel", "#cancel()", docHTML(ContentAssistConfiguration.DIRECTIVE_CANCEL_DOC),PluginImages.VELOCITY_DIRECTIVE));
+
+		// Telosys specific directive
 		keyWords.add(new VelocityKeyWord("#checkId", "#checkId()", docHTML(ContentAssistConfiguration.DIRECTIVE_CHECKID_DOC),PluginImages.VELOCITY_DIRECTIVE));
 		
 		keyWords.add(new VelocityKeyWord("#define", "#define()", docHTML(ContentAssistConfiguration.DIRECTIVE_DEFINE_DOC),PluginImages.VELOCITY_DIRECTIVE));
@@ -57,7 +66,7 @@ public class VelocityKeyWords {
 		keyWords.add(new VelocityKeyWord("#elseif", "#elseif()", null,PluginImages.VELOCITY_DIRECTIVE));
 		keyWords.add(new VelocityKeyWord("#end",    "#end",      null,PluginImages.VELOCITY_DIRECTIVE));
 		
-		// Telosys specific directives (added in ver 2.0.7 )
+		// Telosys specific directive (added in ver 2.0.7 )
 		keyWords.add(new VelocityKeyWord("#error",  "#error()", docHTML(ContentAssistConfiguration.DIRECTIVE_ERROR_DOC),PluginImages.VELOCITY_DIRECTIVE));
 
 		keyWords.add(new VelocityKeyWord("#evaluate", "#evaluate()", docHTML(ContentAssistConfiguration.DIRECTIVE_EVALUATE_DOC),PluginImages.VELOCITY_DIRECTIVE));
@@ -69,7 +78,7 @@ public class VelocityKeyWords {
 		keyWords.add(new VelocityKeyWord("#set",      "#set()", docHTML(ContentAssistConfiguration.DIRECTIVE_SET_DOC),PluginImages.VELOCITY_DIRECTIVE));
 		keyWords.add(new VelocityKeyWord("#stop",     "#stop", docHTML(ContentAssistConfiguration.DIRECTIVE_STOP_DOC),PluginImages.VELOCITY_DIRECTIVE));
 		
-		// Telosys specific directives (added in ver 2.0.7 )
+		// Telosys specific directive (added in ver 2.0.7 )
 		keyWords.add(new VelocityKeyWord("#using",  "#using()", docHTML(ContentAssistConfiguration.DIRECTIVE_USING_DOC),PluginImages.VELOCITY_DIRECTIVE));
 		
 	}

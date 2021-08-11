@@ -7,16 +7,13 @@ public class VelocityKeyWord implements Comparable<VelocityKeyWord> {
 	private final String additionnalDocumentation;
 	private final String completionIconName;
 	
-	
-//	public VelocityKeyWord(String value, String displayValue,
-//			String additionnalDocumentation) {
-//		super();
-//		this.value = value;
-//		this.displayValue = displayValue;
-//		this.additionnalDocumentation = additionnalDocumentation;
-//		this.completionIconName = null;
-//	}
-	
+	/**
+	 * Constructor
+	 * @param value
+	 * @param displayValue
+	 * @param additionnalDocumentation
+	 * @param iconName
+	 */
 	public VelocityKeyWord(String value, String displayValue,
 			String additionnalDocumentation, String iconName) {
 		super();
@@ -29,29 +26,18 @@ public class VelocityKeyWord implements Comparable<VelocityKeyWord> {
 	public String getValue() {
 		return value;
 	}
-//	public void setValue(String value) {
-//		this.value = value;
-//	}
+
 	public String getDisplayValue() {
 		return displayValue;
 	}
-//	public void setDisplayValue(String displayValue) {
-//		this.displayValue = displayValue;
-//	}
 	
 	public String getAdditionnalDocumentation() {
 		return additionnalDocumentation;
 	}
-//	public void setAdditionnalDocumentation(String additionnalDocumentation) {
-//		this.additionnalDocumentation = additionnalDocumentation;
-//	}
 	
 	public String getCompletionIconName() {
 		return completionIconName;
 	}
-//	public void setCompletionIconName(String completionIconName) {
-//		this.completionIconName = completionIconName;
-//	}
 
 	@Override
 	public int compareTo(VelocityKeyWord o) {

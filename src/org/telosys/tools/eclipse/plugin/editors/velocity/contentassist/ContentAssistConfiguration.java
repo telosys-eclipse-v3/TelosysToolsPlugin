@@ -3,12 +3,26 @@ package org.telosys.tools.eclipse.plugin.editors.velocity.contentassist;
 import java.text.MessageFormat;
 import java.util.ResourceBundle;
 
+/**
+ * 
+ * @author Laurent Guerin
+ *
+ */
 public class ContentAssistConfiguration {
-	private static final String DOC_BUNDLE_NAME= "org.telosys.tools.eclipse.plugin.editors.velocity.contentassist.ContentAssistMessages"; //$NON-NLS-1$
+	
+	// Resource bundle for assist documentation (html part displayed for directives documentation)
+	private static final String DOC_BUNDLE_NAME = 
+			"org.telosys.tools.eclipse.plugin.editors.velocity.contentassist.ContentAssistMessages";
     private static final ResourceBundle RESOURCE_BUNDLE_DOC= ResourceBundle.getBundle(DOC_BUNDLE_NAME);
-	private static final String CONF_BUNDLE_NAME= "org.telosys.tools.eclipse.plugin.editors.velocity.contentassist.VelocityEditorConfiguration"; //$NON-NLS-1$
+    
+	// Resource bundle for assist configuration
+	private static final String CONF_BUNDLE_NAME = 
+			"org.telosys.tools.eclipse.plugin.editors.velocity.contentassist.VelocityEditorConfiguration";
     private static final ResourceBundle RESOURCE_BUNDLE_CONF = ResourceBundle.getBundle(CONF_BUNDLE_NAME);
     
+    //---------------------------------------------------------------------------------------
+    // Keys for directives documentation in resource bundle file (properties)
+    //---------------------------------------------------------------------------------------
     // Standard Velocity directives
     public static final String DIRECTIVE_SET_DOC      = "directive.set.doc";
     public static final String DIRECTIVE_IF_DOC       = "directive.if.doc";
@@ -33,11 +47,18 @@ public class ContentAssistConfiguration {
     // Specific Telosys directives (added in ver 3.3.0)
     public static final String DIRECTIVE_CANCEL_DOC = "directive.cancel.doc";
     
+    // NB : don't forget to add the directive documentation in 'ContentAssistMessages.properties'
+    
+    //---------------------------------------------------------------------------------------
+    // Keys for configuration in resource bundle file (properties)
+    //---------------------------------------------------------------------------------------
     // Customizable bean variable name (ex : $entityFound must have the same completion than $entity)
     public static final String  CONF_BEAN_VARIABLES_CUSTOMIZABLE = "velocity.editor.beanVariableSuffixable";
     
+    /**
+     * Private constructor
+     */
     private ContentAssistConfiguration() {
-        // no instance
     }
 
     /**
@@ -84,7 +105,7 @@ public class ContentAssistConfiguration {
      * 
      * @return the resource bundle
      */
-    public static ResourceBundle getConfigurationResourceBundle() {
+    private static ResourceBundle getConfigurationResourceBundle() {
         return RESOURCE_BUNDLE_CONF;
     }
     
@@ -97,7 +118,8 @@ public class ContentAssistConfiguration {
      * @param arg the message argument
      * @return the string
      */ 
-    public static String getFormattedMessage(String key, Object arg) {
+//    public static String getFormattedMessage(String key, Object arg) {
+    private static String getFormattedMessage(String key, Object arg) {
         return getFormattedMessage(key, new Object[] { arg });
     }
     
@@ -110,7 +132,8 @@ public class ContentAssistConfiguration {
      * @param args the message arguments
      * @return the string
      */ 
-    public static String getFormattedMessage(String key, Object[] args) {
+//    public static String getFormattedMessage(String key, Object[] args) {
+    private static String getFormattedMessage(String key, Object[] args) {
         return MessageFormat.format(getMessage(key), args);  
     }   
 }

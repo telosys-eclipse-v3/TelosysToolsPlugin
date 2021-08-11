@@ -3,6 +3,7 @@ package org.telosys.tools.eclipse.plugin.editors.velocity.contentassist;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
@@ -14,10 +15,11 @@ import org.telosys.tools.eclipse.plugin.editors.velocity.model.VelocityKeyWord;
 
 public class VelocityContentAssistProcessor implements IContentAssistProcessor {
 
+	private static final IContextInformation[] NO_CONTEXTS = {};
+	private static final ICompletionProposal[] NO_COMPLETIONS = {};
+
 	private VelocityKeyWordProvider wordProvider;
 	private String lastError;
-	private final IContextInformation[] NO_CONTEXTS = {};
-	private final ICompletionProposal[] NO_COMPLETIONS = {};
 
 	public VelocityContentAssistProcessor() {
 		this.wordProvider = new VelocityKeyWordProvider(new TelosysGeneratorObjectInfo());
@@ -28,7 +30,7 @@ public class VelocityContentAssistProcessor implements IContentAssistProcessor {
 		ICompletionProposal[] proposals = NO_COMPLETIONS;
 		try {
 			String context = this.extractPrefix(textViewer, documentOffset);
-			List<VelocityKeyWord> suggestions = new ArrayList<VelocityKeyWord>();
+			List<VelocityKeyWord> suggestions = new ArrayList<>();
 			
 			if (!context.isEmpty() && context.contains(".")) {
 				if (context.charAt(context.length() - 1) == '.' && context.charAt(0) != '$') {
@@ -53,7 +55,8 @@ public class VelocityContentAssistProcessor implements IContentAssistProcessor {
 
 			proposals = buildResult(suggestions, context,
 					documentOffset - context.length());
-		} catch (Exception e) {
+//		} catch (Exception e) {
+		} catch (BadLocationException e) {
 			e.printStackTrace();
 			this.lastError = e.getMessage();
 		}
@@ -79,32 +82,12 @@ public class VelocityContentAssistProcessor implements IContentAssistProcessor {
 		return this.lastError;
 	}
 
-	// private ICompletionProposal[] buildResult(List<VelocityKeyWord>
-	// suggestions, String replacedWord, int offset) throws Exception {
-	//
-	// ICompletionProposal[] proposals = new
-	// ICompletionProposal[suggestions.size()];
-	//
-	// int index = 0;
-	// for (VelocityKeyWord suggestion : suggestions) {
-	// ICompletionProposal cp = new
-	// CompletionProposal(suggestion.getDisplayValue(),
-	// offset, replacedWord.length(), suggestion.getDisplayValue().length(),
-	// null, suggestion.getDisplayValue(), null,
-	// suggestion.getAdditionnalDocumentation());
-	// proposals[index] = cp;
-	// index++;
-	// }
-	//
-	// return proposals;
-	// }
-
 	private ICompletionProposal[] buildResult(
 			List<VelocityKeyWord> suggestions, String replacedWord, int offset)
-			throws Exception {
+//			throws Exception {
+		{
 			
-		ICompletionProposal[] proposals = new ICompletionProposal[suggestions
-				.size()];
+		ICompletionProposal[] proposals = new ICompletionProposal[suggestions.size()];
 
 		int index = 0;
 		for (VelocityKeyWord suggestion : suggestions) {
@@ -146,7 +129,7 @@ public class VelocityContentAssistProcessor implements IContentAssistProcessor {
 	}
 
 	private String extractPrefix(ITextViewer textViewer, int documentOffset)
-			throws Exception {
+			throws BadLocationException {
 		IDocument document = textViewer.getDocument();
 		int currOffset = documentOffset - 1;
 
@@ -185,13 +168,13 @@ public class VelocityContentAssistProcessor implements IContentAssistProcessor {
 
 	@Override
 	public char[] getContextInformationAutoActivationCharacters() {
-		// TODO Auto-generated method stub
+		// Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public IContextInformationValidator getContextInformationValidator() {
-		// TODO Auto-generated method stub
+		// Auto-generated method stub
 		return null;
 	}
 	

@@ -20,7 +20,7 @@ public class TelosysGeneratorObjectInfo implements IContextObjectInfo {
 	public TelosysGeneratorObjectInfo() {
 		super();
 		this.contextInfo = new ContextInfo();
-		this.beansInfos = new HashMap<String, List<VelocityKeyWord>>();
+		this.beansInfos  = new HashMap<>();
 	}
 
 	
@@ -30,7 +30,7 @@ public class TelosysGeneratorObjectInfo implements IContextObjectInfo {
 	 */
 	@Override
 	public List<VelocityKeyWord> getPredefineVariables() {
-		List<VelocityKeyWord> variables = new ArrayList<VelocityKeyWord>();
+		List<VelocityKeyWord> variables = new ArrayList<>();
 		
 		if (this.predefVariables == null) {
 			String[] names = contextInfo.getVariableNames() ;
@@ -56,7 +56,7 @@ public class TelosysGeneratorObjectInfo implements IContextObjectInfo {
 	 */
 	@Override
 	public List<VelocityKeyWord> getContextBeans() {
-		List<VelocityKeyWord> objects = new ArrayList<VelocityKeyWord>();
+		List<VelocityKeyWord> objects = new ArrayList<>();
 		if (this.objectNames == null) {
 			// Context Beans
 			objects.addAll(this.initializeBeansKeywords(contextInfo.getObjectNames(), PluginImages.VELOCITY_BEAN_GENERATOR));
@@ -80,7 +80,7 @@ public class TelosysGeneratorObjectInfo implements IContextObjectInfo {
 	 */
 	@Override
 	public List<VelocityKeyWord> getBeanInfo(String objectName) {
-		List<VelocityKeyWord> infos = new ArrayList<VelocityKeyWord>();
+		List<VelocityKeyWord> infos = new ArrayList<>();
 		
 		if (this.beansInfos.containsKey(objectName)) {
 			infos = this.beansInfos.get(objectName);
@@ -123,7 +123,7 @@ public class TelosysGeneratorObjectInfo implements IContextObjectInfo {
 	 * @return Velocity keywords
 	 */
 	private List<VelocityKeyWord> initializeBeansKeywords(String[] objects, String iconKeyName) {
-		List<VelocityKeyWord> keywords = new ArrayList<VelocityKeyWord>();
+		List<VelocityKeyWord> keywords = new ArrayList<>();
 
 		if (objects != null) {
 			for (int i = 0; i < objects.length; i++) {

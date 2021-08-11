@@ -29,7 +29,7 @@ public class VelocityKeyWordProvider {
 	 */
 	public List<VelocityKeyWord> suggest(String word) {
 		
-		ArrayList<VelocityKeyWord> wordBuffer = new ArrayList<VelocityKeyWord>();
+		ArrayList<VelocityKeyWord> wordBuffer = new ArrayList<>();
 		
 		// provide the directives
 		wordBuffer.addAll(this.filterSuggestions(VelocityKeyWords.getKeyWords(), word));
@@ -50,7 +50,7 @@ public class VelocityKeyWordProvider {
 	 */
 	public List<VelocityKeyWord> suggestContextVariableOutline(String variableName, String filter) {
 		
-		ArrayList<VelocityKeyWord> wordBuffer = new ArrayList<VelocityKeyWord>();
+		ArrayList<VelocityKeyWord> wordBuffer = new ArrayList<>();
 		
 		// provide attributs and method of a variable generator
 		List<VelocityKeyWord> completions = this.filterSuggestions(this.contextObjectInfo.getBeanInfo(variableName), filter);
@@ -86,7 +86,7 @@ public class VelocityKeyWordProvider {
 	 * @return Filtered List
 	 */
 	private List<VelocityKeyWord> filterSuggestions(List<VelocityKeyWord> allSuggestions,String filter) {
-		List<VelocityKeyWord> listFiltered = new ArrayList<VelocityKeyWord>();
+		List<VelocityKeyWord> listFiltered = new ArrayList<>();
 		
 		if (filter ==  null) {
 			filter = "";

@@ -24,9 +24,10 @@ public class VelocityDoubleClickStrategy implements ITextDoubleClickStrategy {
 		}
 	}
 
-	protected boolean selectComment(int caretPos) {
+	private boolean selectComment(int caretPos) {
 		IDocument doc = fText.getDocument();
-		int startPos, endPos;
+		int startPos;
+		int endPos;
 
 		try {
 			int pos = caretPos;
@@ -73,10 +74,11 @@ public class VelocityDoubleClickStrategy implements ITextDoubleClickStrategy {
 		return false;
 	}
 
-	protected boolean selectWord(int caretPos) {
+	private boolean selectWord(int caretPos) {
 
 		IDocument doc = fText.getDocument();
-		int startPos, endPos;
+		int startPos;
+		int endPos;
 
 		try {
 

@@ -9,8 +9,8 @@ import org.telosys.tools.generator.context.doc.tooling.MethodParameter;
 
 public class EditorDoc {
 
-	Map<String,String> classDoc   = new HashMap<String,String>();
-	Map<String,String> methodsDoc = new HashMap<String,String>();
+	Map<String,String> classDoc   = new HashMap<>();
+	Map<String,String> methodsDoc = new HashMap<>();
 	
 	private String buildKey( ClassInfo classInfo, MethodInfo methodInfo ) {
 		return classInfo.getContextName() + "." + methodInfo.getSignature() ;
@@ -30,7 +30,7 @@ public class EditorDoc {
 		String key = buildKey( classInfo, methodInfo);
 		String doc = methodsDoc.get(key) ;
 		if ( null == doc ) {
-			doc = buildHtmlMethodDoc( classInfo, methodInfo ) ;
+			doc = buildHtmlMethodDoc(methodInfo ) ;
 			classDoc.put(key, doc);
 		}
 		return doc ;
@@ -38,7 +38,6 @@ public class EditorDoc {
 
 	private String buildHtmlClassDoc( ClassInfo classInfo ) {
 		StringBuilder sb = new StringBuilder();
-//		sb.append( "<h1> $" + classInfo.getContextName() + "</h1>	");
 		sb.append( "<p>");
 		
 		for ( String s : classInfo.getDocText()  ) {
@@ -58,7 +57,7 @@ public class EditorDoc {
 		return sb.toString() ;
 	}
 	
-	private String buildHtmlMethodDoc( ClassInfo classInfo, MethodInfo methodInfo ) {
+	private String buildHtmlMethodDoc(MethodInfo methodInfo) {
 		StringBuilder sb = new StringBuilder();
 		
 		sb.append( "<CODE> <B>." + methodInfo.getSimpleDescription() + "</B> </CODE>" );

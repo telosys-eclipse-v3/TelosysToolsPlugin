@@ -40,6 +40,12 @@ public class VelocityKeyWords {
 		return keyWords;
 	}
 	
+	/**
+	 * Returns the HTML documentation to be displayed beside the keyword <br>
+	 * ( for example the documentation for directive like "#if", "#macro", etc )
+	 * @param docId
+	 * @return
+	 */
 	private static String docHTML(String docId) {
 		return ContentAssistConfiguration.getMessage(docId);
 	}

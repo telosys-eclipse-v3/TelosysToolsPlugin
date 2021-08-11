@@ -19,17 +19,15 @@ public class VelocityEditor extends TextEditor {
 		
 		colorManager = new ColorManager();
 		
-		//setSourceViewerConfiguration(new XMLConfiguration(colorManager));
 		setSourceViewerConfiguration(new VelocityEditorConfiguration(colorManager));
 		
 		setDocumentProvider(new VelocityDocumentProvider());
 		
 		//--- Set contextual help to be called when F1 is pressed in the editor
-		//setHelpContextId(getHelpContextId(VELOCITY_EDITOR_HELP_CONTEXT_ID));
 		setHelpContextId( ContextualHelp.getVelocityEditorHelpContextId() ) ;
-
 	}
 	
+	@Override
 	public void dispose() {
 		colorManager.dispose();
 		super.dispose();

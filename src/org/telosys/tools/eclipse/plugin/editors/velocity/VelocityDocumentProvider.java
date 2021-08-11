@@ -9,6 +9,7 @@ import org.telosys.tools.eclipse.plugin.editors.velocity.scanner.partition.Veloc
 
 public class VelocityDocumentProvider extends FileDocumentProvider {
 
+	@Override
 	protected IDocument createDocument(Object element) throws CoreException {
 		IDocument document = super.createDocument(element);
 		if (document != null) {

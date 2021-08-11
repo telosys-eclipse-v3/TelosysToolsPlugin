@@ -16,10 +16,8 @@ import org.telosys.tools.eclipse.plugin.editors.velocity.scanner.code.VelocityCo
 import org.telosys.tools.eclipse.plugin.editors.velocity.scanner.partition.VelocityPartitionScanner;
 
 public class VelocityEditorConfiguration extends SourceViewerConfiguration {
-//	private XMLDoubleClickStrategy doubleClickStrategy;
 	private VelocityDoubleClickStrategy doubleClickStrategy;
 	
-//	private XMLTagScanner tagScanner;
 	private VelocityCodeScanner codeScanner;
 	private ColorManager colorManager;
 	private ContentAssistant assistant;
@@ -65,11 +63,6 @@ public class VelocityEditorConfiguration extends SourceViewerConfiguration {
 	@Override
 	public IPresentationReconciler getPresentationReconciler(ISourceViewer sourceViewer) {
 		PresentationReconciler reconciler = new PresentationReconciler();
-
-//		DefaultDamagerRepairer dr =
-//			new DefaultDamagerRepairer(getXMLTagScanner());
-//		reconciler.setDamager(dr, VelocityPartitionScanner.XML_TAG);
-//		reconciler.setRepairer(dr, VelocityPartitionScanner.XML_TAG);
 
 		//-----------------------------------------------------------------------------
 		// DEFAULT

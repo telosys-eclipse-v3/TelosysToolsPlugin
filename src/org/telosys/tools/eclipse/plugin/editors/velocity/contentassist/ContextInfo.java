@@ -10,7 +10,7 @@ import org.telosys.tools.generator.context.names.ContextNames;
 
 public class ContextInfo {
 
-	private final static MethodInfo[] VOID_METHOD_INFO_ARRAY = {} ;
+	private static final MethodInfo[] VOID_METHOD_INFO_ARRAY = {} ;
 	private final Map<String,ClassInfo> classesInfo ;
 	private final EditorDoc editorDoc ;
 	
@@ -60,8 +60,7 @@ public class ContextInfo {
 	 * @return the class information or null if no information found
 	 */
 	public ClassInfo getClassInfo(String objectName) {
-		ClassInfo classInfo = classesInfo.get(objectName);
-		return classInfo ;
+		return classesInfo.get(objectName);
 	}
 
 	/**

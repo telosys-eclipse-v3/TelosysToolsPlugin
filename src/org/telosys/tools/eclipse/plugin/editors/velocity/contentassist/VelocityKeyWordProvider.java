@@ -31,13 +31,13 @@ public class VelocityKeyWordProvider {
 		
 		ArrayList<VelocityKeyWord> wordBuffer = new ArrayList<>();
 		
-		// provide the directives
+		// provide the directives ( #directive-name )
 		wordBuffer.addAll(this.filterSuggestions(VelocityKeyWords.getKeyWords(), word));
 		
-		// provide the predefines variables
+		// provide the predefined variables ($AMP, $SRC ...)
 		wordBuffer.addAll(this.filterSuggestions(this.contextObjectInfo.getPredefineVariables(), word));
 		
-		// provide the generator variables
+		// provide the predefined objects ($entity, $attribute, $fn, ...)
 		wordBuffer.addAll(this.filterSuggestions(this.contextObjectInfo.getContextBeans(), word));
 
 		return wordBuffer;

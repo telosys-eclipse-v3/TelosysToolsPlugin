@@ -28,7 +28,7 @@ public class VelocityContentAssistProcessor implements IContentAssistProcessor {
 	@Override
 	public ICompletionProposal[] computeCompletionProposals(ITextViewer textViewer, int documentOffset) {
 		ICompletionProposal[] proposals = NO_COMPLETIONS;
-		try {
+//		try {
 			String context = this.extractPrefix(textViewer, documentOffset);
 			List<VelocityKeyWord> suggestions = new ArrayList<>();
 			
@@ -56,10 +56,10 @@ public class VelocityContentAssistProcessor implements IContentAssistProcessor {
 			proposals = buildResult(suggestions, context,
 					documentOffset - context.length());
 //		} catch (Exception e) {
-		} catch (BadLocationException e) {
-			e.printStackTrace();
-			this.lastError = e.getMessage();
-		}
+//		} catch (BadLocationException e) {
+//			e.printStackTrace();
+//			this.lastError = e.getMessage();
+//		}
 		return proposals;
 	}
 
@@ -128,18 +128,23 @@ public class VelocityContentAssistProcessor implements IContentAssistProcessor {
 		return proposals;
 	}
 
-	private String extractPrefix(ITextViewer textViewer, int documentOffset)
-			throws BadLocationException {
+	private String extractPrefix(ITextViewer textViewer, int documentOffset) {
+//			throws BadLocationException {
 		IDocument document = textViewer.getDocument();
 		int currOffset = documentOffset - 1;
 
 		String currWord = "";
 		char currChar;
-		while (currOffset >= 0
-				&& !(Character.isWhitespace(currChar = document
-						.getChar(currOffset)) || currChar == ';')) {
-			currWord = currChar + currWord;
-			currOffset--;
+		try {
+			// go back to left
+			while ( currOffset >= 0
+					&& !( Character.isWhitespace(currChar = document.getChar(currOffset)) || currChar == ';')
+					) {
+				currWord = currChar + currWord;
+				currOffset--;
+			}
+		} catch (BadLocationException e) {
+			// document.getChar(x) error : nothing to do
 		}
 		
 		// identify the situation if the cursor is just after a bracket

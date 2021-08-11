@@ -30,7 +30,7 @@ public class ContextInfo {
 	}
 	
 	/**
-	 * Returns the context objects names ( "fn", "today", ... )
+	 * Returns the context objects names ( "fn", "env", "model", "now", ... )
 	 * @return
 	 */
 	public String[] getObjectNames() {
@@ -45,14 +45,14 @@ public class ContextInfo {
 		return ContextNames.getPredefinedNames();
 	}
 	
-	/**
-	 * Returns the context objects names ( "fn", "today", ... ) <br>
-	 *  and variables names ( "SRC", "AMP", "LT", .. ) 
-	 * @return
-	 */
-	public String[] getObjectAndVariableNames() {
-		return ContextNames.getObjectAndVariableNames();
-	}
+//	/**
+//	 * Returns the context objects names ( "fn", "today", ... ) <br>
+//	 *  and variables names ( "SRC", "AMP", "LT", .. ) 
+//	 * @return
+//	 */
+//	public String[] getObjectAndVariableNames() {
+//		return ContextNames.getObjectAndVariableNames();
+//	}
 	
 	/**
 	 * Returns general information about an object (class level information)

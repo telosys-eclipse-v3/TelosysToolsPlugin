@@ -176,12 +176,22 @@
           priority="high">
         </content-type>
     -->
-        <content-type  base-type="org.eclipse.core.runtime.text"
-          name="Telosys files" id="org.telosys.contenttype"
-          file-extensions="vm,entity,model" 
-          file-names="templates.cfg" 
-          default-charset="UTF-8"
-          priority="high">
+        <content-type 
+          file-extensions="vm"  name="Telosys template file" 
+          id="org.telosys.content-type.vm"
+          default-charset="UTF-8"  priority="high">
+        </content-type>
+
+        <content-type  
+          file-names="templates.cfg"  name="Telosys templates configuration file" 
+          id="org.telosys.content-type.templates.cfg"
+          default-charset="UTF-8"  priority="high">
+        </content-type>
+
+        <content-type
+          file-extensions="entity"  name="Telosys entity file" 
+          id="org.telosys.content-type.entity"
+          default-charset="UTF-8"  priority="high">
         </content-type>
         
     </extension>

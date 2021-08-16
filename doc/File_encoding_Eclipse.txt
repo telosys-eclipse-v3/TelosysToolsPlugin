@@ -1,0 +1,88 @@
+
+Define file encoding in Eclipse (eg "UTF-8")
+
+Window / Preferences 
+
+1) For all text files in workspace :
+
+  General / Workspace :
+
+  Text file encoding :
+  (o) Other : UTF-8
+
+
+2) Only for Telosys files extensions :
+
+  General / Content Types : 
+
+  in "Text" [Add Child...] 
+
+    "New content type" : "Telosys template"
+
+    in "Text / Telosys template"
+      File associations :
+      "*.vm"
+      Associated editors :
+      ? useful ???
+      Default encoding : "UTF-8"  +  Click [ Update ]
+
+    "New content type" : "Telosys entity
+
+    in "Text / Telosys entity
+      File associations :
+      "*.entity"
+      Associated editors :
+      ? useful ???
+      Default encoding : "UTF-8"  +  Click [ Update ]
+      
+ ---------------------------------------------------------------------------
+ 
+ With "Contributing content types" ???
+ 
+ https://stackoverflow.com/questions/53771544/eclipse-plugin-to-associate-a-file-extension-to-the-html-editor
+ 
+ <extension
+    point="org.eclipse.core.contenttype.contentTypes">
+    <content-type
+        base-type="org.eclipse.wst.html.core.htmlsource"
+        file-extensions="apg"
+        default-charset="UTF-8"
+        id="com.test.my.type"
+        name="My Custom Content Type"
+        priority="high">
+    </content-type>
+</extension>
+
+ ---------------------------------------------------------------------------
+ OLD :
+  
+ Plug-ins define content types by contributing an extension 
+ for the extension point org.eclipse.core.runtime.contentTypes. 
+ In this extension, a plug-in specifies a simple id and name for the content type 
+ (the full id is always the simple id prefixed by the current namespace). 
+ The following snippet shows a trimmed down version of 
+ the org.eclipse.core.runtime.text content type contribution:
+
+	<extension point="org.eclipse.core.runtime.contentTypes">
+		<content-type 
+			id="text"
+			name="%textContentTypeName">
+			file-extensions="txt">
+			<describer class="org.eclipse.core.internal.content.TextContentDescriber"/>
+		</content-type>
+		...
+ 
+ Example :
+ <content-type 
+	id="xml"
+	name="%xmlContentTypeName"
+	base-type="org.eclipse.core.runtime.text"
+	file-extensions="xml">
+	<describer class="org.eclipse.core.internal.content.XMLContentDescriber"/>
+	<property name="charset" default="UTF-8"/>
+</content-type>
+
+
+ See : 
+ https://rsarte.hcldoc.com/help/index.jsp?topic=%2Forg.eclipse.platform.doc.isv%2Fguide%2Fruntime_content_contributing.htm
+ 
